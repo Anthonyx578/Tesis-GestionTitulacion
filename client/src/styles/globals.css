@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*Fuentes de Letra */
+h1, h2, h3, h4, h5, h6 {font-family: 'Poppins', sans-serif; /* Títulos */}
+body {font-family: 'Roboto', serif; /* Cuerpo */}
+
+
+.formularioLogin{
+    color: #343A40;
+}
+
+.formularioLogin button{
+    color: rgb(245, 242, 245);
+    background-color: rgba(97, 46, 117, 0.685);
+}
+
+.formularioLogin button:hover{
+    background-color: rgba(76, 35, 92, 0.685);
+}
+

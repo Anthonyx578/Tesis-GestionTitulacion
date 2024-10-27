@@ -1,0 +1,101 @@
+Barra Lateral
+            modulo 
+            - SUPER ADMIN PUEDE VER TODO
+            
+            - Administrador
+            -- Crear lo Usuario:CREAR
+            -- CREAR LO REQUISISTO.
+            -- HA CUMPLIDO LO REQUISITO EL ESTUDIANTE
+
+
+
+            -- DOCENTE TUTOR
+             - ASIGNACION JURADO
+             - LA FECHA ASIGNADA
+             - CALIFICACION POR ESTUDIANTE
+             - SUSTITUCION DE JURADO 
+
+            -  JURADO
+            - SOLO ES VER TESIS
+            - APROBACION
+
+            --ESTUDIANTE
+            --SUBIR TESIS
+            -- DOCUMENTO REQUERIDO
+            -- ESPERAR
+            -- OBSERVACIONES
+
+
+
+            
+            -- ESTUDIANTE
+             -
+
+
+            EN LA MISLA TABLA DE USUARIO QUE TENGA ANIDADO SI ES JURADO Y SI ES DOCENTE TUTOR.
+            AÑADIR BOTON
+            * NO SE PUEDA HACER MAS-- ROLES:  SUPERADMIN ,ADMINISTRADOR (SECRETARIA), ESTUDIANTE , PROFESOR Y JURADO
+            
+            * CUANDO VAS A CREAR EL JURADO: 
+            
+               
+               
+               -- 
+
+
+
+            -- Crear Jurado , docente tutor o el Estudiante
+
+            --un usuario tipo docente puede docetnete tutor o jurador  
+            
+            - Profesor
+            
+            
+            - Usuario Estudiante
+
+            --
+
+
+Rutas
+--Super Admin
+--Puede hacer de TODO
+
+
+--Administrador
+
+--Profesor
+----JURADO
+----DOCENTE TUTOR
+
+
+--Usuario
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
