@@ -56,9 +56,9 @@ export default function Login_Formulario(){
             </div>
             <div className="relative ">
                 <div className="flex flex-row items-center rounded-md shadow-sm bg-white/40 border border-black/30">
-                <Image src={IPassword} alt="Icono de contraseña" width={50} height={50} className="p-3 border-r border-black/30" />
-                <input onCopy={disableCopyPasteCut} onPaste={disableCopyPasteCut} onCut={disableCopyPasteCut} type={viewPassword ? "text" : "password"} id="contrasena" name="contrasena" placeholder="Contraseña" className="w-full placeholder-gray-500 rounded-r-md outline-none text-gray-800 p-3 pr-8 bg-transparent" autoComplete="current-password" pattern="[A-Za-z0-9\\-_@\\.!]{12,}" value={formData.contrasena} onChange={handleInputChange} required/>
-                <Image onClick={() => setViewPassword(!viewPassword)} src={viewPassword ? IInvisible : IVisible} alt="Icono de mostrar contraseña" width={17} height={17} className="absolute cursor-pointer right-2 z-20"/>
+                    <Image src={IPassword} alt="Icono de contraseña" width={50} height={50} className="p-3 border-r border-black/30" />
+                    <input onCopy={disableCopyPasteCut} onPaste={disableCopyPasteCut} onCut={disableCopyPasteCut} type={viewPassword ? "text" : "password"} id="contrasena" name="contrasena" placeholder="Contraseña" className="w-full placeholder-gray-500 rounded-r-md outline-none text-gray-800 p-3 pr-8 bg-transparent" autoComplete="current-password" pattern="[A-Za-z0-9\\-_@\\.!]{12,}" value={formData.contrasena} onChange={handleInputChange} required/>
+                    <Image onClick={() => setViewPassword(!viewPassword)} src={viewPassword ? IInvisible : IVisible} alt="Icono de mostrar contraseña" width={17} height={17} className="absolute cursor-pointer right-2 z-20"/>
                 </div>
                 {messageError && (<p className="text-red-500 absolute top-full left-0 text-start mt-1">{messageError}</p>)}
             </div>

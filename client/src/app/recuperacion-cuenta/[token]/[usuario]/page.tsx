@@ -1,12 +1,11 @@
 import Image from 'next/image';
 import ILogin from '@/assets/Fondo/ILoginDesefonque.webp';
-import IPeligro from '@/assets/Iconos/IPeligro.svg';
 import IWarning from '@/assets/Iconos/IWarning.svg';
 import ILogo from '@/assets/Imagenes/ILogo.png'; 
 import { Toaster } from 'sonner';
 import RestablecerCotrasena_Formulario from '@/components/Recuperacion/Restablecer-Contrasena';
 import { verificarToken } from '@/services/service-verificacionToken';
-
+import { notFound } from 'next/navigation';
 
 
 export const metadata = {
@@ -16,7 +15,7 @@ export const metadata = {
   robots: "noindex, follow",
 };
 
-export default async function RecuperacionCuenta_Page({ params }: { params: { token: string; usuario: string } }) {
+export default async function RestablecerCuenta_Page({ params }: { params: { token: string; usuario: string } }) {
   const { token, usuario } = params;
   const validacionUsuario = usuario !== "";
   
@@ -41,18 +40,8 @@ export default async function RecuperacionCuenta_Page({ params }: { params: { to
         </div>
       );
     }
-    if (validacionToken === 0) {
-      return (
-        <div className="relative w-full h-screen">
-          <Image src={ILogin} alt="Login Background" fill quality={80} priority className="object-cover" />
-          <main className="bg-black/20 absolute inset-0 flex p-4 items-center justify-center">
-            <div className="font-semibold text-center items-center p-6 flex flex-col gap-2 border-2 border-black/30 bg-white/90 rounded-lg shadow-lg w-full max-w-md">
-              <Image src={IPeligro} alt="Error Icon" width={80} height={80} priority />
-              <p>Página no encontrada.</p>
-            </div>
-          </main>
-        </div>
-      );
+    if (validacionToken === 0) { //Utilizamos el 404 de next js 
+      return (notFound());
     }
     return (
       <div className="relative w-full h-screen">

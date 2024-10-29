@@ -9,7 +9,7 @@ export default function GenerarToken() {
     const payload = { user: "leif", role: "cliente" };
 
     // Crear el token JWT
-    console.log( jwt.sign(payload, secretKey, { expiresIn: '1m' }))
+    console.log( jwt.sign(payload, secretKey, { expiresIn: '10D' }))
 }
 
 GenerarToken()

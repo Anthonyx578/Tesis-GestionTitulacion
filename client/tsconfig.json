@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/services/generar-token.js", "src/app/pruebas/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/services/generar-token.js", "src/app/pruebas/page.jsx", "src/services/service-extracionDatosToken.ts"],
   "exclude": ["node_modules"]
 }

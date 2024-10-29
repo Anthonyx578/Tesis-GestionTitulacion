@@ -13,10 +13,8 @@ export function verificarToken({ token}: { token: string}) {
         if (isExpired) {
             return 1; // Token válido pero caducado
         }
-
         return 2; // Token válido y no caducado
-    } catch (error) {
-        console.error("Error al verificar el token:", error); // Imprime el error
+    } catch{
         return 0; // Token no válido
     }
 }

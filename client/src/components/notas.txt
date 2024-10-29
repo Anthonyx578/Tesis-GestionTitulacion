@@ -7,8 +7,6 @@ Barra Lateral
             -- CREAR LO REQUISISTO.
             -- HA CUMPLIDO LO REQUISITO EL ESTUDIANTE
 
-
-
             -- DOCENTE TUTOR
              - ASIGNACION JURADO
              - LA FECHA ASIGNADA

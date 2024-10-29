@@ -5,7 +5,8 @@ import Login_Formulario from '@/components/Login/LoginFormulario';
 
 export const metadata = {
   title: "Login - Administración de Sustentación de Tesis",
-  alternates: {canonical:"http://localhost:3000/"},
+  robots: "index, follow",
+  alternates: {canonical:"http://localhost:3000/"}
 };
 
 export default function Login_Page() {

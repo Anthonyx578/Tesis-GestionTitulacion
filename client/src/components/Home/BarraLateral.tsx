@@ -1,16 +1,33 @@
-"use client"
+const listaContenido = [
+    //Admin puede ver todo
 
-import useMenu from "@/hooks/useMenu"
 
-export default function Components_BarraLateral({role}:{role:string}){
-    const {valor} = useMenu()
+    //Secretaria
+    {title:"Usuarios",url:"",rol:["admin","secretaria"],imagen:""},
+    {title:"Requisistos",url:"",rol:["admin","secretaria"],imagen:""},
+    {title:"Requisisto Cumplidos",url:"",rol:["admin","secretaria"],imagen:""},
+    {title:"Asignar Tesis",url:"",rol:["admin","secretaria"],imagen:""},
+
+    //Profesor
+    {title:"Tesis Asignadas",url:"",rol:["admin","secretaria"],imagen:""},
+    {title:"",url:"",rol:["admin","secretaria"],imagen:""},
+
+    
+    //Profesor
+    {title:"Tesis",url:"",rol:["admin","secretaria"],imagen:""},
+    {title:"",url:"",rol:["admin","secretaria"],imagen:""},
+
+]
+
+    console.log(listaContenido)
+
+export default function Components_BarraLateral(){
 
     return(
-        <div className="w-3.50/12 h-full bg-slate-300 text-black">
-            {valor && (
-                <div >Me veo</div>
-            )}            
-            {role}
+        <div className="w-3.50/12 h-full bg-black/90 text-white">
+            <div>
+                hola
+            </div>
         </div>
     )
 }

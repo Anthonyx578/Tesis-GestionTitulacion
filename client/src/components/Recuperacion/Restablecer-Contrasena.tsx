@@ -9,7 +9,7 @@ import IInvisible from '@/assets/Iconos/INVISIBLE.svg';
 import DOMPurify from 'dompurify';
 import axios from "axios";
 
-export default function Login_Formulario(){    
+export default function RestablecerContrasena_Formulario(){    
     const [viewPassword1, setViewPassword1] = useState(false);
     const [viewPassword2, setViewPassword2] = useState(false);
     const [formData, setFormData] = useState({ password1: '', password2: '' });
