@@ -7,7 +7,7 @@ export const metadata = {
 export default function Home(){
     return(
         <div>
-            Contenido asdasd
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Blanditiis nemo error, expedita voluptatem quisquam natus culpa similique saepe quam quis doloremque autem quibusdam hic quos eaque placeat. Numquam, ut illum!
         </div>
     )
 }

@@ -76,7 +76,17 @@ Rutas
 
 
 
-
+<nav className="w-2/12 bg-slate-800  flex flex-col gap-4 pt-8 border-r border-black/20">
+            {lista_navegacion.map((item, index) => (
+                <Link 
+                    href={item.url} 
+                    key={index} 
+                    className="py-2 px-4 w-full border-y text-white hover:bg-red-600 hover:text-white transition-colors duration-200"
+                >
+                    {item.title}
+                </Link>
+            ))}
+        </nav>
 
 
 

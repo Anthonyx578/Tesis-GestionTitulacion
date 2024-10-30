@@ -6,20 +6,23 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class', // Habilita el modo oscuro basado en la clase
   theme: {
     extend: {
       colors: {
-        primary: "#d9ced0",   // Azul oscuro para uso principal
-        primary_sencodary: "#0d203e",   
-        secondary: "#F76C5E", // Naranja para resaltar
-        background: "#F3F4F6", // Fondo claro
-        text: "#2D2D2D",      // Texto oscuro
+        primary_dark: "#201f20",  
+        primary_white: "#0d203e",   
+        secondary_dark: "#262426", 
+        secondary_white: "#262426", 
+        background: "#F3F4F6", 
+        text: "#2D2D2D",     
       },
-      width: { // Define tu valor personalizado aquí
+      width: {
         '0.70/12': '4.50%', 
+        '2.50/12': '17%', 
         '3.50/12': '20%', 
         '4.50/12': '28%', 
-
+        '0.50/12': '1%', 
       }
     },
   },
