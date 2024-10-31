@@ -1,5 +1,12 @@
-export default function Tesis_Page(){
+export const metadata = {
+    title: "Formulario de Requisisto - Administración de Sustentación de Tesis",
+    robots: "noindex, follow",
+    alternates: {canonical:""}
+};
+
+
+export default function FormularioRequisisto_Page(){
     return(<div>
-        Formulario tesis
+        Formulario de Requisistos
     </div>)
 }

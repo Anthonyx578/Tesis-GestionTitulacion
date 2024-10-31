@@ -1,5 +1,12 @@
-export default function Tesis_Page(){
+export const metadata = {
+    title: "Formulario Jurado de Tesis - Administración de Sustentación de Tesis",
+    robots: "noindex, follow",
+    alternates: {canonical:""}
+};
+
+
+export default function FormularioJuradoTesis_Page(){
     return(<div>
-        Formulario tesis
+        Formulario del jurado de tesis
     </div>)
 }

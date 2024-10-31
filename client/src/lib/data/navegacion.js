@@ -1,37 +1,23 @@
-// Separacion de lista por redimiento y no realizar bucles. 
-// Se buco la creacion a partir de ssr
+// src/data/listasNavegacion.ts
+const listaNavegacion = {
+    administrador: [
+        { title: "Perfil", url: "/agenda_sustentacion/perfil", imagen: (<svg className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" ><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>)},
+    ],
+    secretaria: [
+        { title: "Perfil", url: "/agenda_sustentacion/perfil", imagen: (<svg className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" ><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>)},
+        { title: "Asignación de Tesis", url: "/agenda_sustentacion/asignacion-tesis",imagen: (<svg className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m424-318 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm280-590q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z"/></svg>)},
+        { title: "Usuarios", url: "/agenda_sustentacion/usuarios", imagen: (<svg className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M400-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM80-160v-112q0-33 17-62t47-44q51-26 115-44t141-18h14q6 0 12 2-8 18-13.5 37.5T404-360h-4q-71 0-127.5 18T180-306q-9 5-14.5 14t-5.5 20v32h252q6 21 16 41.5t22 38.5H80Zm560 40-12-60q-12-5-22.5-10.5T584-204l-58 18-40-68 46-40q-2-14-2-26t2-26l-46-40 40-68 58 18q11-8 21.5-13.5T628-460l12-60h80l12 60q12 5 22.5 11t21.5 15l58-20 40 70-46 40q2 12 2 25t-2 25l46 40-40 68-58-18q-11 8-21.5 13.5T732-180l-12 60h-80Zm40-120q33 0 56.5-23.5T760-320q0-33-23.5-56.5T680-400q-33 0-56.5 23.5T600-320q0 33 23.5 56.5T680-240ZM400-560q33 0 56.5-23.5T480-640q0-33-23.5-56.5T400-720q-33 0-56.5 23.5T320-640q0 33 23.5 56.5T400-560Zm0-80Zm12 400Z"/></svg>)},
+        { title: "Requisitos", url: "/agenda_sustentacion/requisitos", imagen: (<svg className=" fill-black/80 dark:fill-white/80" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-160q-33 0-56.5-23.5T240-240v-120h120v-90q-35-2-66.5-15.5T236-506v-44h-46L60-680q36-46 89-65t107-19q27 0 52.5 4t51.5 15v-55h480v520q0 50-35 85t-85 35H320Zm120-200h240v80q0 17 11.5 28.5T720-240q17 0 28.5-11.5T760-280v-440H440v24l240 240v56h-56L510-514l-8 8q-14 14-29.5 25T440-464v104ZM224-630h92v86q12 8 25 11t27 3q23 0 41.5-7t36.5-25l8-8-56-56q-29-29-65-43.5T256-684q-20 0-38 3t-36 9l42 42Zm376 350H320v40h286q-3-9-4.5-19t-1.5-21Zm-280 40v-40 40Z"/></svg>) },
+    ],
+    profesor: [
+        { title: "Perfil", url: "/agenda_sustentacion/perfil", imagen: (<svg className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" ><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>)},
+        { title: "Tutor de Tesis", url: "/agenda_sustentacion/tutor-tesis", imagen: (<svg className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M280-280h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm-80 480q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>) },
+        { title: "Tesis Asignadas", url: "/agenda_sustentacion/tesis-asignada", imagen: (<svg className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M280-280h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm-80 480q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>) },
+    ],
+    estudiantes: [
+        { title: "Perfil", url: "/agenda_sustentacion/perfil", imagen: (<svg className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" ><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>)},
+        { title: "Tesis", url: "/agenda_sustentacion/tesis", imagen: (<svg  className=" fill-black/80 dark:fill-white/80 " xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M280-280h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm-80 480q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>) },
+    ],
+};
 
-import IAcount from "@/assets/Iconos/IAcount.svg";
-import IPerfil from "@/assets/Iconos/IPerfil.svg";
-import IJuradoTesis from "@/assets/Iconos/IJuradoTesis.svg";
-import ITutorTesis from "@/assets/Iconos/ITutorTesis.svg";
-import ITesis from "@/assets/Iconos/ITesis.svg";
-import IRequisito from "@/assets/Iconos/IRequisito.svg";
-
-const listaNavegacion_Administrador = [
-    {title:"Perfil",url:"/agenda_sustentacion/perfil",imagen:IPerfil},
-    {title:"todo1",url:"",imagen:IAcount},
-    {title:"todo2",url:"",imagen:IAcount},
-    {title:"todo3",url:"",imagen:IAcount}, 
-]
-
-const listaNavegacion_Secretaria = [
-    {title:"Perfil",url:"/agenda_sustentacion/perfil",imagen:IPerfil},
-    {title:"Asignacion de Tesis",url:"/agenda_sustentacion/asignacion-tesis",imagen:IAcount},
-    {title:"Usuarios",url:"/agenda_sustentacion/usuarios",imagen:IAcount},
-    {title:"Requisistos",url:"/agenda_sustentacion/requisitos",imagen:IRequisito}
-]
-
-
-const listaNavegacion_Profesor = [
-    {title:"Perfil",url:"/agenda_sustentacion/perfil",imagen:IPerfil},
-    {title:"Tutor de Tesis",url:"/agenda_sustentacion/tutor-tesis",imagen:ITutorTesis},
-    {title:"Tesis Asignadas",url:"/agenda_sustentacion/tesis-asignada",imagen:IJuradoTesis}
-]
-
-const listaNavegacion_Estudiantes = [
-    {title:"Perfil",url:"/agenda_sustentacion/perfil",imagen:IPerfil},
-    {title:"Tesis",url:"/agenda_sustentacion/tesis",imagen:ITesis}
-]
-
-export {listaNavegacion_Administrador,listaNavegacion_Secretaria,listaNavegacion_Profesor,listaNavegacion_Estudiantes};
+export {listaNavegacion};

@@ -1,5 +1,13 @@
-export default function Tesis_Page(){
+export const metadata = {
+    title: "Formulario Tutor de Tesis - Administración de Sustentación de Tesis",
+    robots: "noindex, follow",
+    alternates: {canonical:""}
+};
+
+
+
+export default function FormularioTutorTesis_Page(){
     return(<div>
-        Formulario tesis
+        Formulario Tutor de tesis
     </div>)
 }
