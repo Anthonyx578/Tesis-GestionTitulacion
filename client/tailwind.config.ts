@@ -16,6 +16,12 @@ const config: Config = {
         secondary_white: "#f3f3f3", 
         background: "#F3F4F6", 
         text: "#2D2D2D",     
+
+
+        blue_personalizado: "#0574b0", 
+
+        
+
       },
       width: {
         '0.70/12': '4.50%', 

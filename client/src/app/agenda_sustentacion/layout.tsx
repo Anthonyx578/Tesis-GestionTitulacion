@@ -30,9 +30,9 @@ export default function LayoutPrincipalHome({ children }: { children: React.Reac
     console.log(user);
 
     return (
-        <div className="flex flex-row w-full h-screen">
+        <div className="flex flex-row w-full h-screen ">
             <Components_BarraLateral lista_navegacion={listaNavegacionActual} />
-            <div className="bg-secondary_white dark:bg-secondary_dark w-full text-black/90 dark:text-white/90">
+            <div className="bg-secondary_white dark:bg-secondary_dark w-full text-black/90 dark:text-white/90 p-4 py-6 overflow-y-auto overscroll-x-none">
                 {children}
             </div>
         </div>

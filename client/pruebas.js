@@ -6,7 +6,7 @@ export default function GenerarToken() {
         throw new Error("Secret key not found");  // Maneja si falta la clave secreta
     }
 
-    const payload = { user: "leif", role: "secretaria" };
+    const payload = { user: "leif", role: "administrador" };
 
     // Crear el token JWT
     console.log( jwt.sign(payload, secretKey, { expiresIn: '30D' }))

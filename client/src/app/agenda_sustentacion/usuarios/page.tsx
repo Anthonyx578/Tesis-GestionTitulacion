@@ -1,3 +1,5 @@
+import TableComponent from "@/components/Table/tabla_special";
+
 export const metadata = {
     title: "Usuarios - Administración de Sustentación de Tesis",
     robots: "noindex, follow",
@@ -6,7 +8,5 @@ export const metadata = {
 
 
 export default function Usuarios_Page(){
-    return(<div>
-        Usuarios
-    </div>)
+    return(<TableComponent title="Usuarios" addView={true} datoView={15}/>)
 }
