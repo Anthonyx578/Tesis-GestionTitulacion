@@ -54,9 +54,9 @@ export class EstudianteService {
          try{
              const ExistData = await this.repository.findOne({where:{id_estudiante:id,status:1}})
              if(!ExistData){
-                 return {}
+                return {}
              }
-             return this.repository.update({ id_estudiante: id }, { ...ChangeData, updated_at: new Date() });
+             return await this.repository.update({ id_estudiante: id }, { ...ChangeData, updated_at: new Date() });
          }
          catch(e){
              throw new RpcException(e)
