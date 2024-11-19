@@ -7,6 +7,7 @@ import { JuradoModule } from './jurado/jurado.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { estudiante } from './entitys/estudiante.entity';
+import { docente_Tutor } from './entitys/docenteTutor.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { estudiante } from './entitys/estudiante.entity';
       username: process.env.DbUserName,
       password: process.env.DbPassWord,
       database: process.env.DbName,
-      entities: [estudiante],
+      entities: [estudiante,docente_Tutor],
       
     }),
     EstudianteModule,

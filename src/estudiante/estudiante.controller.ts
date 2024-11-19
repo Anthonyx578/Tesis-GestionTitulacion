@@ -25,9 +25,9 @@ export class EstudianteController {
     }
 
     @MessagePattern({cmd:'UpdateEstudiante'})
-        async Update(data:{id:number,UsuarioData:estudianteUpdateDTO}){
-        const {id,UsuarioData} = data;
-        return await this.Services.update(id,UsuarioData);
+        async Update(data:{id:number,EstudiantesData:estudianteUpdateDTO}){
+        const {id,EstudiantesData} = data;
+        return await this.Services.update(id,EstudiantesData);
     }
 
     @MessagePattern({cmd:'DeleteEstudiante'})
