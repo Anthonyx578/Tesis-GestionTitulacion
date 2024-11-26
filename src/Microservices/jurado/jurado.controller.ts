@@ -1,6 +1,5 @@
 import {
   Body,
-  ConsoleLogger,
   Controller,
   Delete,
   Get,
@@ -11,23 +10,21 @@ import {
   Query,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import {
   BadRequestResponse,
   FailResponse,
-  PaginatedSuccessResponse,
   SuccessResponse,
 } from 'src/Response/Responses';
-import { ConfigService } from '@nestjs/config';
-import { ApiTags } from '@nestjs/swagger';
-import { QueuedIteratorImpl } from 'nats/lib/nats-base-client/queued_iterator';
-import { PaginationDto } from 'src/Pagination/PaginationDTO';
-import { EstudianteUpdateDTO } from '../DTO/estudiante.Update.DTO';
+import { juradoUpdateDTO } from '../DTO/juradoUpdateDTO';
 import { firstValueFrom } from 'rxjs';
-@Controller('estudiante')
-export class EstudianteController {
+
+@Controller('jurado')
+export class JuradoController {
   constructor(@Inject('NAT_Service') private readonly client: ClientProxy) {}
 
-  @ApiTags('Estudiante')
+  @ApiTags('Jurado')
   @Post(':id_usuario')
   async Create(@Param('id_usuario') id_usuario: number) {
     try {
@@ -41,7 +38,7 @@ export class EstudianteController {
         );
       }
       const Usuario = await this.client
-        .send({ cmd: 'CreateEstudiante' }, id_usuario)
+        .send({ cmd: 'CreateJurado' }, id_usuario)
         .toPromise();
       return SuccessResponse(Usuario);
     } catch (error) {
@@ -49,41 +46,34 @@ export class EstudianteController {
     }
   }
 
-  @ApiTags('Estudiante')
+  @ApiTags('Jurado')
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
       const Data = await firstValueFrom(
-        this.client.send({ cmd: 'GetAllEstudiante'}, Pagination),
+        this.client.send({ cmd: 'GetAllJurado' }, Pagination),
       );
-      console.log(Data);
-      return PaginatedSuccessResponse(Data);
-    } catch (e) {
+    }catch (e) {
       return FailResponse(e);
     }
   }
 
-  @ApiTags('Estudiante')
+  @ApiTags('Jurado')
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data = await this.client
-        .send({ cmd: 'GetEstudiante' }, id)
-        .toPromise();
+      const data = await this.client.send({ cmd: 'GetJurado' }, id).toPromise();
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
     }
   }
-  @ApiTags('Estudiante')
+  @ApiTags('Jurado')
   @Put(':id')
-  async Update(
-    @Param('id') id: number,
-    @Body() EstudiantesData: EstudianteUpdateDTO,
-  ) {
+  async Update(@Param('id') id: number, @Body() JuradoData: juradoUpdateDTO) {
     try {
       const data = await this.client
-        .send({ cmd: 'UpdateEstudiante' }, { id, EstudiantesData })
+        .send({ cmd: 'UpdateJurado' }, { id, JuradoData })
         .toPromise();
       return SuccessResponse(data);
     } catch (e) {
@@ -91,12 +81,12 @@ export class EstudianteController {
     }
   }
 
-  @ApiTags('Estudiante')
+  @ApiTags('Jurado')
   @Delete(':id')
   async Delete(@Param('id') id: number) {
     try {
       const data = await this.client
-        .send({ cmd: 'DeleteEstudiante' }, id)
+        .send({ cmd: 'DeleteJurado' }, id)
         .toPromise();
       return SuccessResponse(data);
     } catch (e) {
@@ -104,12 +94,12 @@ export class EstudianteController {
     }
   }
 
-  @ApiTags('Estudiante')
+  @ApiTags('Jurado')
   @Put(':id/restore')
   async Restore(@Param('id') id: number) {
     try {
       const data = await this.client
-        .send({ cmd: 'RestoreEstudiante' }, id)
+        .send({ cmd: 'RestoreJurado' }, id)
         .toPromise();
       return SuccessResponse(data);
     } catch (error) {

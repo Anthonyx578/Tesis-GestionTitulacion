@@ -5,11 +5,15 @@ import { CarreraController } from './carrera/carrera.controller';
 import { ClientsModule,Transport } from '@nestjs/microservices';
 import { AuthenticacionController } from './authenticacion/authenticacion.controller';
 import { EstudianteController } from './estudiante/estudiante.controller';
+import { DocenteTutorController } from './docente-tutor/docente-tutor.controller';
+import { JuradoController } from './jurado/jurado.controller';
+import { ConfigModule } from '@nestjs/config';
 @Module({
-  imports:[ 
+  imports:[
+    ConfigModule.forRoot(), 
     ClientsModule.register([
     { 
-      name: 'NAT_Service', 
+      name: process.env.Servicio, 
       transport: Transport.NATS,
       options: {
         servers: ['nats://localhost:4222'],
@@ -17,6 +21,6 @@ import { EstudianteController } from './estudiante/estudiante.controller';
       },
     },
   ]),],
-  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController]
+  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController]
 })
 export class MicroservicesmoduleModule {}

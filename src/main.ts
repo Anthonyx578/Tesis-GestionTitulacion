@@ -12,12 +12,19 @@ async function bootstrap() {
   const config = new DocumentBuilder()
   .setTitle('Gestion de Sustentacion')
   .setDescription('Api para la gestion de las sustentaciones')
+  .setContact('Anthony', '', 'antrogartme2002@gmail.com')
   .setVersion('1.0')
   .addTag('cats')
   .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
+  SwaggerModule.setup('api', app, documentFactory,{
+    swaggerOptions: {
+      docExpansion: 'none',
+      filter: true,
+      tryItOutEnabled: true, // Esto hace que los controladores no se desplieguen por defecto
+    }
+  });
 
   app.use(cookieParser());
   app.enableCors({
@@ -31,4 +38,5 @@ async function bootstrap() {
   Log.log('Servicio principal Main Broadcast corriendo en http://localhost:'+ process.env.Port + '/api');
 
 }
+
 bootstrap();
