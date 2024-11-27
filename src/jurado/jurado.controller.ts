@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { JuradoService } from './jurado.service';
-import { PaginationDto } from 'src/entitys/DTO/PaginationDTO';
-import { juradoUpdateDTO } from 'src/entitys/DTO/juradoUpdateDTO';
+import { PaginationDto } from 'src/pagination/PaginationDTO';
+import { juradoUpdateDTO } from 'src/jurado/Entitys/DTO/juradoUpdateDTO';
 
 @Controller('jurado')
 export class JuradoController {

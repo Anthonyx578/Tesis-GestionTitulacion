@@ -1,8 +1,8 @@
 import { ConsoleLogger, Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { DocenteTutorService } from './docente-tutor.service';
-import { PaginationDto } from 'src/entitys/DTO/PaginationDTO';
-import { docenteTutorUpdateDTO } from 'src/entitys/DTO/docenteTutorUpdateDTO';
+import { PaginationDto } from 'src/pagination/PaginationDTO';
+import { docenteTutorUpdateDTO } from 'src/docente-tutor/Entitys/DTO/docenteTutorUpdateDTO';
 
 @Controller('docente-tutor')
 

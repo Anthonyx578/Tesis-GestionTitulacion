@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { juradoUpdateDTO } from 'src/entitys/DTO/juradoUpdateDTO';
-import { PaginationDto } from 'src/entitys/DTO/PaginationDTO';
-import { jurado } from 'src/entitys/jurado.entity';
+import { juradoUpdateDTO } from 'src/jurado/Entitys/DTO/juradoUpdateDTO';
+import { PaginationDto } from 'src/pagination/PaginationDTO';
+import { jurado } from 'src/jurado/Entitys/jurado.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

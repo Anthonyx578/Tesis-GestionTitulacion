@@ -6,9 +6,9 @@ import { DocenteTutorModule } from './docente-tutor/docente-tutor.module';
 import { JuradoModule } from './jurado/jurado.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { estudiante } from './entitys/estudiante.entity';
-import { docente_Tutor } from './entitys/docenteTutor.entity';
-import { jurado } from './entitys/jurado.entity';
+import { estudiante } from './estudiante/Entitys/estudiante.entity';
+import { docente_Tutor } from './docente-tutor/Entitys/docenteTutor.entity';
+import { jurado } from './jurado/Entitys/jurado.entity';
 
 @Module({
   imports: [

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { estudianteUpdateDTO } from 'src/entitys/DTO/estudianteUpdateDTO';
-import { PaginationDto } from 'src/entitys/DTO/PaginationDTO';
-import { estudiante } from 'src/entitys/estudiante.entity';
+import { estudianteUpdateDTO } from 'src/estudiante/Entitys/DTO/estudianteUpdateDTO';
+import { PaginationDto } from 'src/pagination/PaginationDTO';
+import { estudiante } from 'src/estudiante/Entitys/estudiante.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

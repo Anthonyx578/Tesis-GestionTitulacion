@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { docente_Tutor } from 'src/entitys/docenteTutor.entity';
-import { docenteTutorUpdateDTO } from 'src/entitys/DTO/docenteTutorUpdateDTO';
-import { PaginationDto } from 'src/entitys/DTO/PaginationDTO';
+import { docente_Tutor } from 'src/docente-tutor/Entitys/docenteTutor.entity';
+import { docenteTutorUpdateDTO } from 'src/docente-tutor/Entitys/DTO/docenteTutorUpdateDTO';
+import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { Repository } from 'typeorm';
 
 @Injectable()

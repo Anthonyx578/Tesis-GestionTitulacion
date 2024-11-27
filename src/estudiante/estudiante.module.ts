@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { EstudianteController } from './estudiante.controller';
 import { EstudianteService } from './estudiante.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { estudiante } from 'src/entitys/estudiante.entity';
+import { estudiante } from 'src/estudiante/Entitys/estudiante.entity';
 
 @Module({
   imports:[TypeOrmModule.forFeature([estudiante])],
