@@ -29,17 +29,17 @@ export class JuradoController {
   async Create(@Param('id_usuario') id_usuario: number) {
     try {
       //Validamos su existencia
-      const Exist = await this.client
-        .send({ cmd: 'GetUsuario' }, id_usuario)
-        .toPromise();
+      const Exist = await firstValueFrom(
+        this.client.send({ cmd: 'GetUsuario' }, id_usuario),
+      );
       if (!Exist) {
         return BadRequestResponse(
           'El usuario con el que se quiere crear no existe',
         );
       }
-      const Usuario = await this.client
-        .send({ cmd: 'CreateJurado' }, id_usuario)
-        .toPromise();
+      const Usuario = await firstValueFrom(
+        this.client.send({ cmd: 'CreateJurado' }, id_usuario),
+      );
       return SuccessResponse(Usuario);
     } catch (error) {
       return FailResponse(error);
@@ -53,7 +53,7 @@ export class JuradoController {
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'GetAllJurado' }, Pagination),
       );
-    }catch (e) {
+    } catch (e) {
       return FailResponse(e);
     }
   }
@@ -62,7 +62,9 @@ export class JuradoController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data = await this.client.send({ cmd: 'GetJurado' }, id).toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetJurado' }, id),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -72,9 +74,9 @@ export class JuradoController {
   @Put(':id')
   async Update(@Param('id') id: number, @Body() JuradoData: juradoUpdateDTO) {
     try {
-      const data = await this.client
-        .send({ cmd: 'UpdateJurado' }, { id, JuradoData })
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'UpdateJurado' }, { id, JuradoData }),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -85,9 +87,9 @@ export class JuradoController {
   @Delete(':id')
   async Delete(@Param('id') id: number) {
     try {
-      const data = await this.client
-        .send({ cmd: 'DeleteJurado' }, id)
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'DeleteJurado' }, id),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -98,9 +100,9 @@ export class JuradoController {
   @Put(':id/restore')
   async Restore(@Param('id') id: number) {
     try {
-      const data = await this.client
-        .send({ cmd: 'RestoreJurado' }, id)
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'RestoreJurado' }, id),
+      );
       return SuccessResponse(data);
     } catch (error) {
       return FailResponse(error);

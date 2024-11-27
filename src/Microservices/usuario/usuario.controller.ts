@@ -42,9 +42,9 @@ export class UsuarioController {
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
-      const data = await this.client
-        .send({ cmd: 'GetAllUsuario' }, Pagination)
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllUsuario' }, Pagination),
+      );
       return PaginatedSuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -55,9 +55,9 @@ export class UsuarioController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data = await this.client
-        .send({ cmd: 'GetUsuario' }, id)
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetUsuario' }, id),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -67,9 +67,9 @@ export class UsuarioController {
   @Put(':id')
   async Update(@Param('id') id: number, @Body() UsuarioData: UsuarioUpdateDTO) {
     try {
-      const data = await this.client
-        .send({ cmd: 'UpdateUsuario' }, { id, UsuarioData })
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'UpdateUsuario' }, { id, UsuarioData }),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -80,9 +80,9 @@ export class UsuarioController {
   @Delete(':id')
   async Delete(@Param('id') id: number) {
     try {
-      const data = await this.client
-        .send({ cmd: 'DeleteUsuario' }, id)
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'DeleteUsuario' }, id),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -93,9 +93,9 @@ export class UsuarioController {
   @Put(':id/restore')
   async Restore(@Param('id') id: number) {
     try {
-      const data = await this.client
-        .send({ cmd: 'RestoreUsuario' }, id)
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'RestoreUsuario' }, id),
+      );
       return SuccessResponse(data);
     } catch (error) {
       return FailResponse(error);

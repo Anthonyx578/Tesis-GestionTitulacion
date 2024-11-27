@@ -32,17 +32,17 @@ export class EstudianteController {
   async Create(@Param('id_usuario') id_usuario: number) {
     try {
       //Validamos su existencia
-      const Exist = await this.client
-        .send({ cmd: 'GetUsuario' }, id_usuario)
-        .toPromise();
+      const Exist = await firstValueFrom(
+        this.client.send({ cmd: 'GetUsuario' }, id_usuario),
+      );
       if (!Exist) {
         return BadRequestResponse(
           'El usuario con el que se quiere crear no existe',
         );
       }
-      const Usuario = await this.client
-        .send({ cmd: 'CreateEstudiante' }, id_usuario)
-        .toPromise();
+      const Usuario = await firstValueFrom(
+        this.client.send({ cmd: 'CreateEstudiante' }, id_usuario),
+      );
       return SuccessResponse(Usuario);
     } catch (error) {
       return FailResponse(error);
@@ -54,7 +54,7 @@ export class EstudianteController {
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
       const Data = await firstValueFrom(
-        this.client.send({ cmd: 'GetAllEstudiante'}, Pagination),
+        this.client.send({ cmd: 'GetAllEstudiante' }, Pagination),
       );
       console.log(Data);
       return PaginatedSuccessResponse(Data);
@@ -82,9 +82,9 @@ export class EstudianteController {
     @Body() EstudiantesData: EstudianteUpdateDTO,
   ) {
     try {
-      const data = await this.client
-        .send({ cmd: 'UpdateEstudiante' }, { id, EstudiantesData })
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'UpdateEstudiante' }, { id, EstudiantesData }),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -95,9 +95,9 @@ export class EstudianteController {
   @Delete(':id')
   async Delete(@Param('id') id: number) {
     try {
-      const data = await this.client
-        .send({ cmd: 'DeleteEstudiante' }, id)
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'DeleteEstudiante' }, id),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -108,9 +108,9 @@ export class EstudianteController {
   @Put(':id/restore')
   async Restore(@Param('id') id: number) {
     try {
-      const data = await this.client
-        .send({ cmd: 'RestoreEstudiante' }, id)
-        .toPromise();
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'RestoreEstudiante' }, id),
+      );
       return SuccessResponse(data);
     } catch (error) {
       return FailResponse(error);
