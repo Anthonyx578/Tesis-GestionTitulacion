@@ -51,7 +51,11 @@ export class UsuarioService {
 
     async Get (id:number){
         try{
-            return await this.repository.findOne({where:{id_usuario:id,status:1},select:['id_usuario','nombre_usuario','nombres','apellidos','telefono','correo','fecha_nacimiento']})
+            const Find = await this.repository.findOne({where:{id_usuario:id,status:1},select:['id_usuario','nombre_usuario','nombres','apellidos','telefono','correo','fecha_nacimiento']})
+            if(!Find){
+                return null;
+            }
+            return Find;
         }
         catch(e){
             throw new RpcException(e)
@@ -63,7 +67,7 @@ export class UsuarioService {
             if(!ExistData){
                 return {}
             }
-            return this.repository.update({ id_usuario: id }, { ...ChangeData, updated_at: new Date() });
+            return await this.repository.update({ id_usuario: id }, { ...ChangeData, updated_at: new Date() });
         }
         catch(e){
             throw new RpcException(e)
