@@ -16,11 +16,17 @@ export default function Prueba_Page() {
         alert(`Token recuperado: ${userToken}`);
     }
 
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
+    function getCookie(name: string): string | undefined {
+        if (typeof window !== 'undefined') { // Aseguramos que el código solo se ejecute en el navegador
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) {
+            return parts.pop()?.split(';').shift(); // Usamos optional chaining para evitar errores si `pop` retorna undefined
+          }
+        }
+        return undefined; // Si no se encuentra o si no estamos en el navegador
     }
+      
 
     return (
         <div className="flex justify-center items-center h-screen">

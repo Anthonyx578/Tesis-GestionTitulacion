@@ -1,3 +1,4 @@
+import Head from "next/head";
 import "../styles/globals.css";
 
 export const metadata = {
@@ -20,7 +21,10 @@ export const metadata = {
 export default function RootLayout({children}:{children: React.ReactNode;}) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <head>
+        <script src="https://unpkg.com/react-scan/dist/auto.global.js" async></script>
+      </head>
+      <body className="bg-primary_white dark:bg-primary_dark ">{children}</body>
     </html>
   );
 }

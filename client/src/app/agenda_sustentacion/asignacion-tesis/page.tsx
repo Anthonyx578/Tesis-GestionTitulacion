@@ -7,6 +7,6 @@ export const metadata = {
 
 export default function AsignacionTesis_Page(){
     return(<div>
-        Asignacioens de Tesis
+        
     </div>)
 }

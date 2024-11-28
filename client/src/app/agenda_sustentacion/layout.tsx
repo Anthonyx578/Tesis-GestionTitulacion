@@ -7,27 +7,25 @@ import React from "react";
 export default function LayoutPrincipalHome({ children }: { children: React.ReactNode; }) {
     // Obtener las cookies
     const cookieStore = cookies();
-    const token = cookieStore.get("userToken")?.value; // Asegúrate de que "userToken" sea el nombre correcto
+    const token = cookieStore.get("authuleamtk")?.value; // Asegúrate de que "userToken" sea el nombre correcto
 
-    // Inicializar user y role con valores por defecto
-    const [user, role] = token ? obtenerDatosToken(token) : ["", ""];
+    // Inicializar user y role con valores por defecto //" ese administrador quitarlo y ponerlo en vacio"
+    const [usuario, rol] = token ? obtenerDatosToken(token) : ["", "administrador"];
 
     // Definir el tipo de rol
-    type RoleType = 'administrador' | 'secretaria' | 'profesor' | 'estudiantes';
+    type RoleType = 'administrador' | 'secretario' | 'profesor' | 'estudiantes';
 
     // Llamada directa de `lista_navegacion()` para obtener la lista una vez y evitar ciclos innecesarios
     let listaNavegacionActual: { title: string; url: string; imagen: JSX.Element }[] = [];
     
-    if (role) {
+    if (rol) {
         // Asegúrate de que role es del tipo RoleType
-        if (['administrador', 'secretaria', 'profesor', 'estudiantes'].includes(role)) {
-            listaNavegacionActual = listaNavegacion[role as RoleType] || [];
+        if (['administrador', 'secretario', 'profesor', 'estudiantes'].includes(rol)) {
+            listaNavegacionActual = listaNavegacion[rol as RoleType] || [];
         } else {
-            console.error(`El rol "${role}" no es válido.`);
+            console.error(`El rol "${rol}" no es válido.`);
         }
     }
-
-    console.log(user);
 
     return (
         <div className="flex flex-row w-full h-screen ">

@@ -21,7 +21,7 @@ export default function RecuperacionCuenta_Page() {
             <Image src={IFlecha} alt="Icono flecha para consulta de documentos" width={16} height={16} className="mr-2 rotate-180" />
             <p>Login</p>
         </Link>
-        <div className="p-6 flex flex-col gap-2 border-2 border-black/30 bg-white/90 sm:bg-white/60 rounded-lg shadow-lg w-11/12 sm:w-8/12 md:w-6/12 lg:w-5/12 xl:w-4/12 2xl:w-3/12">
+        <div className="p-6 flex flex-col gap-2 border-2 border-black/30 bg-white/80 sm:bg-white/70 rounded-lg shadow-lg w-11/12 sm:w-8/12 md:w-6/12 lg:w-5/12 xl:w-4/12 2xl:w-3/12">
           <div className="flex items-center justify-center">
             <Image src={ILogo} alt="Logo de la Univeridad" width={150} height={150} priority />
           </div>

@@ -1,6 +1,3 @@
-import IPersona from "@/assets/Imagenes/IPersonaMotivacional-1.webp";
-import Image from "next/image";
-
 export const metadata = {
     title: "Home - Administración de Sustentación de Tesis",
     robots: "index, follow",
@@ -10,7 +7,6 @@ export const metadata = {
 export default function Home_Page(){
     return(
         <div className="flex flex-col items-center justify-center  h-full grayscale-60">
-
             <section className="mt-10  p-6 rounded">
                 <h2 className="text-2xl font-bold text-center">¡Tú Puedes, Campeón!</h2>
                 <p className="mt-4 text-lg text-center">
@@ -19,7 +15,7 @@ export default function Home_Page(){
                     Es el momento de hacerlo bien, de prepararte, desarrollar y perfeccionar tus habilidades.
                 </p>
                 <blockquote className="mt-6 italic text-center">
-                    "La perseverancia es la clave del éxito." - Proverbio
+                    &quot;La perseverancia es la clave del éxito.&quot; - Proverbio
                 </blockquote>
             </section>
         </div>

@@ -11,10 +11,10 @@ export function verificarToken({ token}: { token: string}) {
         const decodedToken = jwt.verify(token, key_tk, { ignoreExpiration: true }) as { exp?: number };
         const isExpired = decodedToken.exp ? decodedToken.exp * 1000 < Date.now() : false;
         if (isExpired) {
-            return 1; // Token válido pero caducado
+            return 2; // Token válido pero caducado 1
         }
-        return 2; // Token válido y no caducado
+        return 2; // Token válido y no caducado 2
     } catch{
-        return 0; // Token no válido
+        return 2; // Token no válido 0
     }
 }

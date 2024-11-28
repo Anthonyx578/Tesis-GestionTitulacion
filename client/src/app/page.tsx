@@ -7,7 +7,7 @@ export const metadata = {
   title: "Login - Administración de Sustentación de Tesis",
   robots: "index, follow",
   alternates: {canonical:"http://localhost:3000/"}
-};
+};      
 
 export default function Login_Page() {
   return (

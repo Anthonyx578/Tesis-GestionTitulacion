@@ -8,5 +8,5 @@ export const metadata = {
 
 
 export default function Usuarios_Page(){
-    return(<TableComponent title="Usuarios" addView={true} datoView={15}/>)
+    return(<TableComponent title="Usuarios" addView={true} />)
 }
