@@ -1,5 +1,5 @@
 
-export class juradoSustentacionUpdateDTO{
+export class juradoSustentacionDTO{
     id_jurado:number;
     estado:string
     indicacion:string
