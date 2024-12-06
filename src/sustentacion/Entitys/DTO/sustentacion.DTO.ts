@@ -1,4 +1,4 @@
-export class sustentacionUpdateDTO {
+export class sustentacionDTO {
   id_tesis: number;
   id_carrera: number;
   tipo: string;
