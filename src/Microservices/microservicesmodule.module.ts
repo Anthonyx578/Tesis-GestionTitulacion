@@ -8,6 +8,8 @@ import { EstudianteController } from './estudiante/estudiante.controller';
 import { DocenteTutorController } from './docente-tutor/docente-tutor.controller';
 import { JuradoController } from './jurado/jurado.controller';
 import { ConfigModule } from '@nestjs/config';
+import { TesisController } from './tesis/tesis.controller';
+import { RequisitoController } from './requisito/requisito.controller';
 @Module({
   imports:[
     ConfigModule.forRoot(), 
@@ -21,6 +23,6 @@ import { ConfigModule } from '@nestjs/config';
       },
     },
   ]),],
-  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController]
+  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController, TesisController, RequisitoController]
 })
 export class MicroservicesmoduleModule {}
