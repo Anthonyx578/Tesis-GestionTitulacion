@@ -8,33 +8,33 @@ import { PaginationDto } from 'src/pagination/PaginationDTO';
 export class SustentacionController {
     constructor(private readonly Services:SustentacionService){}
 
-    @MessagePattern({cmd:'CreateRequisito'})
+    @MessagePattern({cmd:'CreateSustentacion'})
     async Create (Requisito:sustentacionDTO){
         return await this.Services.Create(Requisito)
     }
 
-    @MessagePattern({cmd:'GetAllRequisito'})
+    @MessagePattern({cmd:'GetAllSustentacion'})
         async GetAll(Pagination:PaginationDto){
         return await this.Services.GetAll(Pagination);
     }
 
-    @MessagePattern({cmd:'GetRequisito'})
+    @MessagePattern({cmd:'GetSustentacion'})
         async Get(id:number){
         return await this.Services.Get(id);
     }
 
-    @MessagePattern({cmd:'UpdateRequisito'})
+    @MessagePattern({cmd:'UpdateSustentacion'})
         async Update(data:{id:number,RequisitoData:sustentacionDTO}){
         const {id,RequisitoData} = data;
         return await this.Services.update(id,RequisitoData);
     }
 
-    @MessagePattern({cmd:'DeleteRequisito'})
+    @MessagePattern({cmd:'DeleteSustentacion'})
     async Delete(id:number){
         return await this.Services.delete(id)
     }
 
-    @MessagePattern({cmd:'RestoreRequisito'})
+    @MessagePattern({cmd:'RestoreSustentacion'})
     async Restore(id:number){
         return await this.Services.restore(id)
     }
