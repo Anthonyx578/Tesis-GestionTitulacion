@@ -1,8 +1,10 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { requisitoDTO } from '../DTO/requisito.DTO';
 import { firstValueFrom } from 'rxjs';
+import { FailResponse, PaginatedSuccessResponse, SuccessResponse } from 'src/Response/Responses';
+import { PaginationDto } from 'src/Pagination/PaginationDTO';
 
 @Controller('requisito')
 export class RequisitoController {
@@ -12,7 +14,7 @@ export class RequisitoController {
     async Create(@Body() Rol: requisitoDTO) {
       try {
         const Data = await firstValueFrom(
-          this.client.send({ cmd: 'CreateRol' }, Rol),
+          this.client.send({ cmd: 'CreateRequisito' }, Rol),
         );
         return SuccessResponse(Data);
       } catch (error) {
@@ -25,7 +27,7 @@ export class RequisitoController {
     async GetAll(@Query() Pagination: PaginationDto) {
       try {
         const data = await firstValueFrom(
-          this.client.send({ cmd: 'GetAllRol' }, Pagination),
+          this.client.send({ cmd: 'GetAllRequisito' }, Pagination),
         );
         return PaginatedSuccessResponse(data);
       } catch (e) {
@@ -38,7 +40,7 @@ export class RequisitoController {
     async Get(@Param('id') id: number) {
       try {
         const data = await firstValueFrom(
-          this.client.send({ cmd: 'GetRol' }, id),
+          this.client.send({ cmd: 'GetRequisito' }, id),
         );
         return SuccessResponse(data);
       } catch (e) {
@@ -48,10 +50,10 @@ export class RequisitoController {
   
     @ApiTags('Rol')
     @Put(':id')
-    async Update(@Param('id') id: number, @Body() RolData: rolDTO) {
+    async Update(@Param('id') id: number, @Body() RequisitoData: requisitoDTO) {
       try {
         const data = await firstValueFrom(
-          this.client.send({ cmd: 'UpdateRol' }, { id, RolData }),
+          this.client.send({ cmd: 'UpdateRequisito' }, { id, RequisitoData }),
         );
         return SuccessResponse(data);
       } catch (e) {
@@ -64,7 +66,7 @@ export class RequisitoController {
     async Delete(@Param('id') id: number) {
       try {
         const data = await firstValueFrom(
-          this.client.send({ cmd: 'DeleteRol' }, id),
+          this.client.send({ cmd: 'DeleteRequisito' }, id),
         );
         return SuccessResponse(data);
       } catch (e) {
@@ -77,7 +79,7 @@ export class RequisitoController {
     async Restore(@Param('id') id: number) {
       try {
         const data = await firstValueFrom(
-          this.client.send({ cmd: 'RestoreRol' }, id),
+          this.client.send({ cmd: 'RestoreRequisito' }, id),
         );
       } catch (error) {
         return FailResponse(error);
