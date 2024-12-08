@@ -10,7 +10,7 @@ async function bootstrap() {
     AppModule,{
       transport:Transport.NATS,
       options:{
-        servers: process.env.NAT_SERVER,
+        servers: "nats://localhost:4222",
         maxReconnectAttempts: -1
       }
     }
