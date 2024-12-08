@@ -9,7 +9,7 @@ import { PaginationDto } from 'src/Pagination/PaginationDTO';
 @Controller('requisito')
 export class RequisitoController {
     constructor(@Inject('NAT_Service') private readonly client: ClientProxy){}
-    @ApiTags('Rol')
+    @ApiTags('Requisito')
     @Post()
     async Create(@Body() Rol: requisitoDTO) {
       try {
@@ -22,7 +22,7 @@ export class RequisitoController {
       }
     }
   
-    @ApiTags('Rol')
+    @ApiTags('Requisito')
     @Get()
     async GetAll(@Query() Pagination: PaginationDto) {
       try {
@@ -35,7 +35,7 @@ export class RequisitoController {
       }
     }
   
-    @ApiTags('Rol')
+    @ApiTags('Requisito')
     @Get(':id')
     async Get(@Param('id') id: number) {
       try {
@@ -48,7 +48,7 @@ export class RequisitoController {
       }
     }
   
-    @ApiTags('Rol')
+    @ApiTags('Requisito')
     @Put(':id')
     async Update(@Param('id') id: number, @Body() RequisitoData: requisitoDTO) {
       try {
@@ -61,7 +61,7 @@ export class RequisitoController {
       }
     }
   
-    @ApiTags('Rol')
+    @ApiTags('Requisito')
     @Delete(':id')
     async Delete(@Param('id') id: number) {
       try {
@@ -74,7 +74,7 @@ export class RequisitoController {
       }
     }
   
-    @ApiTags('Rol')
+    @ApiTags('Requisito')
     @Put(':id/restore')
     async Restore(@Param('id') id: number) {
       try {

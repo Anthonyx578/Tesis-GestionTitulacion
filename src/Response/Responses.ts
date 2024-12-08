@@ -14,5 +14,5 @@ export function BadRequestResponse(Mesagge:string = 'Operacion invalida'){
 }
 
 export function SuccessResponse(Data:any = {}){
-    return {message:'Operaicon realizada con exito', Data};
+    return {message:'Operacion realizada con exito', Data};
 }
