@@ -13,7 +13,7 @@ export class UsuarioService {
     constructor(@InjectRepository(usuario) private repository:Repository<usuario>){
     }
 
-    async Create (Usuario:UsuarioCreateDTO){
+    async Create (Usuario:UsuarioUpdateDTO){
         try{
             const NewCarrera:Partial<usuario> = {
                 nombre_usuario: Usuario.nombre_usuario,
@@ -36,7 +36,7 @@ export class UsuarioService {
             })
             const TotalPages =Math.ceil(TotalData/limit);
 
-            const data = await this.repository.find({where:{status:1},select:['id_usuario','nombre_usuario','nombres','apellidos','telefono','correo','fecha_nacimiento','id_rol'],skip:((page - 1) * limit),take:limit})
+            const data = await this.repository.find({where:{status:1},select:['id_usuario','nombre_usuario','nombres','apellidos','telefono','correo','fecha_nacimiento','id_rol','id_carrera'],skip:((page - 1) * limit),take:limit})
             /*
             data.map((data)=>{
                 data.id_rol

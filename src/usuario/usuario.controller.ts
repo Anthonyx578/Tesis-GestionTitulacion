@@ -11,7 +11,7 @@ export class UsuarioController {
 
 
     @MessagePattern({cmd:'CreateUsuario'})
-        async Create(Data:UsuarioCreateDTO){
+        async Create(Data:UsuarioUpdateDTO){
         return  await this.Services.Create(Data)
     }
     @MessagePattern({cmd:'GetAllUsuario'})

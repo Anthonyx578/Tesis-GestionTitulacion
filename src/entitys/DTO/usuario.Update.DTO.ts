@@ -5,6 +5,8 @@ export class UsuarioUpdateDTO{
 
     nombres:string
 
+    contrasena:string
+    
     apellidos:string
 
     telefono_string
