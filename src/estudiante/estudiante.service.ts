@@ -15,11 +15,18 @@ export class EstudianteService {
 
   async Create(id_usuario: number) {
     try {
-      const Estudiante: Partial<estudiante> = {
-        id_usuario: id_usuario,
-        created_at: new Date(),
-      };
-      return await this.repository.save(Estudiante);
+      const Used =await this.repository.find({where:{id_usuario:id_usuario}});
+      console.log(Used)
+      if(Used.length == 0){
+        const Estudiante: Partial<estudiante> = {
+            id_usuario: id_usuario,
+            created_at: new Date(),
+          };
+        return await this.repository.save(Estudiante);
+      }
+      else{
+        throw new RpcException('El usuario ya esta en uso');
+      }
     } catch (error) {
       throw new RpcException(error);
     }
@@ -67,7 +74,20 @@ export class EstudianteService {
     try {
       return await this.repository.findOne({
         where: { id_estudiante: id, status: 1 },
-        select: ['id_usuario', 'id_estudiante', 'id_tesis'],
+        select: [
+          'id_usuario',
+          'id_estudiante',
+          'id_tesis',
+          'sexo',
+          'genero',
+          'estado_civil',
+          'pais',
+          'provincia',
+          'ciudad',
+          'parroquia',
+          'direccion',
+          'numero_hijos',
+        ],
       });
     } catch (e) {
       throw new RpcException(e);
