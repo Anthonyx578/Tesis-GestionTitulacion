@@ -9,6 +9,26 @@ export class estudiante{
     @Column()
     id_usuario:number
     @Column()
+    sexo:string
+    @Column()
+    estado_civil:string
+    @Column()
+    genero:string
+    @Column()
+    tipo_colegio:string
+    @Column()
+    numero_hijos:number
+    @Column()
+    pais:string
+    @Column()
+    provincia:string
+    @Column()
+    ciudad:string
+    @Column()
+    parroquia:string
+    @Column()
+    direccion:string
+    @Column()
     created_at:Date
     @Column()
     deleted_at:Date
