@@ -21,6 +21,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { EstudianteUpdateDTO } from '../DTO/estudiante.Update.DTO';
 import { firstValueFrom } from 'rxjs';
+import { estudiante } from './Entity/estudiante.entity';
 
 @Controller('estudiante')
 export class EstudianteController {
@@ -53,10 +54,23 @@ export class EstudianteController {
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
       const Data = await firstValueFrom(
-        this.client.send({ cmd: 'GetAllEstudiante' }, Pagination),
+        this.client.send<{ data: estudiante[]; meta: any }>(
+          { cmd: 'GetAllEstudiante' },
+          Pagination,
+        ),
       );
-      console.log(Data);
-      return PaginatedSuccessResponse(Data);
+      //Obtenemos el apartado de data de la respuesta
+      const { data } = Data;
+      //Completamos los datos con los de usuario
+      const CompleteData = await Promise.all(
+        data.map(async (estudiante) => {
+          const UserData = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuario' }, estudiante.id_usuario),
+          );
+          return { ...UserData, ...estudiante };
+        }),
+      );
+      return PaginatedSuccessResponse({ data: CompleteData, meta: Data.meta });
     } catch (e) {
       return FailResponse(e);
     }
@@ -66,9 +80,16 @@ export class EstudianteController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data = await firstValueFrom(this.client
-        .send({ cmd: 'GetEstudiante' }, id))
-      return SuccessResponse(data);
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetEstudiante' }, id),
+      );
+      const { id_usuario } = data;
+      const userData = await firstValueFrom(
+        this.client.send({ cmd: 'GetUsuario' }, id_usuario),
+      );
+      console.log(userData);
+      const MapedData = { ...userData, ...data };
+      return SuccessResponse(MapedData);
     } catch (e) {
       return FailResponse(e);
     }
