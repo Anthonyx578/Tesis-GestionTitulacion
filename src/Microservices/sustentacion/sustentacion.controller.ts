@@ -1,38 +1,22 @@
-import {
-  Body,
-  ConsoleLogger,
-  Controller,
-  Delete,
-  Get,
-  Inject,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import {
-  BadRequestResponse,
-  FailResponse,
-  PaginatedSuccessResponse,
-  SuccessResponse,
-} from 'src/Response/Responses';
 import { ApiTags } from '@nestjs/swagger';
-import { PaginationDto } from 'src/Pagination/PaginationDTO';
-import { EstudianteUpdateDTO } from '../DTO/estudiante.Update.DTO';
 import { firstValueFrom } from 'rxjs';
+import { PaginationDto } from 'src/Pagination/PaginationDTO';
+import { BadRequestResponse, FailResponse, PaginatedSuccessResponse, SuccessResponse } from 'src/Response/Responses';
+import { sustentacionDTO } from './DTO/sustentacion.DTO';
 
-@Controller('estudiante')
-export class EstudianteController {
-  constructor(@Inject('NAT_Service') private readonly client: ClientProxy) {}
+@Controller('sustentacion')
+export class SustentacionController {
+    constructor(@Inject('NAT_Service') private readonly client: ClientProxy) {}
 
-  @ApiTags('Estudiante')
+  @ApiTags('Sustentacion')
   @Post(':id_usuario')
   async Create(@Param('id_usuario') id_usuario: number) {
     try {
       //Validamos su existencia
       const Exist = await firstValueFrom(
-        this.client.send({ cmd: 'GetUsuario' }, id_usuario),
+        this.client.send({ cmd: 'GetSustentacion' }, id_usuario),
       );
       if (!Exist) {
         return BadRequestResponse(
@@ -40,7 +24,7 @@ export class EstudianteController {
         );
       }
       const Usuario = await firstValueFrom(
-        this.client.send({ cmd: 'CreateEstudiante' }, id_usuario),
+        this.client.send({ cmd: 'CreateSustentacion' }, id_usuario),
       );
       return SuccessResponse(Usuario);
     } catch (error) {
@@ -48,12 +32,12 @@ export class EstudianteController {
     }
   }
 
-  @ApiTags('Estudiante')
+  @ApiTags('Sustentacion')
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
       const Data = await firstValueFrom(
-        this.client.send({ cmd: 'GetAllEstudiante' }, Pagination),
+        this.client.send({ cmd: 'GetAllSustentacion' }, Pagination),
       );
       console.log(Data);
       return PaginatedSuccessResponse(Data);
@@ -62,26 +46,26 @@ export class EstudianteController {
     }
   }
 
-  @ApiTags('Estudiante')
+  @ApiTags('Sustentacion')
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
       const data = await firstValueFrom(this.client
-        .send({ cmd: 'GetEstudiante' }, id))
+        .send({ cmd: 'GetSustentacion' }, id));
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
     }
   }
-  @ApiTags('Estudiante')
+  @ApiTags('Sustentacion')
   @Put(':id')
   async Update(
     @Param('id') id: number,
-    @Body() EstudiantesData: EstudianteUpdateDTO,
+    @Body() SustentacionData: sustentacionDTO,
   ) {
     try {
       const data = await firstValueFrom(
-        this.client.send({ cmd: 'UpdateEstudiante' }, { id, EstudiantesData }),
+        this.client.send({ cmd: 'UpdateSustentacion' }, { id, SustentacionData }),
       );
       return SuccessResponse(data);
     } catch (e) {
@@ -89,12 +73,12 @@ export class EstudianteController {
     }
   }
 
-  @ApiTags('Estudiante')
+  @ApiTags('Sustentacion')
   @Delete(':id')
   async Delete(@Param('id') id: number) {
     try {
       const data = await firstValueFrom(
-        this.client.send({ cmd: 'DeleteEstudiante' }, id),
+        this.client.send({ cmd: 'DeleteSustentacion' }, id),
       );
       return SuccessResponse(data);
     } catch (e) {
@@ -102,12 +86,12 @@ export class EstudianteController {
     }
   }
 
-  @ApiTags('Estudiante')
+  @ApiTags('Sustentacion')
   @Put(':id/restore')
   async Restore(@Param('id') id: number) {
     try {
       const data = await firstValueFrom(
-        this.client.send({ cmd: 'RestoreEstudiante' }, id),
+        this.client.send({ cmd: 'RestoreSustentacion' }, id),
       );
       return SuccessResponse(data);
     } catch (error) {

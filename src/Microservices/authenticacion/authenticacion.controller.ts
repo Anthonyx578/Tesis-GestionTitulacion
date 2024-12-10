@@ -1,22 +1,21 @@
 import {
   Body,
   Controller,
-  Get,
   Inject,
   Post,
-  Query,
   Res,
 } from '@nestjs/common';
 import { UsuarioCreateDTO } from '../DTO/usuario.Create.DTO';
 import { ClientProxy } from '@nestjs/microservices';
 import { FailResponse } from 'src/Response/Responses';
-import * as cookieParser from 'cookie-parser';
 import { Response } from 'express';
 import { firstValueFrom } from 'rxjs';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('authenticacion')
 export class AuthenticacionController {
   constructor(@Inject('NAT_Service') private readonly client: ClientProxy) {}
+  @ApiTags('Auth')
   @Post()
   async login(@Body() Login: UsuarioCreateDTO, @Res() response: Response) {
     try {

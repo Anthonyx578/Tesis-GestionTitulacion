@@ -22,7 +22,6 @@ import {
 } from 'src/Response/Responses';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
 import { firstValueFrom } from 'rxjs';
 
 @Controller('rol')

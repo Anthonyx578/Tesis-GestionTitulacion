@@ -18,7 +18,7 @@ import {
 import { docenteTutorUpdateDTO } from '../DTO/docenteTutorUpdateDTO';
 import { ClientProxy } from '@nestjs/microservices';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
-import { first, firstValueFrom } from 'rxjs';
+import {firstValueFrom } from 'rxjs';
 
 @Controller('docente-tutor')
 export class DocenteTutorController {

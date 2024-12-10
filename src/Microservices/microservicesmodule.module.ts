@@ -10,6 +10,7 @@ import { JuradoController } from './jurado/jurado.controller';
 import { ConfigModule } from '@nestjs/config';
 import { TesisController } from './tesis/tesis.controller';
 import { RequisitoController } from './requisito/requisito.controller';
+import { SustentacionController } from './sustentacion/sustentacion.controller';
 @Module({
   imports:[
     ConfigModule.forRoot(), 
@@ -23,6 +24,6 @@ import { RequisitoController } from './requisito/requisito.controller';
       },
     },
   ]),],
-  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController, TesisController, RequisitoController]
+  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController, TesisController, RequisitoController, SustentacionController]
 })
 export class MicroservicesmoduleModule {}
