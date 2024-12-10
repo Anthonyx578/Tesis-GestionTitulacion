@@ -24,9 +24,9 @@ export class SustentacionController {
     }
 
     @MessagePattern({cmd:'UpdateSustentacion'})
-        async Update(data:{id:number,RequisitoData:sustentacionDTO}){
-        const {id,RequisitoData} = data;
-        return await this.Services.update(id,RequisitoData);
+        async Update(data:{id:number,SustentacionData:sustentacionDTO}){
+        const {id,SustentacionData} = data;
+        return await this.Services.update(id,SustentacionData);
     }
 
     @MessagePattern({cmd:'DeleteSustentacion'})
