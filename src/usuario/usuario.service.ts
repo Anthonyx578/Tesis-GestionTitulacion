@@ -50,7 +50,7 @@ export class UsuarioService {
 
     async Get (id:number){
         try{
-            const Find = await this.repository.findOne({where:{id_usuario:id,status:1},select:['id_usuario','nombre_usuario','nombres','apellidos','telefono','correo','fecha_nacimiento']})
+            const Find = await this.repository.findOne({where:{id_usuario:id,status:1},select:['id_usuario','nombre_usuario','nombres','apellidos','telefono','correo','fecha_nacimiento','id_rol','id_carrera']})
             if(!Find){
                 return null;
             }

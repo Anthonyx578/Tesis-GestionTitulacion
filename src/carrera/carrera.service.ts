@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { carrera } from 'src/entitys/carrera.entity';
-import { carreraDTO } from 'src/entitys/DTO/carreraDTo';
+import { carreraDTO } from 'src/entitys/DTO/carreraDTO';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { Repository } from 'typeorm';
 

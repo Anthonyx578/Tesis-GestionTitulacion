@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { CarreraService } from './carrera.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { carreraDTO } from 'src/entitys/DTO/carreraDTo';
+import { carreraDTO } from 'src/entitys/DTO/carreraDTO';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 
 @Controller('carrera')

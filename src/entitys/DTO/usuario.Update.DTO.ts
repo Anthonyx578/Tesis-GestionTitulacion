@@ -1,23 +1,33 @@
-import { IsDate, IsEmail, IsString } from "class-validator";
+import { IsDate, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class UsuarioUpdateDTO{
-    nombre_usuario:string
+export class UsuarioUpdateDTO {
+    @IsOptional()
+    nombre_usuario?: string;
 
-    nombres:string
+    @IsOptional()
+    nombres?: string;
 
-    contrasena:string
-    
-    apellidos:string
+    @IsOptional()
+    contrasena?: string;
 
-    telefono:string
+    @IsOptional()
+    apellidos?: string;
 
-    @IsEmail()
-    correo:string
+    @IsOptional()
+    telefono?: string;
 
-    @IsString()
-    fecha_nacimiento:Date
+    @IsOptional()
+    correo?: string;
 
-    id_rol:number
+    @IsOptional()
+    @Type(() => Date) // Transformar a un objeto Date
+    @IsDate() // Validar que es una fecha
+    fecha_nacimiento?: Date;
 
-    id_carrera:number
+    @IsOptional()
+    id_rol?: number;
+
+    @IsOptional()
+    id_carrera?: number;
 }
