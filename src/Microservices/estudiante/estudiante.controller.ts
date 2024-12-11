@@ -99,7 +99,6 @@ export class EstudianteController {
   @Get('ByUser/:id_usuario')
   async GetbyUser(@Param('id_usuario') id: number) {
     try {
-      console.log(id)
       const data = await firstValueFrom(
         this.client.send({ cmd: 'GetEstudiantebyUser' }, id),
       );
