@@ -66,7 +66,7 @@ export default function Formulario_Usuario({
   }, []);
 
   if (!isClient) {
-    return null; // Este retorno previene el error de hidratación en el servidor
+    return null; 
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -92,7 +92,7 @@ export default function Formulario_Usuario({
 
     // Filtrar campos vacíos o nulos
     const filteredFormData = Object.fromEntries(
-      Object.entries(formData).filter(([_, value]) => value !== "" && value !== null)
+      Object.entries(formData).filter(([value]) => value !== "" && value !== null)
     );
 
     console.log("Datos enviados:", filteredFormData);
@@ -131,8 +131,8 @@ export default function Formulario_Usuario({
       }
     
        router.push("/agenda_sustentacion/usuarios");
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Error al procesar la solicitud");
+    } catch {
+      toast.error("Error al procesar la solicitud");
     }
   };
 

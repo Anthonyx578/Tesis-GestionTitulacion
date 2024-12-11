@@ -1,6 +1,5 @@
 import { Toaster } from "sonner";
 import Formulario_Usuario from "./formulario";
-
 const url = process.env.NEXT_PRIVATE_KEY_URL;
 
 const fetchData = async (id?: number) => {
@@ -25,7 +24,7 @@ export default async function Formulario_Requisisto_Page({searchParams}: {search
   const data_carrera =  await fetchData_LoadDatos("carrera");
   const data_rol = ( await fetchData_LoadDatos("rol"));
 
-  console.log(data)
+ 
 
 
   const title = id ? "Modificar Usuario" : "Crear Usuario";
