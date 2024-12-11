@@ -35,7 +35,6 @@ export class EstudianteService {
   async GetAll(Pagination: PaginationDto) {
     try {
       const { page, limit } = Pagination;
-
       const TotalData = await this.repository.count({
         where: { status: 1 },
       });
