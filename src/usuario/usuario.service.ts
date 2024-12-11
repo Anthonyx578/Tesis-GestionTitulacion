@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsuarioCreateDTO } from 'src/entitys/DTO/usuario.Create.DTO';
 import { usuario } from 'src/entitys/usuario.entity';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { Repository } from 'typeorm';
@@ -15,10 +14,16 @@ export class UsuarioService {
 
     async Create (Usuario:UsuarioUpdateDTO){
         try{
-            const NewCarrera:Partial<usuario> = {
-                ...Usuario,
+            const bycript = require('bcryptjs')
+            const {contrasena, ...OtherData} = Usuario
+            const hashedCont = await bycript.hash(contrasena,10); 
+
+            const NewCarrera = {
+                ...OtherData,
+                contrasena: hashedCont,
                 created_at:new Date()
             }
+            console.log(NewCarrera) 
             return await this.repository.save(NewCarrera);
         }
         catch(e){
