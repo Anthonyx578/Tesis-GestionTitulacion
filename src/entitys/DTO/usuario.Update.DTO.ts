@@ -9,13 +9,13 @@ export class UsuarioUpdateDTO{
     
     apellidos:string
 
-    telefono_string
+    telefono:string
 
     @IsEmail()
     correo:string
 
     @IsString()
-    fecha_nacimiento:string
+    fecha_nacimiento:Date
 
     id_rol:number
 

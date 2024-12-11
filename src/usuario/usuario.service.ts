@@ -18,6 +18,13 @@ export class UsuarioService {
             const NewCarrera:Partial<usuario> = {
                 nombre_usuario: Usuario.nombre_usuario,
                 contrasena: await this.hashPassword(Usuario.contrasena),
+                id_carrera: Usuario.id_carrera || null,
+                nombres: Usuario.nombres || null,
+                apellidos: Usuario.apellidos || null,
+                telefono:Usuario.telefono || null,
+                correo:Usuario.correo || null,
+                fecha_nacimiento:Usuario.fecha_nacimiento || null,
+                id_rol:Usuario.id_rol || null,
                 created_at:new Date()
             }
             return await this.repository.save(NewCarrera);
