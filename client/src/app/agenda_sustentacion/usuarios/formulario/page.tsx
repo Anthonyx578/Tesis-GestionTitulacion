@@ -9,12 +9,12 @@ const fetchData = async (id?: number) => {
     return data.Data;
 };
 
-const fetchData_LoadDatos = async () => {
-  const response = await fetch(`${url}carrera`, { cache: "no-store" });
+const fetchData_LoadDatos = async (tablaurl:string) => {
+  const response = await fetch(`${url}${tablaurl}`, { cache: "no-store" });
   const data = await response.json();
-  console.log(data)
   return data.data;
 };
+
 
 
 
@@ -22,14 +22,18 @@ export default async function Formulario_Requisisto_Page({searchParams}: {search
   const { id } = await searchParams;
 
   const data = id ? await fetchData(id) : null;
-  const data_carrera =  await fetchData_LoadDatos();
+  const data_carrera =  await fetchData_LoadDatos("carrera");
+  const data_rol = ( await fetchData_LoadDatos("rol"));
+
+  console.log(data)
+
 
   const title = id ? "Modificar Usuario" : "Crear Usuario";
   const funcioncrear = !id;
 
   return (
     <>
-      <Formulario_Carrera title={title} data={data} funcion_crear={funcioncrear} id={id} data_carrera={data_carrera} />
+      <Formulario_Carrera title={title} data={data} funcion_crear={funcioncrear} id={id} data_carrera={data_carrera} data_rol={data_rol} />
       <Toaster richColors />
     </>
   );

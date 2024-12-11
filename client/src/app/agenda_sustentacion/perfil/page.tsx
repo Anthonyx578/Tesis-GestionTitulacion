@@ -1,15 +1,26 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { obtenerRolToken } from "@/services/service-extracionRolToken";
 
-export default function Perfil_Page() {
+export default async function Perfil_Page() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("authuleamtk")?.value; // Asegúrate de que "userToken" sea el nombre correcto
+    const [rol] = token ? obtenerRolToken(token) : [""];
+
+    
+    
+    
     return (
         <div className="flex flex-col gap-6 bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
             <div className="flex justify-between items-center">
                 <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
                     Perfil
                 </h1>
-                <Link href="perfil/formulario" className="bg-blue-600 hover:bg-blue-700 text-white p-2 sm:py-2 sm:px-4 rounded-lg font-semibold transition-all">
-                    Editar Información
-                </Link>
+                {rol == "estudiantes" &&(
+                    <Link href="perfil/formulario" className="bg-blue-600 hover:bg-blue-700 text-white p-2 sm:py-2 sm:px-4 rounded-lg font-semibold transition-all">
+                        Editar Información
+                    </Link>
+                )}
             </div>
             <hr className="border-gray-300 dark:border-gray-700" />
 

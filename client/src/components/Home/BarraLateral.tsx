@@ -4,7 +4,7 @@ import ILogoBlack from "@/assets/Imagenes/ILogoBlack.webp";
 import ILogoWhite from "@/assets/Imagenes/ILogoWhite.png";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, JSX } from 'react';
 import Cookies from 'js-cookie';
 
 // Memoizamos el componente para evitar renderizados innecesarios.

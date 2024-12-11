@@ -1,7 +1,7 @@
 import Components_BarraLateral from "@/components/Home/BarraLateral";
 import { cookies } from "next/headers";
 import { listaNavegacion } from "@/lib/data/navegacion";
-import React from "react";
+import React, { JSX } from "react";
 import { obtenerRolToken } from "@/services/service-extracionRolToken";
 
 export default async function LayoutPrincipalHome({ children }: { children: React.ReactNode; }) {
@@ -10,7 +10,7 @@ export default async function LayoutPrincipalHome({ children }: { children: Reac
     const token = cookieStore.get("authuleamtk")?.value; // Asegúrate de que "userToken" sea el nombre correcto
 
     // Inicializar user y role con valores por defecto //" ese administrador quitarlo y ponerlo en vacio"
-    const [rol] = token ? obtenerRolToken(token) : ["", "administrador"];
+    const [rol] = token ? obtenerRolToken(token) : ["administrador"];
 
     // Definir el tipo de rol
     type RoleType = 'administrador' | 'secretario' | 'profesor' | 'estudiantes';

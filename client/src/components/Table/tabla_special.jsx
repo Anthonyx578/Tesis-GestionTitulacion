@@ -91,47 +91,62 @@ const TableComponent = ({ title, addView, url, columns, editView, deleteView, id
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg">
-            <table className="min-w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-300">
-                  {columns.map(({ accessorKey, header }) => (
-                    <th key={accessorKey} className="border px-4 py-2">
-                      {header}
-                    </th>
-                  ))}
-                  {(editView || deleteView) && <th className="border px-4 py-2">Acciones</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((row, index) => (
-                  <tr key={row[id_name] || index} className="hover:bg-gray-300 dark:hover:bg-gray-700/40">
-                    {columns.map(({ accessorKey }) => (
-                      <td key={accessorKey} className="border px-4 py-2 text-gray-700 dark:text-gray-300">
-                        {row[accessorKey]}
-                      </td>
-                    ))}
-                    {(editView || deleteView) && (
-                      <td className="w-80 border px-4 py-2">
-                        <div className="flex justify-center gap-2">
-                          {editView && (
-                            <button onClick={() => handleEdit(row[id_name])} className="bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md">
-                              <Image src={IEdit} alt="Editar" width={20} />
-                            </button>
-                          )}
-                          {deleteView && (
-                            <button onClick={() => handleDelete(row[id_name])} className="bg-red-500 text-white hover:bg-red-600 p-2 rounded-md">
-                              <Image src={IDelete} alt="Eliminar" width={20} />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    )}
-                  </tr>
+         <div className="overflow-x-auto border border-gray-300 dark:border-gray-700 rounded-lg">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-300">
+                {columns.map(({ accessorKey, header }) => (
+                  <th key={accessorKey} className="border px-4 py-2">
+                    {header}
+                  </th>
                 ))}
-              </tbody>
-            </table>
-          </div>
+                {(editView || deleteView) && (
+                  <th
+                    className="border px-4 py-2 sticky right-0 bg-gray-200 dark:bg-gray-800"
+                  >
+                    Acciones
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((row, index) => (
+                <tr key={row[id_name] || index} className="hover:bg-gray-300 dark:hover:bg-gray-700/40">
+                  {columns.map(({ accessorKey }) => (
+                    <td key={accessorKey} className="border px-4 py-2 text-gray-700 dark:text-gray-300">
+                      {row[accessorKey]}
+                    </td>
+                  ))}
+                  {(editView || deleteView) && (
+                    <td
+                      className="w-80 border px-4 py-2 sticky right-0 bg-gray-50 dark:bg-primary_dark"
+                    >
+                      <div className="flex justify-center gap-2">
+                        {editView && (
+                          <button
+                            onClick={() => handleEdit(row[id_name])}
+                            className="bg-blue-500 text-white hover:bg-blue-600 p-2 rounded-md"
+                          >
+                            <Image src={IEdit} alt="Editar" width={20} />
+                          </button>
+                        )}
+                        {deleteView && (
+                          <button
+                            onClick={() => handleDelete(row[id_name])}
+                            className="bg-red-500 text-white hover:bg-red-600 p-2 rounded-md"
+                          >
+                            <Image src={IDelete} alt="Eliminar" width={20} />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
 
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </>

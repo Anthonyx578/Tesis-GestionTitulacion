@@ -23,7 +23,10 @@ export default function Carreras_Page(){
         { accessorKey: "id_carrera", header: "Carrera" },
         { accessorKey: "id_rol", header: "Rol" },
         { accessorKey: "nombres", header: "Nombres" },
-        { accessorKey: "apellidos", header: "Apellidos" }
+        { accessorKey: "apellidos", header: "Apellidos" },
+        { accessorKey: "telefono", header: "Telefono" },
+        { accessorKey: "correo", header: "Correo" },
+
     ]
 
 
