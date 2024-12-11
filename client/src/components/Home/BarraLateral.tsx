@@ -10,19 +10,8 @@ import Cookies from 'js-cookie';
 // Memoizamos el componente para evitar renderizados innecesarios.
 const MemoizedLink = React.memo(function MemoizedLink({ item, menu }: { item: { title: string; url: string; imagen: JSX.Element }; menu: boolean }) {
     return (
-        <Link 
-            href={item.url} 
-            className={`relative flex items-center overflow-hidden group 
-                        ${menu ? 'justify-start px-3 py-2' : 'justify-center p-2'} 
-                        gap-2  transition-all duration-700
-                        `}
-        >
-            {/* Background animation */}
-            <span 
-                className="absolute inset-0 bg-black/10 dark:bg-white/10 -z-10 group-hover:translate-x-0 transform translate-x-[-100%] transition-transform duration-700 ease-out" 
-            />
-
-            {/* Content */}
+        <Link href={item.url} className={`relative flex items-center overflow-hidden group ${menu ? 'justify-start px-3 py-2' : 'justify-center p-2'} gap-2  transition-all duration-700`}>
+            <span className="absolute inset-0 bg-black/10 dark:bg-white/10 -z-10 group-hover:translate-x-0 transform translate-x-[-100%] transition-transform duration-700 ease-out"/>
             <div className="flex flex-row items-center gap-2 z-10">
                 {item.imagen}
                 {menu && <span>{item.title}</span>}
@@ -62,18 +51,18 @@ export default function Components_BarraLateral({ lista_navegacion }: { lista_na
     }, [darkMode, isLoaded]);
 
     return (
-        <div className={`${menu ? 'w-10/12 absolute sm:relative sm:w-4/12 md:w-4/12 lg:w-2.50/12' : 'w-16'} bg-primary_white text-sm dark:bg-primary_dark transition-all duration-500 flex flex-col border-r border-black/10 h-screen truncate text-black/90 dark:text-white/90 z-20 `}>
+        <div className={`${menu ? 'w-10/12 absolute sm:relative sm:w-4/12 md:w-4/12 lg:w-2.50/12' : 'w-16'} bg-white sm:bg-primary_white text-sm dark:bg-primary_dark transition-all duration-500 flex flex-col border-r border-black/10 h-screen truncate text-black/90 dark:text-white/90 z-20 `}>
             <div className={`${menu ? 'px-4 py-2' : 'py-4 flex-col justify-center items-center w-full'} flex items-center justify-between shadow-lg`}>
                 {menu && (
-                    <Image src={darkMode ? ILogoBlack : ILogoWhite} alt="Logo" width={120} height={10} className="p-2" />
+                    <Image src={darkMode ? ILogoBlack : ILogoWhite} alt="Logo" width={120} loading="lazy" className="p-2" />
                 )}
                 <svg onClick={() => setMenu(!menu)} className="place-self-center fill-black/80 dark:fill-white/80 cursor-pointer" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
-                    <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+                    <path d="M240-160q-33 0-56.5-23.5T160-240q0-33 23.5-56.5T240-320q33 0 56.5 23.5T320-240q0 33-23.5 56.5T240-160Zm240 0q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm240 0q-33 0-56.5-23.5T640-240q0-33 23.5-56.5T720-320q33 0 56.5 23.5T800-240q0 33-23.5 56.5T720-160ZM240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Zm240 0q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Zm240 0q-33 0-56.5-23.5T640-720q0-33 23.5-56.5T720-800q33 0 56.5 23.5T800-720q0 33-23.5 56.5T720-640Z"/>
                 </svg>
             </div>
             <hr className="border-black/10" />
             <div className="flex flex-col justify-between h-full px-0 p-2 ">
-                <nav className="flex flex-col gap-2">
+                <nav className="flex flex-col gap-2 overflow-y-auto overscroll-y-auto">
                     {lista_navegacion.map((item, index) => (
                         <MemoizedLink key={index} item={item} menu={menu} />
                     ))}

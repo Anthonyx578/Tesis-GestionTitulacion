@@ -1,16 +1,16 @@
 import Components_BarraLateral from "@/components/Home/BarraLateral";
-import { obtenerDatosToken } from "@/services/service-extracionDatosToken";
 import { cookies } from "next/headers";
 import { listaNavegacion } from "@/lib/data/navegacion";
 import React from "react";
+import { obtenerRolToken } from "@/services/service-extracionRolToken";
 
-export default function LayoutPrincipalHome({ children }: { children: React.ReactNode; }) {
+export default async function LayoutPrincipalHome({ children }: { children: React.ReactNode; }) {
     // Obtener las cookies
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get("authuleamtk")?.value; // Asegúrate de que "userToken" sea el nombre correcto
 
     // Inicializar user y role con valores por defecto //" ese administrador quitarlo y ponerlo en vacio"
-    const [usuario, rol] = token ? obtenerDatosToken(token) : ["", "administrador"];
+    const [rol] = token ? obtenerRolToken(token) : ["", "administrador"];
 
     // Definir el tipo de rol
     type RoleType = 'administrador' | 'secretario' | 'profesor' | 'estudiantes';
@@ -30,7 +30,7 @@ export default function LayoutPrincipalHome({ children }: { children: React.Reac
     return (
         <div className="flex flex-row w-full h-screen ">
             <Components_BarraLateral lista_navegacion={listaNavegacionActual} />
-            <div className="bg-secondary_white dark:bg-secondary_dark w-full text-black/90 dark:text-white/90 p-4  overflow-y-auto overscroll-x-none">
+            <div className="p-3 sm:py-6 sm:px-8 bg-secondary_white dark:bg-secondary_dark w-full text-black/90 dark:text-white/90 overflow-y-auto overscroll-x-none">
                 {children}
             </div>
         </div>

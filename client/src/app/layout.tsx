@@ -1,18 +1,26 @@
-import Head from "next/head";
-import "../styles/globals.css";
+import '@/styles/globals.css';
+import { Roboto } from 'next/font/google'
+ 
+
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '700'], 
+  display: 'swap',
+});
+
 
 export const metadata = {
   title: "Administración de Sustentación de Tesis",
   description: "Plataforma para la gestión eficiente y sin complicaciones de la sustentación de tesis en Uleam. Ideal para la última fase del proceso de aprobación de tesis.",
   keywords: "tesis, sustentación de tesis, gestión de tesis, aprobación de tesis, Uleam, Uleam Tesis, Login",
   publisher: "Leif V.R & Anthoy A.M - Tesis",
-  
   category: "Educación",
   programmers:"Leif Wither V.R y Antony Roger A.M",
   openGraph: {
     title: "Administración de Sustentación de Tesis",
     description: "Gestiona tu proceso de sustentación de tesis de forma eficiente",
-    url: "http://localhost:3000/",
+    url: "http://localhost:5000/",
     siteName: "Uleam - Tesis Leif y Anthony",
     locale: "es_EC",
   }
@@ -21,10 +29,11 @@ export const metadata = {
 export default function RootLayout({children}:{children: React.ReactNode;}) {
   return (
     <html lang="es">
-      <head>
-        <script src="https://unpkg.com/react-scan/dist/auto.global.js" async></script>
-      </head>
-      <body className="bg-primary_white dark:bg-primary_dark ">{children}</body>
+      <body className={roboto.className+ "bg-primary_white dark:bg-primary_dark"}>
+        {children} 
+      </body>
     </html>
   );
-}
+};
+
+
