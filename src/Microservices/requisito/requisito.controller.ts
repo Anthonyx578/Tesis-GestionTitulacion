@@ -26,6 +26,7 @@ export class RequisitoController {
     @Get()
     async GetAll(@Query() Pagination: PaginationDto) {
       try {
+        console.log(Pagination)
         const data = await firstValueFrom(
           this.client.send({ cmd: 'GetAllRequisito' }, Pagination),
         );
