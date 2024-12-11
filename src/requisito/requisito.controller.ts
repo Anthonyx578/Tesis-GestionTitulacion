@@ -14,6 +14,7 @@ export class RequisitoController {
 
     @MessagePattern({cmd:'GetAllRequisito'})
         async GetAll(Pagination:PaginationDto){
+            console.log(Pagination)
         return await this.Services.GetAll(Pagination);
     }
 

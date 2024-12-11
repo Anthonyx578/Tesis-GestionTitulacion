@@ -28,7 +28,8 @@ export class RequisitoService {
       async GetAll(Pagination: PaginationDto) {
         try {
           const { page, limit } = Pagination;
-    
+          console.log(page)
+          console.log(limit)
           const TotalData = await this.repository.count({
             where: { status: 1 },
           });
