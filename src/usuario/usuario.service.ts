@@ -14,16 +14,13 @@ export class UsuarioService {
 
     async Create (Usuario:UsuarioUpdateDTO){
         try{
-            const bycript = require('bcryptjs')
             const {contrasena, ...OtherData} = Usuario
-            const hashedCont = await bycript.hash(contrasena,10); 
-
+            const hashedCont = await this.hashPassword(contrasena)
             const NewCarrera = {
                 ...OtherData,
                 contrasena: hashedCont,
                 created_at:new Date()
             }
-            console.log(NewCarrera) 
             return await this.repository.save(NewCarrera);
         }
         catch(e){
