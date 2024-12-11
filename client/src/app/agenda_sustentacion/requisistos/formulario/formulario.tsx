@@ -22,7 +22,7 @@ export default function Formulario_Requisito({title,data,id,funcion_crear}: {tit
 
     try {
       if (funcion_crear) {
-        await axios.post("http://localhost:3000/requisito", formData, options);
+        await axios.post("/administracion/v1/requisito", formData, options);
         toast.success("Requisito creado exitosamente");
       } else {
         await axios.put(`/administracion/v1/requisito/${id}`, formData, options);

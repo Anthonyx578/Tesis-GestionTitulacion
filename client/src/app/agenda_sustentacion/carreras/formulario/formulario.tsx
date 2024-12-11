@@ -21,7 +21,7 @@ export default function Formulario_Carrera({title,data,id,funcion_crear}: {title
 
     try {
       if (funcion_crear) {
-        await axios.post("http://localhost:3000/carrera", formData, options);
+        await axios.post("/administracion/v1/carrera", formData, options);
         toast.success("Carrera creada exitosamente");
       } else {
         await axios.put(`/administracion/v1/carrera/${id}`, formData, options);

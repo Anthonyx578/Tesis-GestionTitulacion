@@ -1,5 +1,5 @@
 import { Toaster } from "sonner";
-import Formulario_Carrera from "./formulario";
+import Formulario_Usuario from "./formulario";
 
 const url = process.env.NEXT_PRIVATE_KEY_URL;
 
@@ -33,7 +33,7 @@ export default async function Formulario_Requisisto_Page({searchParams}: {search
 
   return (
     <>
-      <Formulario_Carrera title={title} data={data} funcion_crear={funcioncrear} id={id} data_carrera={data_carrera} data_rol={data_rol} />
+      <Formulario_Usuario title={title} data={data} funcion_crear={funcioncrear} id={id} data_carrera={data_carrera} data_rol={data_rol} />
       <Toaster richColors />
     </>
   );

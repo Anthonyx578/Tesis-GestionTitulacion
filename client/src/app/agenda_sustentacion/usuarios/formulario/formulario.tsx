@@ -54,8 +54,9 @@ export default function Formulario_Usuario({
   const apellidos = useRef<HTMLInputElement>(null);
   const fecha_nacimiento = useRef<HTMLInputElement>(null);
 
-  const carreraSeleccionada = useRef<any>(null);
-  const rolSeleccionado = useRef<any>(null);
+  // Cambiamos el tipo a `HTMLSelectElement | null`
+  const carreraSeleccionada = useRef<HTMLSelectElement | null>(null);
+  const rolSeleccionado = useRef<HTMLSelectElement | null>(null);
 
   const [isClient, setIsClient] = useState(false);
 
@@ -70,47 +71,68 @@ export default function Formulario_Usuario({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
+    // Ahora accedemos al valor de los selects mediante `ref.current.value`
+    const selectedRol = opcionesRoles.find(
+      (rol) => rol.value === Number(rolSeleccionado.current?.value)
+    );
+
     // Crear objeto con todos los datos
     const formData = {
       nombre_usuario: DOMPurify.sanitize(nombre_usuario.current?.value || ""),
       contrasena: DOMPurify.sanitize(contrasena.current?.value || ""),
-      id_carrera: carreraSeleccionada.current?.value || null,
-      id_rol: rolSeleccionado.current?.value || null,
+      id_carrera: carreraSeleccionada.current ? carreraSeleccionada.current.value : null,
+      id_rol: selectedRol ? selectedRol.value : null, // ID del rol seleccionado
       correo: DOMPurify.sanitize(correo.current?.value || ""),
       telefono: DOMPurify.sanitize(telefono.current?.value || ""),
       nombres: DOMPurify.sanitize(nombres.current?.value || ""),
       apellidos: DOMPurify.sanitize(apellidos.current?.value || ""),
       fecha_nacimiento: DOMPurify.sanitize(fecha_nacimiento.current?.value || ""),
     };
-  
+
     // Filtrar campos vacíos o nulos
     const filteredFormData = Object.fromEntries(
       Object.entries(formData).filter(([_, value]) => value !== "" && value !== null)
     );
-  
+
     console.log("Datos enviados:", filteredFormData);
-  
+
     const options = {
       withCredentials: true,
       headers: { "Content-Type": "application/json" },
     };
-  
+
+    const rol = selectedRol ? selectedRol.label : "";
+
+
     try {
       if (funcion_crear) {
-        const response = await axios.post("http://localhost:3000/usuario", filteredFormData, options);
-        console.log(response.data.Data.id_usuario)
+        const response = await axios.post("/administracion/v1/usuario", filteredFormData, options);
+        const id_usuario =response.data.Data.id_usuario
+      
+        if(rol == "administrador"){
+          await axios.post(("/administracion/v1/docente-tutor/"+id_usuario), filteredFormData, options);
+          await axios.post(("/administracion/v1/jurado/"+id_usuario), filteredFormData, options);
+
+        }
+        if(rol == "profesor"){
+          await axios.post(("/administracion/v1/docente-tutor/"+id_usuario), filteredFormData, options);
+          await axios.post(("/administracion/v1/jurado/"+id_usuario), filteredFormData, options);
+
+        }
+        if(rol == "estudiantes"){
+          await axios.post(("/administracion/v1/estudiante/"+id_usuario), filteredFormData, options);
+
+        }
         toast.success("Usuario creado exitosamente");
       } else {
         await axios.put(`/administracion/v1/usuario/${id}`, filteredFormData, options);
         toast.success("Usuario modificado exitosamente");
       }
-      
-      //router.push("/agenda_sustentacion/usuario");
+    
+       router.push("/agenda_sustentacion/usuarios");
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || "Error al procesar la solicitud"
-      );
+      toast.error(error?.response?.data?.message || "Error al procesar la solicitud");
     }
   };
 
@@ -118,13 +140,11 @@ export default function Formulario_Usuario({
     value: carrera.id_carrera,
     label: carrera.nombre_carrera,
   }));
-  
+
   const opcionesRoles = (data_rol || []).map((rol) => ({
     value: rol.id_rol,
     label: rol.rol,
   }));
-
-
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-8 bg-primary_white dark:bg-primary_dark/70 rounded-lg shadow-lg border border-black/10">
@@ -142,7 +162,7 @@ export default function Formulario_Usuario({
             <label htmlFor="contrasena" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Contraseña
             </label>
-            <input ref={contrasena} defaultValue={data ? data.contrasena : ""} id="contrasena" type="password" placeholder="Contraseña" className="mt-1 block w-full p-3 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-300 focus:ring focus:ring-blue-500 focus:outline-none" required/>
+            <input ref={contrasena} defaultValue={data ? data.contrasena : ""} id="contrasena" type="password" placeholder="Contraseña" className="mt-1 block w-full p-3 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-300 focus:ring focus:ring-blue-500 focus:outline-none" required={funcion_crear} />
           </div>
         </div>
   
@@ -182,7 +202,7 @@ export default function Formulario_Usuario({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Carrera</label>
-            <select defaultValue={carreraSeleccionada.current?.value || 1} onChange={(e) => (carreraSeleccionada.current = { value: e.target.value, label: e.target.options[e.target.selectedIndex].text })} className="block w-full mt-1 px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" required >
+            <select ref={carreraSeleccionada} disabled={!funcion_crear} defaultValue={data?.id_carrera?.toString() || ""} className="block w-full mt-1 px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" required >
               {opcionesCarreras.map((carrera) => (
                 <option key={carrera.value} value={carrera.value}>
                   {carrera.label}
@@ -193,7 +213,7 @@ export default function Formulario_Usuario({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Rol</label>
-            <select defaultValue={rolSeleccionado.current?.value || 1}  onChange={(e) => (rolSeleccionado.current = { value: e.target.value, label: e.target.options[e.target.selectedIndex].text })} className="block w-full mt-1 px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" required>
+            <select ref={rolSeleccionado} disabled={!funcion_crear}  defaultValue={data?.id_rol?.toString() || ""} className="block w-full mt-1 px-4 py-2 border rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" required>
               {opcionesRoles.map((rol) => (
                 <option key={rol.value} value={rol.value}>
                   {rol.label}
@@ -203,8 +223,6 @@ export default function Formulario_Usuario({
           </div>
         </div>
 
-
-  
         {/* Fecha de Nacimiento */}
         <div>
           <label htmlFor="fecha_nacimiento" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
