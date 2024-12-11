@@ -33,7 +33,7 @@ export class CarreraService {
             })
             const TotalPages =Math.ceil(TotalData/limit);
 
-            const data = await this.repositoty.find({where:{status:1},select:['id_carrera','nombre_carrera'],skip:((page - 1) * limit),take:limit})
+            const data = await this.repositoty.find({select:['id_carrera','nombre_carrera'],skip:((page - 1) * limit),take:limit})
 
             return {data,meta:{TotalPages:TotalPages,CurrentPage:page,DataCount:limit}}
        } 
