@@ -23,6 +23,11 @@ export class EstudianteController {
     return await this.Services.Get(id);
   }
 
+  @MessagePattern({ cmd: 'GetEstudiantebyUser' })
+  async GetbyUser(id: number) {
+    return await this.Services.GetbyUser(id);
+  }
+
   @MessagePattern({ cmd: 'UpdateEstudiante' })
   async Update(data: { id: number; EstudiantesData: estudianteUpdateDTO }) {
     const { id, EstudiantesData } = data;

@@ -93,6 +93,30 @@ export class EstudianteService {
       throw new RpcException(e);
     }
   }
+
+  async GetbyUser(id: number) {
+    try {
+      return await this.repository.findOne({
+        where: { id_usuario: id, status: 1 },
+        select: [
+          'id_usuario',
+          'id_estudiante',
+          'id_tesis',
+          'sexo',
+          'genero',
+          'estado_civil',
+          'pais',
+          'provincia',
+          'ciudad',
+          'parroquia',
+          'direccion',
+          'numero_hijos',
+        ],
+      });
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
   async update(id: number, ChangeData: estudianteUpdateDTO) {
     try {
       const ExistData = await this.repository.findOne({
