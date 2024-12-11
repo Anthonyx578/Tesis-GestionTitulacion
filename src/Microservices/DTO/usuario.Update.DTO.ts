@@ -8,6 +8,10 @@ export class UsuarioUpdateDTO{
 
     @ApiProperty()
     @IsString()
+    contrasena:string
+
+    @ApiProperty()
+    @IsString()
     nombres:string
 
     @ApiProperty()

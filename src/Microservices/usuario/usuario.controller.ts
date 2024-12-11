@@ -27,7 +27,7 @@ export class UsuarioController {
 
   @ApiTags('Usuario')
   @Post()
-  async Create(@Body() Usuario: UsuarioCreateDTO) {
+  async Create(@Body() Usuario: UsuarioUpdateDTO) {
     try {
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'CreateUsuario' }, Usuario),
