@@ -94,6 +94,24 @@ export class EstudianteController {
       return FailResponse(e);
     }
   }
+
+  @ApiTags('Estudiante')
+  @Get(':id_usuario')
+  async GetbyUser(@Param('id_usuario') id: number) {
+    try {
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetEstudiantebyUser' }, id),
+      );
+      const userData = await firstValueFrom(
+        this.client.send({ cmd: 'GetUsuario' }, id),
+      );
+      console.log(userData);
+      const MapedData = { ...userData, ...data };
+      return SuccessResponse(MapedData);
+    } catch (e) {
+      return FailResponse(e);
+    }
+  }
   @ApiTags('Estudiante')
   @Put(':id')
   async Update(
