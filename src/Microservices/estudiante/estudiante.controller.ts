@@ -96,16 +96,17 @@ export class EstudianteController {
   }
 
   @ApiTags('Estudiante')
-  @Get(':id_usuario')
+  @Get('ByUser/:id_usuario')
   async GetbyUser(@Param('id_usuario') id: number) {
     try {
+      console.log(id)
       const data = await firstValueFrom(
         this.client.send({ cmd: 'GetEstudiantebyUser' }, id),
       );
+      //console.log(data)
       const userData = await firstValueFrom(
         this.client.send({ cmd: 'GetUsuario' }, id),
       );
-      console.log(userData);
       const MapedData = { ...userData, ...data };
       return SuccessResponse(MapedData);
     } catch (e) {
