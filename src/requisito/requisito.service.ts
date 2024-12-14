@@ -13,7 +13,7 @@ export class RequisitoService {
         private readonly repository: Repository<requisito>,
       ) {}
     
-      async Create(Data: requisitoDTO) {
+      async Create(Data:requisitoDTO) {
         try {
           const Tesis: Partial<requisito> = {
             ...Data,
@@ -40,6 +40,9 @@ export class RequisitoService {
             select: ['id_requisito','documento'],
             skip: (page - 1) * limit,
             take: limit,
+            order:{
+              id_requisito:'DESC'
+            }
           });
     
           return {

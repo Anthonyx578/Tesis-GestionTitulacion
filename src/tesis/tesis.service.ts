@@ -39,6 +39,9 @@ export class TesisService {
         select: ['id_tesis', 'titulo','documento', 'fecha','id_docente_tutor'],
         skip: (page - 1) * limit,
         take: limit,
+        order:{
+          id_tesis:'DESC'
+        }
       });
 
       return {
