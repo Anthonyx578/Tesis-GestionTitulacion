@@ -39,6 +39,9 @@ export class DocenteTutorService {
         select: ['id_usuario', 'id_docente_tutor'],
         skip: (page - 1) * limit,
         take: limit,
+        order:{
+          id_docente_tutor:'DESC'
+        }
       });
 
       return {

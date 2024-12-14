@@ -39,6 +39,9 @@ export class JuradoService {
         select: ['id_usuario', 'id_jurado'],
         skip: (page - 1) * limit,
         take: limit,
+        order:{
+          id_jurado:'DESC'
+        }
       });
 
       return {

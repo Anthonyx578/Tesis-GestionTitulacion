@@ -58,6 +58,9 @@ export class EstudianteService {
         ],
         skip: (page - 1) * limit,
         take: limit,
+        order:{
+          id_estudiante:'DESC'
+        }
       });
 
       return {
