@@ -3,7 +3,7 @@ import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { requisito } from './Entitys/requisitos.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { requisitoDTO } from './Entitys/DTO/requisito.DTO';
 
 @Injectable()
@@ -28,8 +28,6 @@ export class RequisitoService {
       async GetAll(Pagination: PaginationDto) {
         try {
           const { page, limit } = Pagination;
-          console.log(page)
-          console.log(limit)
           const TotalData = await this.repository.count({
             where: { status: 1 },
           });
@@ -54,6 +52,32 @@ export class RequisitoService {
         }
       }
     
+      async GetAllLike(Pagination: PaginationDto,Like:string) {
+        try {
+          const { page, limit } = Pagination;
+          const TotalData = await this.repository.count({
+            where: { status: 1 },
+          });
+          const TotalPages = Math.ceil(TotalData / limit);
+    
+          const data = await this.repository.find({
+            where: { status: 1 ,documento:ILike(`%${Like}%`)},
+            select: ['id_requisito','documento'],
+            skip: (page - 1) * limit,
+            take: limit,
+            order:{
+              id_requisito:'DESC'
+            }
+          });
+    
+          return {
+            data,
+            meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
+          };
+        } catch (e) {
+          throw new RpcException(e);
+        }
+      }
       async Get(id: number) {
         try {
           return await this.repository.findOne({

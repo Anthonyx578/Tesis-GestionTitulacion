@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { tesis } from './Entitys/tesis.Entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { tesisDTO } from './Entitys/DTO/tesis.DTO';
@@ -38,6 +38,34 @@ export class TesisService {
         where: { status: 1 },
         select: ['id_tesis', 'titulo','documento', 'fecha','id_docente_tutor'],
         skip: (page - 1) * limit,
+        take: limit,
+        order:{
+          id_tesis:'DESC'
+        }
+      });
+
+      return {
+        data,
+        meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
+      };
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
+  async GetAllLike(Pagination: PaginationDto,Like:string) {
+    try {
+      const { page, limit } = Pagination;
+
+      const TotalData = await this.repository.count({
+        where: { status: 1 },
+      });
+      const TotalPages = Math.ceil(TotalData / limit);
+
+      const data = await this.repository.find({
+        where:{status: 1,titulo:ILike(`%${Like}%`)},
+        select:['id_tesis', 'titulo','documento', 'fecha','id_docente_tutor'],
+        skip:(page - 1) * limit,
         take: limit,
         order:{
           id_tesis:'DESC'

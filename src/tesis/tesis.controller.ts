@@ -20,6 +20,12 @@ export class TesisController {
         return await this.Services.GetAll(Pagination);
     }
 
+    @MessagePattern({cmd:'GetAllLikeTesis'})
+        async GetAllLike(data:{Pagination:PaginationDto,Like:string}){
+        const {Pagination,Like} = data
+        return await this.Services.GetAllLike(Pagination,Like);
+    }
+
     @MessagePattern({cmd:'GetTesis'})
         async Get(id:number){
         return await this.Services.Get(id);

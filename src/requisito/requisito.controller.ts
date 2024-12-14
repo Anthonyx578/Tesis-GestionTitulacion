@@ -14,8 +14,12 @@ export class RequisitoController {
 
     @MessagePattern({cmd:'GetAllRequisito'})
         async GetAll(Pagination:PaginationDto){
-            console.log(Pagination)
         return await this.Services.GetAll(Pagination);
+    }
+    @MessagePattern({cmd:'GetAllLikeRequisito'})
+        async GetAllLike(data:{Pagination:PaginationDto,Like:string}){
+        const {Pagination,Like} = data;
+        return await this.Services.GetAllLike(Pagination,Like);
     }
 
     @MessagePattern({cmd:'GetRequisito'})
