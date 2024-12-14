@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { carrera } from 'src/entitys/carrera.entity';
 import { carreraDTO } from 'src/entitys/DTO/carreraDTO';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class CarreraService {
@@ -35,6 +35,34 @@ export class CarreraService {
 
       const data = await this.repositoty.find({
         select: ['id_carrera', 'nombre_carrera'],
+        skip: (page - 1) * limit,
+        take: limit,
+        order:{
+            id_carrera:'DESC'
+        }
+      });
+
+      return {
+        data,
+        meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
+      };
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
+  async GetAllLike(Pagination: PaginationDto,Like:string) {
+    try {
+      const { page, limit } = Pagination;
+
+      const TotalData = await this.repositoty.count({
+        where: { status: 1 },
+      });
+      const TotalPages = Math.ceil(TotalData / limit);
+
+      const data = await this.repositoty.find({
+        select: ['id_carrera', 'nombre_carrera'],
+        where:{nombre_carrera:ILike(`%${Like}%`),},
         skip: (page - 1) * limit,
         take: limit,
         order:{

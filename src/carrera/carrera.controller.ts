@@ -17,6 +17,11 @@ export class CarreraController {
         async GetAll(Pagination:PaginationDto){
         return await this.Services.GetAll(Pagination);
     }
+    @MessagePattern({cmd:'GetAllLikeCarrera'})
+        async GetAllLike(data:{Pagination:PaginationDto,Like:string}){
+        const {Pagination,Like} = data
+        return await this.Services.GetAllLike(Pagination,Like);
+    }
 
     @MessagePattern({cmd:'GetCarrera'})
         async Get(id:number){
