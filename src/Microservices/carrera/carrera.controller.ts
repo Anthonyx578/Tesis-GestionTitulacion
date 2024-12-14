@@ -10,7 +10,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import {
   FailResponse,
@@ -24,6 +24,7 @@ import { firstValueFrom } from 'rxjs';
 export class CarreraController {
   constructor(@Inject('NAT_Service') private readonly client: ClientProxy) {}
 
+  
   @ApiTags('Carrera')
   @Post()
   async Create(@Body() Carrera: carreraDTO) {
@@ -42,6 +43,18 @@ export class CarreraController {
     try {
       const data = await firstValueFrom(
         this.client.send({ cmd: 'GetAllCarrera' }, Pagination),
+      );
+      return PaginatedSuccessResponse(data);
+    } catch (e) {
+      return FailResponse(e);
+    }
+  }
+  @ApiTags('Carrera')
+  @Get('like/:search')
+  async GetAllLike(@Query() Pagination: PaginationDto,@Param('search') Like:string) {
+    try {
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllLikeCarrera' }, {Pagination,Like}),
       );
       return PaginatedSuccessResponse(data);
     } catch (e) {

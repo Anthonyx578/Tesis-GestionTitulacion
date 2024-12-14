@@ -37,6 +37,19 @@ export class TesisController {
     }
   
     @ApiTags('Tesis')
+    @Get('Like/:search')
+    async GetAllLike(@Query() Pagination: PaginationDto,@Param('search')Like:string) {
+      try {
+        const data = await firstValueFrom(
+          this.client.send({ cmd:'GetAllLikeTesis'},{Pagination,Like}),
+        );
+        return PaginatedSuccessResponse(data);
+      } catch(e){
+        return FailResponse(e);
+      }
+    }
+
+    @ApiTags('Tesis')
     @Get(':id')
     async Get(@Param('id') id: number) {
       try {

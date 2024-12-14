@@ -26,7 +26,6 @@ export class RequisitoController {
     @Get()
     async GetAll(@Query() Pagination: PaginationDto) {
       try {
-        console.log(Pagination)
         const data = await firstValueFrom(
           this.client.send({ cmd: 'GetAllRequisito' }, Pagination),
         );
@@ -35,7 +34,19 @@ export class RequisitoController {
         return FailResponse(e);
       }
     }
-  
+    @ApiTags('Requisito')
+    @Get('Like/:search')
+    async GetAllLike(@Query() Pagination: PaginationDto,@Param('search')Like:string) {
+      try {
+        const data = await firstValueFrom(
+          this.client.send({ cmd: 'GetAllLikeRequisito' }, {Pagination,Like}),
+        );
+        return PaginatedSuccessResponse(data);
+      } catch (e) {
+        return FailResponse(e);
+      }
+    }
+
     @ApiTags('Requisito')
     @Get(':id')
     async Get(@Param('id') id: number) {

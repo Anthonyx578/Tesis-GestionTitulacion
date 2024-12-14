@@ -30,7 +30,7 @@ export class UsuarioController {
   async Create(@Body() Usuario: UsuarioUpdateDTO) {
     try {
       const Data = await firstValueFrom(
-        this.client.send({ cmd: 'CreateUsuario' }, Usuario),
+        this.client.send({ cmd: 'CreateUsuario'}, Usuario),
       );
       return SuccessResponse(Data);
     } catch (error) {
@@ -51,6 +51,18 @@ export class UsuarioController {
     }
   }
 
+  @ApiTags('Usuario')
+  @Get()
+  async GetAllLike(@Query() Pagination: PaginationDto,Like:string) {
+    try {
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllUsuario' }, Pagination),
+      );
+      return PaginatedSuccessResponse(data);
+    } catch (e) {
+      return FailResponse(e);
+    }
+  }
   @ApiTags('Usuario')
   @Get(':id')
   async Get(@Param('id') id: number) {

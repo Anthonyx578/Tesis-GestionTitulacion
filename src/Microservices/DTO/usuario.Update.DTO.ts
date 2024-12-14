@@ -27,8 +27,8 @@ export class UsuarioUpdateDTO{
     correo:string
 
     @ApiProperty()
-    @IsString()
-    fecha_nacimiento:string
+    @IsDate()
+    fecha_nacimiento:Date
 
     @ApiProperty()
     @IsNumber()
