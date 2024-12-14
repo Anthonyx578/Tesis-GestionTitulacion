@@ -39,6 +39,9 @@ export class SustentacionService {
             select: ['id_sustentacion','id_tesis','id_carrera','fecha_sustentacion','periodo_academico','tipo','estado_sustentacion'],
             skip: (page - 1) * limit,
             take: limit,
+            order:{
+              id_sustentacion:'DESC'
+            }
           });
     
           return {

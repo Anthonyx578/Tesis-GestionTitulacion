@@ -39,6 +39,9 @@ export class PostsustentacionService {
             select: ['id_postSustentacion','id_estudiante','id_sustentacion','calificacion'],
             skip: (page - 1) * limit,
             take: limit,
+            order:{
+              id_postSustentacion:'DESC'
+            }
           });
     
           return {

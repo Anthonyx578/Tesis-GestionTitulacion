@@ -21,6 +21,8 @@ export class sustentacion {
   @Column()
   periodo_academico: string;
   @Column()
+  aula:string
+  @Column()
   created_at: Date;
   @Column()
   deleted_at: Date;

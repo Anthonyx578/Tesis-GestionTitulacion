@@ -5,4 +5,5 @@ export class sustentacionDTO {
   fecha_sustentacion: Date;
   estado_sustentacion: string;
   periodo_academico: string;
+  aula:string;
 }
