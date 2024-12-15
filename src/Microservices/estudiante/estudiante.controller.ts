@@ -22,6 +22,7 @@ import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { EstudianteUpdateDTO } from '../DTO/estudiante.Update.DTO';
 import { firstValueFrom } from 'rxjs';
 import { estudiante } from './Entity/estudiante.entity';
+import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
 
 @Controller('estudiante')
 export class EstudianteController {
@@ -70,9 +71,13 @@ export class EstudianteController {
           return { ...UserData, ...estudiante };
         }),
       );
+      //console.log(CompleteData)
       return PaginatedSuccessResponse({ data: CompleteData, meta: Data.meta });
     } catch (e) {
-      return FailResponse(e);
+      if(!noConectionValidator(e)){
+        return FailResponse(e);
+      }
+      return FailResponse('Existen problemas con los demas servicios servicios')
     }
   }
 
@@ -102,7 +107,6 @@ export class EstudianteController {
       const data = await firstValueFrom(
         this.client.send({ cmd: 'GetEstudiantebyUser' }, id),
       );
-      //console.log(data)
       const userData = await firstValueFrom(
         this.client.send({ cmd: 'GetUsuario' }, id),
       );
