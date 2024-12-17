@@ -53,6 +53,7 @@ export class DocenteTutorController {
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'GetAllDocenteTutor' }, Pagination),
       );
+      return Data
     } catch (e) {
       return FailResponse(e);
     }

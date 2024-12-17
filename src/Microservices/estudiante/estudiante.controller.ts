@@ -138,7 +138,7 @@ export class EstudianteController {
       const Idtesis = EstudianteData.id_tesis; 
       const Exist = await firstValueFrom(this.client.send({cmd:'GetTesis'},Idtesis))
       if(!Exist){
-        return 'Tesis no validad'
+        return 'Tesis no valida'
       }
       //Modificacion
       const data = await firstValueFrom(
