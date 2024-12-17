@@ -34,7 +34,7 @@ export class CarreraService {
       const TotalPages = Math.ceil(TotalData / limit);
 
       const data = await this.repositoty.find({
-        select: ['id_carrera', 'nombre_carrera'],
+        select: ['id_carrera', 'nombre_carrera','status'],
         skip: (page - 1) * limit,
         take: limit,
         order:{

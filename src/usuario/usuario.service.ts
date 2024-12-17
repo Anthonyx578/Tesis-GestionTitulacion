@@ -49,6 +49,7 @@ export class UsuarioService {
           'fecha_nacimiento',
           'id_rol',
           'id_carrera',
+          'status'
         ],
         skip: (page - 1) * limit,
         take: limit,
@@ -73,7 +74,7 @@ export class UsuarioService {
   async Get(id: number) {
     try {
       const Find = await this.repository.findOne({
-        where: { id_usuario: id, status: 1 },
+        where: { id_usuario: id},
         select: [
           'id_usuario',
           'nombre_usuario',
