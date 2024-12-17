@@ -45,8 +45,11 @@ export class EstudianteController {
         this.client.send({ cmd: 'CreateEstudiante' }, id_usuario),
       );
       return SuccessResponse(Usuario);
-    } catch (error) {
-      return FailResponse(error);
+    } catch (e) {
+      if(!noConectionValidator(e)){
+        return FailResponse(e);
+      }
+      return FailResponse('Existen problemas con los demas servicios servicios')
     }
   }
 
@@ -96,7 +99,10 @@ export class EstudianteController {
       const MapedData = { ...userData, ...data };
       return SuccessResponse(MapedData);
     } catch (e) {
-      return FailResponse(e);
+      if(!noConectionValidator(e)){
+        return FailResponse(e);
+      }
+      return FailResponse('Existen problemas con los demas servicios servicios')
     }
   }
 
@@ -113,7 +119,10 @@ export class EstudianteController {
       const MapedData = { ...userData, ...data };
       return SuccessResponse(MapedData);
     } catch (e) {
-      return FailResponse(e);
+      if(!noConectionValidator(e)){
+        return FailResponse(e);
+      }
+      return FailResponse('Existen problemas con los demas servicios servicios')
     }
   }
 
@@ -131,12 +140,16 @@ export class EstudianteController {
       if(!Exist){
         return 'Tesis no validad'
       }
+      //Modificacion
       const data = await firstValueFrom(
         this.client.send({ cmd: 'UpdateEstudiante' }, { id, EstudianteData }),
       );
       return SuccessResponse(data);
     } catch (e) {
-      return FailResponse(e);
+      if(!noConectionValidator(e)){
+        return FailResponse(e);
+      }
+      return FailResponse('Existen problemas con los demas servicios servicios')
     }
   }
 
