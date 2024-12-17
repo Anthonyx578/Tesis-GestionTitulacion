@@ -81,7 +81,7 @@ export class TesisService {
     }
   }
 
-  async Get(id: number) {
+  async Get(id: number){
     try {
       return await this.repository.findOne({
         where: { id_tesis: id, status: 1 },
