@@ -116,15 +116,23 @@ export class EstudianteController {
       return FailResponse(e);
     }
   }
+
+
   @ApiTags('Estudiante')
   @Put(':id')
   async Update(
     @Param('id') id: number,
-    @Body() EstudiantesData: EstudianteUpdateDTO,
-  ) {
+    @Body() EstudianteData: EstudianteUpdateDTO,
+  ){
     try {
+      //Validacion
+      const Idtesis = EstudianteData.id_tesis; 
+      const Exist = await firstValueFrom(this.client.send({cmd:'GetTesis'},Idtesis))
+      if(!Exist){
+        return 'Tesis no validad'
+      }
       const data = await firstValueFrom(
-        this.client.send({ cmd: 'UpdateEstudiante' }, { id, EstudiantesData }),
+        this.client.send({ cmd: 'UpdateEstudiante' }, { id, EstudianteData }),
       );
       return SuccessResponse(data);
     } catch (e) {

@@ -6,9 +6,6 @@ export class EstudianteUpdateDTO{
     @IsNumber()
     id_tesis:number
     @ApiProperty()
-    @IsNumber()
-    id_usuario:number
-    @ApiProperty()
     @IsString()
     sexo:string
     @ApiProperty()
