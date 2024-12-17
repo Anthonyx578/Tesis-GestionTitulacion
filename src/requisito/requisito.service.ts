@@ -35,7 +35,7 @@ export class RequisitoService {
     
           const data = await this.repository.find({
             where: { status: 1 },
-            select: ['id_requisito','documento'],
+            select: ['id_requisito','documento','status'],
             skip: (page - 1) * limit,
             take: limit,
             order:{

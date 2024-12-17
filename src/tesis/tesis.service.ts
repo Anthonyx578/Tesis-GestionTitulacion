@@ -36,7 +36,7 @@ export class TesisService {
 
       const data = await this.repository.find({
         where: { status: 1 },
-        select: ['id_tesis', 'titulo','documento', 'fecha','id_docente_tutor'],
+        select: ['id_tesis', 'titulo','documento', 'fecha','id_docente_tutor','status'],
         skip: (page - 1) * limit,
         take: limit,
         order:{
