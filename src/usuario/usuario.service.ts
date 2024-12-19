@@ -6,6 +6,7 @@ import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UsuarioUpdateDTO } from 'src/entitys/DTO/usuario.Update.DTO';
+import { rol } from 'src/entitys/rol.entity';
 
 @Injectable()
 export class UsuarioService {
@@ -71,6 +72,49 @@ export class UsuarioService {
     }
   }
 
+  async GetAllByRol(Pagination: PaginationDto, Rol:number) {
+    try {
+      const { page, limit } = Pagination;
+
+      const TotalData = await this.repository.count({
+        where: { status: 1,id_rol:Rol},
+      });
+      const TotalPages = Math.ceil(TotalData / limit);
+      console.log(Rol)
+      const data = await this.repository.find({
+        where: { status: 1 , id_rol:Rol},
+        select: [
+          'id_usuario',
+          'nombre_usuario',
+          'nombres',
+          'apellidos',
+          'telefono',
+          'correo',
+          'fecha_nacimiento',
+          'id_rol',
+          'id_carrera',
+          'status'
+        ],
+        skip: (page - 1) * limit,
+        take: limit,
+        order:{
+            id_usuario:'DESC'
+        }
+      });
+      /*
+            data.map((data)=>{
+                data.id_rol
+            })
+            */
+      return {
+        data,
+        meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit,TotalData:TotalData },
+      };
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
   async Get(id: number) {
     try {
       const Find = await this.repository.findOne({
@@ -95,6 +139,7 @@ export class UsuarioService {
       throw new RpcException(e);
     }
   }
+
   async update(id: number, ChangeData: UsuarioUpdateDTO) {
     try {
       const ExistData = await this.repository.findOne({

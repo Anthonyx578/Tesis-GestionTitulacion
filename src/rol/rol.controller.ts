@@ -23,6 +23,11 @@ export class RolController {
         return await this.Services.Get(id);
     }
 
+    @MessagePattern({cmd:'GetByRol'})
+        async GetByRol(rol:string){
+        return await this.Services.GetByRol(rol);
+    }
+
     @MessagePattern({cmd:'UpdateRol'})
         async Update(data:{id:number,RolData:rolDTO}){
         const {id,RolData} = data;

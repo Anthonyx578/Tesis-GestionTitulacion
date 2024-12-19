@@ -42,6 +42,15 @@ export class RolService {
         }
     }
 
+    async GetByRol(Rol:string){
+        try {
+            const data = await this.repositoty.findOne({where:{rol:Rol},select:['id_rol']})
+            return data;
+        } catch (e) {
+            throw new RpcException(e)
+        }
+
+    }
     async Get (id:number){
         try{
             return await this.repositoty.findOne({where:{id_rol:id,status:1},select:['id_rol','rol']})
