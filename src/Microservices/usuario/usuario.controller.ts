@@ -10,10 +10,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UsuarioCreateDTO } from '../DTO/usuario.Create.DTO';
 import {
   FailResponse,
+  PaginatedMappedResponse,
   PaginatedSuccessResponse,
   SuccessResponse,
 } from 'src/Response/Responses';
@@ -67,18 +68,20 @@ export class UsuarioController {
 
   @ApiTags('Usuario')
   @Get('/profesores')
-  async GetAllProfesores(@Query() Pagination: PaginationDto) {
+  @ApiQuery({name:'like',required:false,description:'Filtro de busqueda opcional'})
+  async GetAllProfesores(@Query() Pagination: PaginationDto,@Query('like')Like?: string) {
     try {
+      const searchLike = Like || '';
       const idRol = await firstValueFrom(
         this.client.send({ cmd:'GetByRol'}, 'profesor'),
       );
+      console.log(searchLike);
       const Profesores = await firstValueFrom(
-        this.client.send({cmd:'GetAllUsuarioByRol'},{Pagination,...idRol})
+        this.client.send({cmd:'GetAllUsuarioByRol'},{Pagination,...idRol,searchLike})
       )
       return PaginatedSuccessResponse(Profesores);
     } catch (e) {
-      console.log(e)
-      return FailResponse(e);
+      return FailResponse(e.message);
     }
   }
 
