@@ -75,7 +75,6 @@ export class UsuarioController {
       const idRol = await firstValueFrom(
         this.client.send({ cmd:'GetByRol'}, 'profesor'),
       );
-      console.log(searchLike);
       const Profesores = await firstValueFrom(
         this.client.send({cmd:'GetAllUsuarioByRol'},{Pagination,...idRol,searchLike})
       )
