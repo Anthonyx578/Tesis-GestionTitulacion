@@ -29,9 +29,7 @@ export class DocenteTutorService {
     try {
       const { page, limit } = Pagination;
 
-      const TotalData = await this.repository.count({
-        where: { status: 1 },
-      });
+      const TotalData = await this.repository.count({});
       const TotalPages = Math.ceil(TotalData / limit);
 
       const data = await this.repository.find({
@@ -43,6 +41,7 @@ export class DocenteTutorService {
           id_docente_tutor:'DESC'
         }
       });
+      console.log(data)
 
       return {
         data,

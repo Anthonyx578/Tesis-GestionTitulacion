@@ -55,6 +55,7 @@ export class EstudianteService {
           'parroquia',
           'direccion',
           'numero_hijos',
+          'tipo_colegio'
         ],
         skip: (page - 1) * limit,
         take: limit,
@@ -71,6 +72,47 @@ export class EstudianteService {
       throw new RpcException(e);
     }
   }
+
+  /*async GetAll(Pagination: PaginationDto) {
+    try {
+      const { page, limit } = Pagination;
+      const TotalData = await this.repository.count({
+        where: { status: 1 },
+      });
+      const TotalPages = Math.ceil(TotalData / limit);
+
+      const data = await this.repository.find({
+        where: { status: 1 },
+        select: [
+          'id_usuario',
+          'id_estudiante',
+          'id_tesis',
+          'sexo',
+          'genero',
+          'estado_civil',
+          'pais',
+          'provincia',
+          'ciudad',
+          'parroquia',
+          'direccion',
+          'numero_hijos',
+          'tipo_colegio'
+        ],
+        skip: (page - 1) * limit,
+        take: limit,
+        order:{
+          id_estudiante:'DESC'
+        }
+      });
+
+      return {
+        data,
+        meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
+      };
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }*/
 
   async Get(id: number) {
     try {
@@ -89,6 +131,7 @@ export class EstudianteService {
           'parroquia',
           'direccion',
           'numero_hijos',
+          'tipo_colegio'
         ],
       });
     } catch (e) {
@@ -113,12 +156,14 @@ export class EstudianteService {
           'parroquia',
           'direccion',
           'numero_hijos',
+          'tipo_colegio'
         ],
       });
     } catch (e) {
       throw new RpcException(e);
     }
   }
+
   async update(id: number, ChangeData: estudianteUpdateDTO) {
     try {
       const ExistData = await this.repository.findOne({
