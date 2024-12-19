@@ -53,6 +53,7 @@ export class JuradoController {
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'GetAllJurado' }, Pagination),
       );
+      return Data
     } catch (e) {
       return FailResponse(e);
     }

@@ -11,6 +11,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TesisController } from './tesis/tesis.controller';
 import { RequisitoController } from './requisito/requisito.controller';
 import { SustentacionController } from './sustentacion/sustentacion.controller';
+import { JuradoSustentacionController } from './jurado-sustentacion/jurado-sustentacion.controller';
+import { RequisitoCumplidoController } from './requisito-cumplido/requisito-cumplido.controller';
 @Module({
   imports:[
     ConfigModule.forRoot(), 
@@ -24,6 +26,6 @@ import { SustentacionController } from './sustentacion/sustentacion.controller';
       },
     },
   ]),],
-  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController, TesisController, RequisitoController, SustentacionController]
+  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController, TesisController, RequisitoController, SustentacionController, JuradoSustentacionController, RequisitoCumplidoController]
 })
 export class MicroservicesmoduleModule {}

@@ -1,34 +1,57 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
-import { BadRequestResponse, FailResponse, PaginatedSuccessResponse, SuccessResponse } from 'src/Response/Responses';
+import {
+  BadRequestResponse,
+  FailResponse,
+  PaginatedSuccessResponse,
+  SuccessResponse,
+} from 'src/Response/Responses';
 import { sustentacionDTO } from './DTO/sustentacion.DTO';
+import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
 
 @Controller('sustentacion')
 export class SustentacionController {
-    constructor(@Inject('NAT_Service') private readonly client: ClientProxy) {}
+  constructor(@Inject('NAT_Service') private readonly client: ClientProxy) {}
 
   @ApiTags('Sustentacion')
-  @Post(':id_usuario')
-  async Create(@Param('id_usuario') id_usuario: number) {
+  @Post()
+  async Create(@Body() sustentacion: sustentacionDTO) {
     try {
       //Validamos su existencia
-      const Exist = await firstValueFrom(
-        this.client.send({ cmd: 'GetSustentacion' }, id_usuario),
+      const { id_carrera, id_tesis } = sustentacion;
+      const ExistTesis = await firstValueFrom(
+        this.client.send({ cmd: 'GetTesis' }, id_tesis),
       );
-      if (!Exist) {
-        return BadRequestResponse(
-          'El usuario con el que se quiere crear no existe',
-        );
+      const ExistCarrera = await firstValueFrom(
+        this.client.send({ cmd: 'GetCarrera' }, id_carrera),
+      );
+      if (!ExistTesis || !ExistCarrera) {
+        return BadRequestResponse('Tesis o Carrera no valida');
       }
-      const Usuario = await firstValueFrom(
-        this.client.send({ cmd: 'CreateSustentacion' }, id_usuario),
+      const Sustentacion = await firstValueFrom(
+        this.client.send({ cmd: 'CreateSustentacion' }, sustentacion),
       );
-      return SuccessResponse(Usuario);
-    } catch (error) {
-      return FailResponse(error);
+      return SuccessResponse(Sustentacion);
+    } catch (e) {
+      if (!noConectionValidator(e)) {
+        return FailResponse(e);
+      }
+      return FailResponse(
+        'Existen problemas con los demas servicios servicios',
+      );
     }
   }
 
@@ -39,7 +62,6 @@ export class SustentacionController {
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'GetAllSustentacion' }, Pagination),
       );
-      console.log(Data);
       return PaginatedSuccessResponse(Data);
     } catch (e) {
       return FailResponse(e);
@@ -50,8 +72,9 @@ export class SustentacionController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data = await firstValueFrom(this.client
-        .send({ cmd: 'GetSustentacion' }, id));
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetSustentacion' }, id),
+      );
       return SuccessResponse(data);
     } catch (e) {
       return FailResponse(e);
@@ -65,7 +88,10 @@ export class SustentacionController {
   ) {
     try {
       const data = await firstValueFrom(
-        this.client.send({ cmd: 'UpdateSustentacion' }, { id, SustentacionData }),
+        this.client.send(
+          { cmd: 'UpdateSustentacion' },
+          { id, SustentacionData },
+        ),
       );
       return SuccessResponse(data);
     } catch (e) {

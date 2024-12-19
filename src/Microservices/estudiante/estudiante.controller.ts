@@ -14,6 +14,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import {
   BadRequestResponse,
   FailResponse,
+  FailServiceResponse,
   PaginatedSuccessResponse,
   SuccessResponse,
 } from 'src/Response/Responses';
@@ -80,7 +81,7 @@ export class EstudianteController {
       if(!noConectionValidator(e)){
         return FailResponse(e);
       }
-      return FailResponse('Existen problemas con los demas servicios servicios')
+      return FailServiceResponse()
     }
   }
 

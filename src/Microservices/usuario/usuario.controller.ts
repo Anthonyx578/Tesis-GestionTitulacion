@@ -63,6 +63,26 @@ export class UsuarioController {
       return FailResponse(e);
     }
   }
+
+
+  @ApiTags('Usuario')
+  @Get('/profesores')
+  async GetAllProfesores(@Query() Pagination: PaginationDto) {
+    try {
+      const idRol = await firstValueFrom(
+        this.client.send({ cmd:'GetByRol'}, 'profesor'),
+      );
+      const Profesores = await firstValueFrom(
+        this.client.send({cmd:'GetAllUsuarioByRol'},{Pagination,...idRol})
+      )
+      return PaginatedSuccessResponse(Profesores);
+    } catch (e) {
+      console.log(e)
+      return FailResponse(e);
+    }
+  }
+
+
   @ApiTags('Usuario')
   @Get(':id')
   async Get(@Param('id') id: number) {

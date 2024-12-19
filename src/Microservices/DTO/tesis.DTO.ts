@@ -6,7 +6,7 @@ export class tesisDTO{
     @ApiProperty()
     titulo:string
     @ApiProperty()
-    fecha:Date
+    fecha:string
     @ApiProperty()
     documento:string
 }
