@@ -3,7 +3,7 @@ import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { usuario } from 'src/entitys/usuario.entity';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UsuarioUpdateDTO } from 'src/entitys/DTO/usuario.Update.DTO';
 import { rol } from 'src/entitys/rol.entity';
@@ -72,7 +72,7 @@ export class UsuarioService {
     }
   }
 
-  async GetAllByRol(Pagination: PaginationDto, Rol:number) {
+  async GetAllByRol(Pagination: PaginationDto, Rol:number,searchLike:string) {
     try {
       const { page, limit } = Pagination;
 
@@ -82,7 +82,7 @@ export class UsuarioService {
       const TotalPages = Math.ceil(TotalData / limit);
       console.log(Rol)
       const data = await this.repository.find({
-        where: { status: 1 , id_rol:Rol},
+        where: { status: 1 , id_rol:Rol,nombre_usuario:ILike(`%${searchLike}%`),nombres:ILike(`%${searchLike}%`),apellidos:ILike(`%${searchLike}%`),correo:ILike(`%${searchLike}%`)},
         select: [
           'id_usuario',
           'nombre_usuario',

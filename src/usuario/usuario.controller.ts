@@ -19,9 +19,9 @@ export class UsuarioController {
   }
 
   @MessagePattern({ cmd: 'GetAllUsuarioByRol' })
-  async GetAllByRol(data:{Pagination: PaginationDto,id_rol:number}) {
-    const {Pagination,id_rol} = data
-    return await this.Services.GetAllByRol(Pagination, id_rol);
+  async GetAllByRol(data:{Pagination: PaginationDto,id_rol:number,searchLike}) {
+    const {Pagination,id_rol,searchLike} = data
+    return await this.Services.GetAllByRol(Pagination, id_rol,searchLike);
   }
 
   @MessagePattern({ cmd: 'GetUsuario' })
