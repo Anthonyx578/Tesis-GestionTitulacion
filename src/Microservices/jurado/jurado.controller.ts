@@ -19,6 +19,7 @@ import {
 } from 'src/Response/Responses';
 import { juradoUpdateDTO } from '../DTO/juradoUpdateDTO';
 import { firstValueFrom } from 'rxjs';
+import { juradoGet } from './DataClass/juradoGet';
 
 @Controller('jurado')
 export class JuradoController {
@@ -50,10 +51,17 @@ export class JuradoController {
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
-      const Data = await firstValueFrom(
+      const data: { Data: juradoGet[]; meta: {} } = await firstValueFrom(
         this.client.send({ cmd: 'GetAllJurado' }, Pagination),
       );
-      return Data
+      const {Data,meta} = data
+      const JuradoMapped = await Promise.all(
+        Data.map(async (jurado)=>{
+          const UsuarioData = await firstValueFrom( this.client.send({cmd:'GetUsuario'},jurado.id_usuario))
+          return {...jurado,...UsuarioData}
+        })
+      )
+      return JuradoMapped;
     } catch (e) {
       return FailResponse(e);
     }
@@ -63,10 +71,13 @@ export class JuradoController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data = await firstValueFrom(
+      const data:juradoGet = await firstValueFrom(
         this.client.send({ cmd: 'GetJurado' }, id),
       );
-      return SuccessResponse(data);
+
+      const UserData = await firstValueFrom(this.client.send({cmd:'GetUsuario'},data.id_usuario))
+      const NewResponse = {...data,...UserData}
+      return SuccessResponse(NewResponse);
     } catch (e) {
       return FailResponse(e);
     }

@@ -13,12 +13,15 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   BadRequestResponse,
   FailResponse,
+  PaginatedSuccessResponse,
   SuccessResponse,
 } from 'src/Response/Responses';
 import { docenteTutorUpdateDTO } from '../DTO/docenteTutorUpdateDTO';
 import { ClientProxy } from '@nestjs/microservices';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
-import {firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import { docenteTutorGet } from './DataClass/docenteTutorGetClass';
+import { Usuario } from '../DTO/usuario.Entity';
 
 @Controller('docente-tutor')
 export class DocenteTutorController {
@@ -50,11 +53,27 @@ export class DocenteTutorController {
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
-      const Data = await firstValueFrom(
+      const Datos: {
+        Data: docenteTutorGet[];
+        meta: {};
+      } = await firstValueFrom(
         this.client.send({ cmd: 'GetAllDocenteTutor' }, Pagination),
       );
-      return Data
+      const {Data,meta} = Datos
+
+      const DocenteMapeado =await Promise.all(
+        Data.map(async (Docente)=>{
+          const UsuarioObt = await firstValueFrom(
+            this.client.send({cmd:'GetUsuario'},Docente.id_usuario)
+          )
+          return {...Docente,...UsuarioObt};
+        } )
+      )
+      const NewData = {Data:DocenteMapeado,meta}
+      console.log(NewData)
+      return PaginatedSuccessResponse(NewData);
     } catch (e) {
+      console.log(e)
       return FailResponse(e);
     }
   }
@@ -63,10 +82,14 @@ export class DocenteTutorController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data = await firstValueFrom(
+      const data:docenteTutorGet = await firstValueFrom(
         this.client.send({ cmd: 'GetDocenteTutor' }, id),
       );
-      return SuccessResponse(data);
+      const UserData = await firstValueFrom(
+        this.client.send({cmd:'GetUsuario'},data.id_usuario)
+      )
+      const DocenteTutor = {...data,...UserData} 
+      return SuccessResponse(DocenteTutor);
     } catch (e) {
       return FailResponse(e);
     }
