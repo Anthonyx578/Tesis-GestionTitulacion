@@ -32,7 +32,7 @@ export class UsuarioService {
       throw new RpcException(e);
     }
   }
-
+  //asignarle el rol y la carrera
   async GetAll(Pagination: PaginationDto) {
     try {
       const { page, limit } = Pagination;
@@ -42,7 +42,7 @@ export class UsuarioService {
       });
       const TotalPages = Math.ceil(TotalData / limit);
 
-      const data = await this.repository.find({
+      const data:usuario[] = await this.repository.find({
         where: { status: 1 },
         select: [
           'id_usuario',
@@ -62,13 +62,10 @@ export class UsuarioService {
           id_usuario: 'DESC',
         },
       });
-      /*
-            data.map((data)=>{
-                data.id_rol
-            })
-            */
+      console.log(data)
+      const MappedData =await this.MappearDatos(data);
       return {
-        data,
+        MappedData,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
       };
     } catch (e) {
@@ -116,7 +113,7 @@ export class UsuarioService {
           id_usuario: 'DESC',
         },
       });
-      const MappedData = await this.MappearProfesor(data);
+      const MappedData = await this.MappearDatos(data);
       return {
         Data: MappedData,
         meta: {
@@ -131,7 +128,7 @@ export class UsuarioService {
     }
   }
 
-  async MappearProfesor(data:usuario[]){
+  async MappearDatos(data:usuario[]){
     const MappedData = await Promise.all(
       data.map(async (data) => {
         const rolData = await this.rolService.Get(data.id_rol);
