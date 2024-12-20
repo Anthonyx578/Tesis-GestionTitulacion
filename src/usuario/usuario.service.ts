@@ -63,7 +63,7 @@ export class UsuarioService {
         },
       });
       console.log(data)
-      const MappedData =await this.MappearDatos(data);
+      const MappedData =await  this.MappearDatos(data);
       return {
         MappedData,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
@@ -138,6 +138,13 @@ export class UsuarioService {
     );
     return MappedData
   }
+
+  async MappearDato(data:usuario){
+    const rol = await this.rolService.Get(data.id_rol)
+    const carrera = await this.carreraService.Get(data.id_carrera);
+    const MappedData = {...data,...rol,...carrera}
+    return MappedData
+  }
   
   async Get(id: number) {
     try {
@@ -158,7 +165,8 @@ export class UsuarioService {
       if (!Find) {
         return null;
       }
-      return Find;
+      const MappedData = await this.MappearDato(Find)
+      return MappedData;
     } catch (e) {
       throw new RpcException(e);
     }
