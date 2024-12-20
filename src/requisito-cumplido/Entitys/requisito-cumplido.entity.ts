@@ -1,8 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({name:'requisitos_cumplidos'})
 export class requisitoCumplido {
   @PrimaryGeneratedColumn()
+  id:number
+  @Column()
   id_estudiante: number;
   @Column()
   id_requisito: number;

@@ -9,7 +9,7 @@ export class tesis{
     @Column()
     titulo:string
     @Column()
-    fecha:Date
+    fecha:string
     @Column()
     documento:string
     @Column()
