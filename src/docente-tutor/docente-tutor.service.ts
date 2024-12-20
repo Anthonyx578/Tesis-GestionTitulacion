@@ -32,7 +32,7 @@ export class DocenteTutorService {
       const TotalData = await this.repository.count({});
       const TotalPages = Math.ceil(TotalData / limit);
 
-      const data = await this.repository.find({
+      const Data = await this.repository.find({
         where: { status: 1 },
         select: ['id_usuario', 'id_docente_tutor'],
         skip: (page - 1) * limit,
@@ -41,10 +41,9 @@ export class DocenteTutorService {
           id_docente_tutor:'DESC'
         }
       });
-      console.log(data)
 
       return {
-        data,
+        Data,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
       };
     } catch (e) {
@@ -62,6 +61,18 @@ export class DocenteTutorService {
       throw new RpcException(e);
     }
   }
+
+  async GetByUser(id: number) {
+    try {
+      return await this.repository.findOne({
+        where: { id_usuario: id },
+        select: ['id_usuario', 'id_docente_tutor','status'],
+      });
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
   async update(id: number, ChangeData: docenteTutorUpdateDTO) {
     try {
         const ExistData = await this.repository.findOne({
