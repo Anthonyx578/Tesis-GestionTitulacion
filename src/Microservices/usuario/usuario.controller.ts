@@ -21,6 +21,7 @@ import {
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { UsuarioUpdateDTO } from '../DTO/usuario.Update.DTO';
 import { firstValueFrom } from 'rxjs';
+import { Usuario } from '../DTO/usuario.Entity';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -31,7 +32,7 @@ export class UsuarioController {
   async Create(@Body() Usuario: UsuarioUpdateDTO) {
     try {
       const Data = await firstValueFrom(
-        this.client.send({ cmd: 'CreateUsuario'}, Usuario),
+        this.client.send({ cmd: 'CreateUsuario' }, Usuario),
       );
       return SuccessResponse(Data);
     } catch (error) {
@@ -54,7 +55,7 @@ export class UsuarioController {
 
   @ApiTags('Usuario')
   @Get()
-  async GetAllLike(@Query() Pagination: PaginationDto,Like:string) {
+  async GetAllLike(@Query() Pagination: PaginationDto, Like: string) {
     try {
       const data = await firstValueFrom(
         this.client.send({ cmd: 'GetAllUsuario' }, Pagination),
@@ -65,25 +66,96 @@ export class UsuarioController {
     }
   }
 
-
   @ApiTags('Usuario')
   @Get('/profesores')
-  @ApiQuery({name:'like',required:false,description:'Filtro de busqueda opcional'})
-  async GetAllProfesores(@Query() Pagination: PaginationDto,@Query('like')Like?: string) {
+  @ApiQuery({
+    name: 'like',
+    required: false,
+    description: 'Filtro de busqueda opcional',
+  })
+  async GetAllProfesores(
+    @Query() Pagination: PaginationDto,
+    @Query('like') Like?: string,
+  ) {
     try {
       const searchLike = Like || '';
       const idRol = await firstValueFrom(
-        this.client.send({ cmd:'GetByRol'}, 'profesor'),
+        this.client.send({ cmd: 'GetByRol' }, 'profesor'),
       );
-      const Profesores = await firstValueFrom(
-        this.client.send({cmd:'GetAllUsuarioByRol'},{Pagination,...idRol,searchLike})
-      )
-      return PaginatedSuccessResponse(Profesores);
+      const Profesores: { Data: Usuario[]; meta: {} } = await firstValueFrom(
+        this.client.send(
+          { cmd: 'GetAllUsuarioByRol' },
+          { Pagination, ...idRol, searchLike },
+        ),
+      );
+      const { Data, meta } = Profesores;
+      const ProfesorMapped = await Promise.all(
+        Data.map(async (profesores) => {
+          const Istutor: { id_docente_tutor; id_usuario; status: number } =
+            await firstValueFrom(
+              this.client.send(
+                { cmd: 'GetDocenteTutorByUser' },
+                profesores.id_usuario,
+              ),
+            );
+          const IsJurado: { id_jurado; id_usuario; status } =
+            await firstValueFrom(
+              this.client.send(
+                { cmd: 'GetJuradoByUser' },
+                profesores.id_usuario,
+              ),
+            );
+          var ProfesorTutorMP: {};
+          var ProfesorJuradoMp:{};
+          if (Istutor != null) {
+            if (Istutor.status == 0) {
+              ProfesorTutorMP = {
+                ...profesores,
+                id_docente_tutor: Istutor.id_docente_tutor,
+                statusTutor: Istutor.status,
+                isTutor: 0,
+              };
+            } else {
+              ProfesorTutorMP = {
+                ...profesores,
+                id_docente_tutor: Istutor.id_docente_tutor,
+                statusTutor: Istutor.status,
+                isTutor: 1,
+              };
+            }
+          }
+          if (ProfesorTutorMP) {
+            
+            if (IsJurado != null) {
+              ProfesorJuradoMp = {
+                ...ProfesorTutorMP,
+                id_jurado: IsJurado.id_jurado,
+                statusJurado: IsJurado.status,
+              };
+              if (IsJurado.status == 0) {
+                ProfesorJuradoMp = { ...ProfesorJuradoMp, isJurado: 0 };
+              } else {
+                ProfesorJuradoMp = { ...ProfesorJuradoMp, isJurado: 1 };
+              }
+            }
+
+          }
+          if(ProfesorJuradoMp){
+            console.log(ProfesorJuradoMp)
+            return ProfesorJuradoMp
+          }
+        }),
+      );
+      //console.log(ProfesorMapped);
+      const Response={
+        Data:ProfesorMapped,
+        meta
+      }
+      return PaginatedSuccessResponse(Response);
     } catch (e) {
       return FailResponse(e.message);
     }
   }
-
 
   @ApiTags('Usuario')
   @Get(':id')
