@@ -75,7 +75,6 @@ export class EstudianteService {
           id_estudiante: 'DESC',
         },
       });
-      console.log(Data);
       return {
         Data,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
