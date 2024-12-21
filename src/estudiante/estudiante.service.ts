@@ -43,7 +43,6 @@ export class EstudianteService {
       Like = Like || '';
       const Data = await this.repository.find({
         where: [
-          { status: 1 },
           {sexo: `%${Like}%` },
           {genero: `%${Like}%` },
           {estado_civil: `%${Like}%` },
