@@ -39,7 +39,7 @@ export class UsuarioController {
       return FailResponse();
     }
   }
-
+  /*
   @ApiTags('Usuario')
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
@@ -51,14 +51,14 @@ export class UsuarioController {
     } catch (e) {
       return FailResponse(e);
     }
-  }
+  }*/
 
   @ApiTags('Usuario')
-  @Get('/like')
-  @ApiQuery({name:'Like',required:false})
-  async GetAllLike(@Query() Pagination: PaginationDto,@Query() Like: string) {
+  @Get()
+  @ApiQuery({name:'Like',required:false,description:'Valor de busqueda opcional',example:'Anthony'})
+  async GetAllLike(@Query() Pagination: PaginationDto,@Query('Like') Like: string) {
     try {
-      Like = Like||'';
+      console.log(Like)
       const data = await firstValueFrom(
         this.client.send({ cmd: 'GetAllUsuarioLike' }, {Pagination,Like}),
       );
@@ -67,6 +67,8 @@ export class UsuarioController {
       return FailResponse(e);
     }
   }
+
+
 
   @ApiTags('Usuario')
   @Get('/profesores')
