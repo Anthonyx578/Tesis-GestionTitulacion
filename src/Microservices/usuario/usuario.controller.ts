@@ -54,11 +54,13 @@ export class UsuarioController {
   }
 
   @ApiTags('Usuario')
-  @Get()
-  async GetAllLike(@Query() Pagination: PaginationDto, Like: string) {
+  @Get('/like')
+  @ApiQuery({name:'Like',required:false})
+  async GetAllLike(@Query() Pagination: PaginationDto,@Query() Like: string) {
     try {
+      Like = Like||'';
       const data = await firstValueFrom(
-        this.client.send({ cmd: 'GetAllUsuario' }, Pagination),
+        this.client.send({ cmd: 'GetAllUsuarioLike' }, {Pagination,Like}),
       );
       return PaginatedSuccessResponse(data);
     } catch (e) {
