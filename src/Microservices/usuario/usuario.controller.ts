@@ -39,6 +39,8 @@ export class UsuarioController {
       return FailResponse();
     }
   }
+
+
   /*
   @ApiTags('Usuario')
   @Get()
@@ -55,7 +57,7 @@ export class UsuarioController {
 
   @ApiTags('Usuario')
   @Get()
-  @ApiQuery({name:'Like',required:false,description:'Valor de busqueda opcional',example:'Anthony'})
+  @ApiQuery({name:'Like',required:false,description:'Valor de busqueda opcional',example:''})
   async GetAllLike(@Query() Pagination: PaginationDto,@Query('Like') Like: string) {
     try {
       console.log(Like)
@@ -67,8 +69,6 @@ export class UsuarioController {
       return FailResponse(e);
     }
   }
-
-
 
   @ApiTags('Usuario')
   @Get('/profesores')

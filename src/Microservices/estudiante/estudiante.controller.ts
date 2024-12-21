@@ -18,7 +18,7 @@ import {
   PaginatedSuccessResponse,
   SuccessResponse,
 } from 'src/Response/Responses';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { EstudianteUpdateDTO } from '../DTO/estudiante.Update.DTO';
 import { firstValueFrom } from 'rxjs';
@@ -56,19 +56,20 @@ export class EstudianteController {
 
   @ApiTags('Estudiante')
   @Get()
-  async GetAll(@Query() Pagination: PaginationDto) {
+  @ApiQuery({name:'Like',required:false})
+  async GetAll(@Query() Pagination: PaginationDto,@Query('Like')Like:string) {
     try {
-      const Data = await firstValueFrom(
-        this.client.send<{ data: estudiante[]; meta: any }>(
+      const DataEstudiante = await firstValueFrom(
+        this.client.send<{ Data: estudiante[]; meta: any }>(
           { cmd: 'GetAllEstudiante' },
-          Pagination,
+          {Pagination,Like}
         ),
       );
       //Obtenemos el apartado de data de la respuesta
-      const { data } = Data;
+      const { Data } = DataEstudiante;
       //Completamos los datos con los de usuario
       const CompleteData = await Promise.all(
-        data.map(async (estudiante) => {
+        Data.map(async (estudiante) => {
           const UserData = await firstValueFrom(
             this.client.send({ cmd: 'GetUsuario' }, estudiante.id_usuario),
           );
@@ -76,12 +77,12 @@ export class EstudianteController {
         }),
       );
       //console.log(CompleteData)
-      return PaginatedSuccessResponse({ data: CompleteData, meta: Data.meta });
+      return PaginatedSuccessResponse({ data: CompleteData, meta: DataEstudiante.meta });
     } catch (e) {
-      if(!noConectionValidator(e)){
+      /*if(!noConectionValidator(e)){
         return FailResponse(e);
-      }
-      return FailServiceResponse()
+      }*/
+      return FailResponse(e)
     }
   }
 
