@@ -43,7 +43,6 @@ export class UsuarioService {
       const TotalPages = Math.ceil(TotalData / limit);
 
       const data: usuario[] = await this.repository.find({
-        where: { status: 1 },
         select: [
           'id_usuario',
           'nombre_usuario',
