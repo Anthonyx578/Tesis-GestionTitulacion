@@ -41,7 +41,6 @@ export class UsuarioService {
         where: { status: 1 },
       });
       const TotalPages = Math.ceil(TotalData / limit);
-
       const data: usuario[] = await this.repository.find({
         select: [
           'id_usuario',
@@ -73,17 +72,18 @@ export class UsuarioService {
 
   async GetAllLike(Pagination: PaginationDto, Like: string) {
     try {
+      Like = Like||'';
       const { page, limit } = Pagination;
       const TotalData = await this.repository.count({
-        where: { status: 1 },
       });
       const TotalPages = Math.ceil(TotalData / limit);
+      console.log(Like)
       const data: usuario[] = await this.repository.find({
         where: [
-          { status: 1, nombre_usuario: ILike(`%${Like}%`) },
-          { status: 1, nombres: ILike(`%${Like}%`) },
-          { status: 1, apellidos: ILike(`%${Like}%`) },
-          {status: 1,correo: ILike(`%${Like}%`)},
+          {nombre_usuario: ILike(`%${Like}%`)},
+          {nombres: ILike(`%${Like}%`) },
+          {apellidos: ILike(`%${Like}%`) },
+          {correo: ILike(`%${Like}%`)},
         ],
         select: [
           'id_usuario',
@@ -127,15 +127,12 @@ export class UsuarioService {
       const TotalPages = Math.ceil(TotalData / limit);
 
       const data = await this.repository.find({
-        where: {
-          status: 1,
-          id_rol: Rol,
-          //Hacer Pruebas, porque no da datos si pongo mas de uno
-          nombre_usuario: ILike(`%${searchLike}%`),
-          /*nombres: ILike(`%${searchLike}%`),
-          apellidos: ILike(`%${searchLike}%`),
-          correo: ILike(`%${searchLike}%`),*/
-        },
+        where: [
+          {id_rol: Rol,nombre_usuario: ILike(`%${searchLike}%`)},
+          {id_rol: Rol,nombres: ILike(`%${searchLike}%`)},
+          {id_rol: Rol,apellidos: ILike(`%${searchLike}%`)},
+          {id_rol: Rol,correo: ILike(`%${searchLike}%`)}
+        ],
         select: [
           'id_usuario',
           'nombre_usuario',
