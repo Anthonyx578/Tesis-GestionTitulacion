@@ -15,16 +15,17 @@ export class EstudianteService {
 
   async Create(id_usuario: number) {
     try {
-      const Used =await this.repository.find({where:{id_usuario:id_usuario}});
-      console.log(Used)
-      if(Used.length == 0){
+      const Used = await this.repository.find({
+        where: { id_usuario: id_usuario },
+      });
+      console.log(Used);
+      if (Used.length == 0) {
         const Estudiante: Partial<estudiante> = {
-            id_usuario: id_usuario,
-            created_at: new Date(),
-          };
+          id_usuario: id_usuario,
+          created_at: new Date(),
+        };
         return await this.repository.save(Estudiante);
-      }
-      else{
+      } else {
         throw new RpcException('El usuario ya esta en uso');
       }
     } catch (error) {
@@ -32,16 +33,27 @@ export class EstudianteService {
     }
   }
 
-  async GetAll(Pagination: PaginationDto) {
+  async GetAll(Pagination: PaginationDto, Like) {
     try {
       const { page, limit } = Pagination;
       const TotalData = await this.repository.count({
         where: { status: 1 },
       });
       const TotalPages = Math.ceil(TotalData / limit);
-
-      const data = await this.repository.find({
-        where: { status: 1 },
+      Like = Like || '';
+      const Data = await this.repository.find({
+        where: [
+          { status: 1 },
+          {sexo: `%${Like}%` },
+          {genero: `%${Like}%` },
+          {estado_civil: `%${Like}%` },
+          {pais: `%${Like}%` },
+          {provincia:`%${Like}%`},
+          {ciudad:`%${Like}%`},
+          {parroquia:`%${Like}%`},
+          {direccion:`%${Like}%`},
+          {tipo_colegio:`%${Like}%`},
+        ],
         select: [
           'id_usuario',
           'id_estudiante',
@@ -55,17 +67,17 @@ export class EstudianteService {
           'parroquia',
           'direccion',
           'numero_hijos',
-          'tipo_colegio'
+          'tipo_colegio',
         ],
         skip: (page - 1) * limit,
         take: limit,
-        order:{
-          id_estudiante:'DESC'
-        }
+        order: {
+          id_estudiante: 'DESC',
+        },
       });
-
+      console.log(Data);
       return {
-        data,
+        Data,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
       };
     } catch (e) {
@@ -131,7 +143,7 @@ export class EstudianteService {
           'parroquia',
           'direccion',
           'numero_hijos',
-          'tipo_colegio'
+          'tipo_colegio',
         ],
       });
     } catch (e) {
@@ -156,7 +168,7 @@ export class EstudianteService {
           'parroquia',
           'direccion',
           'numero_hijos',
-          'tipo_colegio'
+          'tipo_colegio',
         ],
       });
     } catch (e) {

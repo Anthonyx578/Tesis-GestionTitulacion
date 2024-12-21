@@ -14,8 +14,9 @@ export class EstudianteController {
   }
 
   @MessagePattern({ cmd: 'GetAllEstudiante' })
-  async GetAll(Pagination: PaginationDto) {
-    return await this.Services.GetAll(Pagination);
+  async GetAll(Data:{Pagination: PaginationDto,Like:string}) {
+    const {Pagination,Like} = Data
+    return await this.Services.GetAll(Pagination,Like);
   }
 
   @MessagePattern({ cmd: 'GetEstudiante' })
