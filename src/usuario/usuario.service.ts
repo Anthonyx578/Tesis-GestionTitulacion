@@ -42,7 +42,7 @@ export class UsuarioService {
       });
       const TotalPages = Math.ceil(TotalData / limit);
 
-      const data:usuario[] = await this.repository.find({
+      const data: usuario[] = await this.repository.find({
         where: { status: 1 },
         select: [
           'id_usuario',
@@ -62,8 +62,50 @@ export class UsuarioService {
           id_usuario: 'DESC',
         },
       });
-      console.log(data)
-      const MappedData =await  this.MappearDatos(data);
+      const MappedData = await this.MappearDatos(data);
+      return {
+        MappedData,
+        meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
+      };
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
+  async GetAllLike(Pagination: PaginationDto, Like: string) {
+    try {
+      const { page, limit } = Pagination;
+      const TotalData = await this.repository.count({
+        where: { status: 1 },
+      });
+      const TotalPages = Math.ceil(TotalData / limit);
+      const data: usuario[] = await this.repository.find({
+        where: [
+          { status: 1, nombre_usuario: ILike(`%${Like}%`) },
+          { status: 1, nombres: ILike(`%${Like}%`) },
+          { status: 1, apellidos: ILike(`%${Like}%`) },
+          {status: 1,correo: ILike(`%${Like}%`)},
+        ],
+        select: [
+          'id_usuario',
+          'nombre_usuario',
+          'nombres',
+          'apellidos',
+          'telefono',
+          'correo',
+          'fecha_nacimiento',
+          'id_rol',
+          'id_carrera',
+          'status',
+        ],
+        skip: (page - 1) * limit,
+        take: limit,
+        order: {
+          id_usuario: 'DESC',
+        },
+      });
+      console.log(data);
+      const MappedData = await this.MappearDatos(data);
       return {
         MappedData,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
@@ -128,7 +170,7 @@ export class UsuarioService {
     }
   }
 
-  async MappearDatos(data:usuario[]){
+  async MappearDatos(data: usuario[]) {
     const MappedData = await Promise.all(
       data.map(async (data) => {
         const rolData = await this.rolService.Get(data.id_rol);
@@ -136,16 +178,16 @@ export class UsuarioService {
         return { ...data, ...rolData, ...CarreraData };
       }),
     );
-    return MappedData
+    return MappedData;
   }
 
-  async MappearDato(data:usuario){
-    const rol = await this.rolService.Get(data.id_rol)
+  async MappearDato(data: usuario) {
+    const rol = await this.rolService.Get(data.id_rol);
     const carrera = await this.carreraService.Get(data.id_carrera);
-    const MappedData = {...data,...rol,...carrera}
-    return MappedData
+    const MappedData = { ...data, ...rol, ...carrera };
+    return MappedData;
   }
-  
+
   async Get(id: number) {
     try {
       const Find = await this.repository.findOne({
@@ -165,7 +207,7 @@ export class UsuarioService {
       if (!Find) {
         return null;
       }
-      const MappedData = await this.MappearDato(Find)
+      const MappedData = await this.MappearDato(Find);
       return MappedData;
     } catch (e) {
       throw new RpcException(e);

@@ -4,6 +4,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { UsuarioCreateDTO } from 'src/entitys/DTO/usuario.Create.DTO';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { UsuarioUpdateDTO } from 'src/entitys/DTO/usuario.Update.DTO';
+import { Like } from 'typeorm';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -16,6 +17,12 @@ export class UsuarioController {
   @MessagePattern({ cmd: 'GetAllUsuario' })
   async GetAll(Pagination: PaginationDto) {
     return await this.Services.GetAll(Pagination);
+  }
+
+  @MessagePattern({ cmd: 'GetAllUsuarioLike' })
+  async GetAllLike(Data:{Pagination: PaginationDto,Like:string}) {
+    const {Pagination,Like} = Data
+    return await this.Services.GetAllLike(Pagination,Like);
   }
 
   @MessagePattern({ cmd: 'GetAllUsuarioByRol' })
