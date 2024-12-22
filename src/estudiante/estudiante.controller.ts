@@ -19,6 +19,11 @@ export class EstudianteController {
     return await this.Services.GetAll(Pagination,Like);
   }
 
+  @MessagePattern({ cmd: 'GetAllEstudianteNames' })
+  async GetAllNames() {
+    return await this.Services.GetAllNames();
+  }
+
   @MessagePattern({ cmd: 'GetEstudiante' })
   async Get(id: number) {
     return await this.Services.Get(id);

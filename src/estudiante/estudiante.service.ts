@@ -83,6 +83,24 @@ export class EstudianteService {
     }
   }
 
+  async GetAllNames() {
+    try {
+      const Data = await this.repository.find({
+        select: [
+          'id_usuario',
+          'id_estudiante'
+        ],
+        order: {
+          id_estudiante: 'DESC',
+        },
+      });
+      return Data;
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
+
   /*async GetAll(Pagination: PaginationDto) {
     try {
       const { page, limit } = Pagination;
