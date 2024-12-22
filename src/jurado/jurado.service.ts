@@ -67,7 +67,7 @@ export class JuradoService {
   async GetByUser(id: number) {
     try {
       return await this.repository.findOne({
-        where: { id_usuario: id, status: 1 },
+        where: { id_usuario: id},
         select: ['id_usuario', 'id_jurado','status'],
       });
     } catch (e) {
