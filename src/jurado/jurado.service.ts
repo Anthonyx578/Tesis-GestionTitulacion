@@ -53,6 +53,21 @@ export class JuradoService {
     }
   }
 
+  async GetAllNames() {
+    try {
+      const Data = await this.repository.find({
+        where: { status: 1 },
+        select: ['id_usuario', 'id_jurado'],
+        order:{
+          id_jurado:'DESC'
+        }
+      });
+      return Data;
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
   async Get(id: number) {
     try {
       return await this.repository.findOne({

@@ -18,6 +18,11 @@ export class JuradoController {
         return await this.Services.GetAll(Pagination);
     }
 
+    @MessagePattern({cmd:'GetAllJuradoNames'})
+        async GetAllNames(){
+        return await this.Services.GetAllNames();
+    }
+
     @MessagePattern({cmd:'GetJurado'})
         async Get(id:number){
         return await this.Services.Get(id);
