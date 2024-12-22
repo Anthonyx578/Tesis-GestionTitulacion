@@ -79,7 +79,7 @@ export class UsuarioController {
   })
   async GetAllProfesores(
     @Query() Pagination: PaginationDto,
-    @Query('like') Like?: string,
+    @Query('Like') Like?: string,
   ) {
     try {
       const searchLike = Like || '';
