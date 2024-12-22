@@ -67,7 +67,7 @@ export class RequisitoCumplidoService {
       });
       const TotalPages = Math.ceil(TotalData / limit);
 
-      const data = await this.repository.find({
+      const Data = await this.repository.find({
         where: { status: 1,id_estudiante:Estudiante},
         select: [
           'id',
@@ -83,7 +83,7 @@ export class RequisitoCumplidoService {
       });
 
       return {
-        data,
+        Data,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
       };
     } catch (e) {
