@@ -13,6 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   BadRequestResponse,
   FailResponse,
+  PaginatedMappedResponse,
   PaginatedSuccessResponse,
   SuccessResponse,
 } from 'src/Response/Responses';
@@ -22,6 +23,7 @@ import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { firstValueFrom } from 'rxjs';
 import { docenteTutorGet } from './DataClass/docenteTutorGetClass';
 import { Usuario } from '../DTO/usuario.Entity';
+import { resourceUsage } from 'process';
 
 @Controller('docente-tutor')
 export class DocenteTutorController {
@@ -59,21 +61,51 @@ export class DocenteTutorController {
       } = await firstValueFrom(
         this.client.send({ cmd: 'GetAllDocenteTutor' }, Pagination),
       );
-      const {Data,meta} = Datos
+      const { Data, meta } = Datos;
 
-      const DocenteMapeado =await Promise.all(
-        Data.map(async (Docente)=>{
+      const DocenteMapeado = await Promise.all(
+        Data.map(async (Docente) => {
           const UsuarioObt = await firstValueFrom(
-            this.client.send({cmd:'GetUsuario'},Docente.id_usuario)
-          )
-          return {...Docente,...UsuarioObt};
-        } )
-      )
-      const NewData = {Data:DocenteMapeado,meta}
-      console.log(NewData)
+            this.client.send({ cmd: 'GetUsuario' }, Docente.id_usuario),
+          );
+          return { ...Docente, ...UsuarioObt };
+        }),
+      );
+      const NewData = { Data: DocenteMapeado, meta };
+      console.log(NewData);
       return PaginatedSuccessResponse(NewData);
     } catch (e) {
-      console.log(e)
+      console.log(e);
+      return FailResponse(e);
+    }
+  }
+
+  @ApiTags('DocenteTutor')
+  @Get('/names')
+  async GetAllNames() {
+    try {
+      const Datos: docenteTutorGet[] = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllDocenteTutorNames' }, {}),
+      );
+      const DocenteMapeado =await Promise.all(
+        Datos.map(async (Docente)=>{
+          const UsuarioObt:{id_usuario:number,nombres:string,apellidos:string} = await firstValueFrom(
+            this.client.send({cmd:'GetUsuarioNames'},Docente.id_usuario)
+          )
+          if(UsuarioObt != null){
+            const {id_docente_tutor} = Docente
+            const {nombres,apellidos}= UsuarioObt
+            return {id_docente_tutor,nombres,apellidos}
+          }
+          return UsuarioObt
+        } )
+      )
+      
+      //const NewData = {Data:DocenteMapeado,meta}
+      console.log(DocenteMapeado)
+      return PaginatedMappedResponse(DocenteMapeado);
+    } catch (e) {
+      console.log(e);
       return FailResponse(e);
     }
   }
@@ -82,13 +114,13 @@ export class DocenteTutorController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data:docenteTutorGet = await firstValueFrom(
+      const data: docenteTutorGet = await firstValueFrom(
         this.client.send({ cmd: 'GetDocenteTutor' }, id),
       );
       const UserData = await firstValueFrom(
-        this.client.send({cmd:'GetUsuario'},data.id_usuario)
-      )
-      const DocenteTutor = {...data,...UserData} 
+        this.client.send({ cmd: 'GetUsuario' }, data.id_usuario),
+      );
+      const DocenteTutor = { ...data, ...UserData };
       return SuccessResponse(DocenteTutor);
     } catch (e) {
       return FailResponse(e);

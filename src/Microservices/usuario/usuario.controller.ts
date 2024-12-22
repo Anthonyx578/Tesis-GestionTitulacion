@@ -73,7 +73,7 @@ export class UsuarioController {
   @ApiTags('Usuario')
   @Get('/profesores')
   @ApiQuery({
-    name: 'like',
+    name: 'Like',
     required: false,
     description: 'Filtro de busqueda opcional',
   })
