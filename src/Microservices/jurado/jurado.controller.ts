@@ -20,6 +20,7 @@ import {
 import { juradoUpdateDTO } from '../DTO/juradoUpdateDTO';
 import { firstValueFrom } from 'rxjs';
 import { juradoGet } from './DataClass/juradoGet';
+import { Usuario } from '../DTO/usuario.Entity';
 
 @Controller('jurado')
 export class JuradoController {
@@ -54,15 +55,50 @@ export class JuradoController {
       const data: { Data: juradoGet[]; meta: {} } = await firstValueFrom(
         this.client.send({ cmd: 'GetAllJurado' }, Pagination),
       );
-      const {Data,meta} = data
+      const { Data, meta } = data;
       const JuradoMapped = await Promise.all(
-        Data.map(async (jurado)=>{
-          const UsuarioData = await firstValueFrom( this.client.send({cmd:'GetUsuario'},jurado.id_usuario))
-          return {...jurado,...UsuarioData}
-        })
-      )
+        Data.map(async (jurado) => {
+          const UsuarioData = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuario' }, jurado.id_usuario),
+          );
+          return { ...jurado, ...UsuarioData };
+        }),
+      );
       return JuradoMapped;
     } catch (e) {
+      return FailResponse(e);
+    }
+  }
+
+  @ApiTags('Jurado')
+  @Get('/names')
+  async GetAllNames() {
+    try {
+      const Data: juradoGet[] = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllJuradoNames' }, {}),
+      );
+      console.log(Data)
+      const JuradoMapped = await Promise.all(
+        Data.map(async (jurado) => {
+          const UsuarioData: {
+            id_usuario: number;
+            nombes: string;
+            apellidos: string;
+          } = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuarioNames' }, jurado.id_usuario),
+          );
+          if (UsuarioData != null) {
+            const { id_usuario, ...Datos } = UsuarioData;
+            const { id_jurado } = jurado;
+            console.log({ id_jurado, ...Datos });
+            return { id_jurado, ...Datos };
+          }
+          return  
+        }),
+      );
+      return JuradoMapped;
+    } catch (e) {
+      console.log(e);
       return FailResponse(e);
     }
   }
@@ -71,12 +107,14 @@ export class JuradoController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data:juradoGet = await firstValueFrom(
+      const data: juradoGet = await firstValueFrom(
         this.client.send({ cmd: 'GetJurado' }, id),
       );
 
-      const UserData = await firstValueFrom(this.client.send({cmd:'GetUsuario'},data.id_usuario))
-      const NewResponse = {...data,...UserData}
+      const UserData = await firstValueFrom(
+        this.client.send({ cmd: 'GetUsuario' }, data.id_usuario),
+      );
+      const NewResponse = { ...data, ...UserData };
       return SuccessResponse(NewResponse);
     } catch (e) {
       return FailResponse(e);
