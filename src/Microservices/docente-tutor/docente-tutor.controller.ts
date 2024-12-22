@@ -87,6 +87,7 @@ export class DocenteTutorController {
       const Datos: docenteTutorGet[] = await firstValueFrom(
         this.client.send({ cmd: 'GetAllDocenteTutorNames' }, {}),
       );
+      console.log(Datos)
       const DocenteMapeado =await Promise.all(
         Datos.map(async (Docente)=>{
           const UsuarioObt:{id_usuario:number,nombres:string,apellidos:string} = await firstValueFrom(
