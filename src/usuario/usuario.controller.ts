@@ -37,6 +37,11 @@ export class UsuarioController {
     return await this.Services.Get(id);
   }
 
+  @MessagePattern({ cmd: 'GetUsuarioNames' })
+  async GetNames(id: number) {
+    return await this.Services.GetNames(id);
+  }
+
   @MessagePattern({ cmd: 'UpdateUsuario' })
   async Update(data: { id: number; UsuarioData: UsuarioUpdateDTO }) {
     const { id, UsuarioData } = data;

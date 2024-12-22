@@ -9,6 +9,7 @@ import { UsuarioUpdateDTO } from 'src/entitys/DTO/usuario.Update.DTO';
 import { rol } from 'src/entitys/rol.entity';
 import { RolService } from 'src/rol/rol.service';
 import { CarreraService } from 'src/carrera/carrera.service';
+import { findSourceMap } from 'module';
 
 @Injectable()
 export class UsuarioService {
@@ -205,6 +206,24 @@ export class UsuarioService {
       }
       const MappedData = await this.MappearDato(Find);
       return MappedData;
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
+  async GetNames(id: number) {
+    try {
+      const Find = await this.repository.findOne({
+        where: { id_usuario: id },
+        select: [
+          'nombres',
+          'apellidos',
+        ],
+      });
+      if (!Find) {
+        return null;
+      }
+      return Find;
     } catch (e) {
       throw new RpcException(e);
     }
