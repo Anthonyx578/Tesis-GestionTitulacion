@@ -15,6 +15,7 @@ import {
   BadRequestResponse,
   FailResponse,
   FailServiceResponse,
+  PaginatedMappedResponse,
   PaginatedSuccessResponse,
   SuccessResponse,
 } from 'src/Response/Responses';
@@ -24,6 +25,7 @@ import { EstudianteUpdateDTO } from '../DTO/estudiante.Update.DTO';
 import { firstValueFrom } from 'rxjs';
 import { estudiante } from './Entity/estudiante.entity';
 import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
+import { estudianteGetName } from './Entity/estudianteGetName';
 
 @Controller('estudiante')
 export class EstudianteController {
@@ -78,6 +80,42 @@ export class EstudianteController {
       );
       //console.log(CompleteData)
       return PaginatedSuccessResponse({ data: CompleteData, meta: DataEstudiante.meta });
+    } catch (e) {
+      /*if(!noConectionValidator(e)){
+        return FailResponse(e);
+      }*/
+      return FailResponse(e)
+    }
+  }
+
+  @ApiTags('Estudiante')
+  @Get('/names')
+  async GetAllNames() {
+    try {
+      const Data:estudianteGetName[] = await firstValueFrom(
+        this.client.send(
+          { cmd: 'GetAllEstudianteNames' },
+          {}
+        ),
+      );
+      console.log(Data);
+      //Obtenemos el apartado de data de la respuesta
+      //Completamos los datos con los de usuario
+      const CompleteData = await Promise.all(
+        Data.map(async (estudiante) => {
+          const UserData = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuarioNames' }, estudiante.id_usuario),
+          );
+          if(UserData != null){
+            const {id_estudiante} = estudiante
+            const{nombres,apellidos} = UserData
+            return {id_estudiante,nombres,apellidos}
+          }
+          return
+        }),
+      );
+      //console.log(CompleteData)
+      return PaginatedMappedResponse(CompleteData);
     } catch (e) {
       /*if(!noConectionValidator(e)){
         return FailResponse(e);
