@@ -77,7 +77,6 @@ export class JuradoController {
       const Data: juradoGet[] = await firstValueFrom(
         this.client.send({ cmd: 'GetAllJuradoNames' }, {}),
       );
-      console.log(Data)
       const JuradoMapped = await Promise.all(
         Data.map(async (jurado) => {
           const UsuarioData: {
@@ -90,7 +89,6 @@ export class JuradoController {
           if (UsuarioData != null) {
             const { id_usuario, ...Datos } = UsuarioData;
             const { id_jurado } = jurado;
-            console.log({ id_jurado, ...Datos });
             return { id_jurado, ...Datos };
           }
           return  
@@ -98,7 +96,6 @@ export class JuradoController {
       );
       return JuradoMapped;
     } catch (e) {
-      console.log(e);
       return FailResponse(e);
     }
   }
