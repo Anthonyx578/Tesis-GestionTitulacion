@@ -18,6 +18,11 @@ export class DocenteTutorController {
         return await this.Services.GetAll(Pagination);
     }
 
+    @MessagePattern({cmd:'GetAllDocenteTutorNames'})
+        async GetAllNames(){
+        return await this.Services.GetAllNames();
+    }
+
     @MessagePattern({cmd:'GetDocenteTutor'})
         async Get(id:number){
         return await this.Services.Get(id);

@@ -37,15 +37,31 @@ export class DocenteTutorService {
         select: ['id_usuario', 'id_docente_tutor'],
         skip: (page - 1) * limit,
         take: limit,
-        order:{
-          id_docente_tutor:'DESC'
-        }
+        order: {
+          id_docente_tutor: 'DESC',
+        },
       });
 
       return {
         Data,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
       };
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
+  async GetAllNames() {
+    try {
+      const Data = await this.repository.find({
+        where: { status: 1 },
+        select: ['id_usuario', 'id_docente_tutor'],
+        order: {
+          id_docente_tutor: 'DESC',
+        },
+      });
+
+      return Data;
     } catch (e) {
       throw new RpcException(e);
     }
@@ -66,7 +82,7 @@ export class DocenteTutorService {
     try {
       return await this.repository.findOne({
         where: { id_usuario: id },
-        select: ['id_usuario', 'id_docente_tutor','status'],
+        select: ['id_usuario', 'id_docente_tutor', 'status'],
       });
     } catch (e) {
       throw new RpcException(e);
@@ -75,17 +91,17 @@ export class DocenteTutorService {
 
   async update(id: number, ChangeData: docenteTutorUpdateDTO) {
     try {
-        const ExistData = await this.repository.findOne({
-            where: { id_docente_tutor: id, status: 1 },
-        });
-        if (!ExistData) {
-            return null;
-        }
-        return await this.repository.update(
-            { id_docente_tutor: id },
-            { ...ChangeData, updated_at: new Date() },
-        );
-    }catch (e) {
+      const ExistData = await this.repository.findOne({
+        where: { id_docente_tutor: id, status: 1 },
+      });
+      if (!ExistData) {
+        return null;
+      }
+      return await this.repository.update(
+        { id_docente_tutor: id },
+        { ...ChangeData, updated_at: new Date() },
+      );
+    } catch (e) {
       throw new RpcException(e);
     }
   }

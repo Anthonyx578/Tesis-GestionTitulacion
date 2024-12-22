@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { estudianteUpdateDTO } from 'src/estudiante/Entitys/DTO/estudianteUpdateDTO';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { estudiante } from 'src/estudiante/Entitys/estudiante.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class EstudianteService {
@@ -43,15 +43,15 @@ export class EstudianteService {
       Like = Like || '';
       const Data = await this.repository.find({
         where: [
-          {sexo: `%${Like}%` },
-          {genero: `%${Like}%` },
-          {estado_civil: `%${Like}%` },
-          {pais: `%${Like}%` },
-          {provincia:`%${Like}%`},
-          {ciudad:`%${Like}%`},
-          {parroquia:`%${Like}%`},
-          {direccion:`%${Like}%`},
-          {tipo_colegio:`%${Like}%`},
+          { sexo: ILike(`%${Like}%`) },
+          { genero: ILike(`%${Like}%`) },
+          { estado_civil: ILike(`%${Like}%`) },
+          { pais: ILike(`%${Like}%`) },
+          { provincia: ILike(`%${Like}%`) },
+          { ciudad: ILike(`%${Like}%`) },
+          { parroquia: ILike(`%${Like}%`) },
+          { direccion: ILike(`%${Like}%`) },
+          { tipo_colegio: ILike(`%${Like}%`) },
         ],
         select: [
           'id_usuario',
