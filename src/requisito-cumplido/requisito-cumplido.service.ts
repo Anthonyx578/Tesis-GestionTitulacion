@@ -31,6 +31,9 @@ export class RequisitoCumplidoService {
     try {
       const { page, limit } = Pagination;
 
+      const TotalData = await this.repository.count({
+        where: { status: 1 },
+      });
       const TotalPages = Math.ceil(TotalData / limit);
 
       const data = await this.repository.find({
