@@ -101,46 +101,27 @@ export class EstudianteService {
   }
 
 
-  /*async GetAll(Pagination: PaginationDto) {
+  async GetAllEstudiantesTesis(id:number) {
     try {
-      const { page, limit } = Pagination;
-      const TotalData = await this.repository.count({
-        where: { status: 1 },
-      });
-      const TotalPages = Math.ceil(TotalData / limit);
-
-      const data = await this.repository.find({
-        where: { status: 1 },
+      const Data = await this.repository.find({
+        where: {id_tesis:id,status:1},
         select: [
           'id_usuario',
-          'id_estudiante',
+          //'id_estudiante',
           'id_tesis',
-          'sexo',
-          'genero',
-          'estado_civil',
-          'pais',
-          'provincia',
-          'ciudad',
-          'parroquia',
-          'direccion',
-          'numero_hijos',
-          'tipo_colegio'
         ],
-        skip: (page - 1) * limit,
-        take: limit,
-        order:{
-          id_estudiante:'DESC'
-        }
+        order: {
+          id_estudiante: 'DESC',
+        },
       });
-
-      return {
-        data,
-        meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
-      };
+      if(Data.length == 0){
+        return {message:'No hay estudiantes en esta tesis'}
+      }
+      return Data
     } catch (e) {
       throw new RpcException(e);
     }
-  }*/
+  }
 
   async Get(id: number) {
     try {
