@@ -49,22 +49,27 @@ export class EstudianteController {
       );
       return SuccessResponse(Usuario);
     } catch (e) {
-      if(!noConectionValidator(e)){
+      if (!noConectionValidator(e)) {
         return FailResponse(e);
       }
-      return FailResponse('Existen problemas con los demas servicios servicios')
+      return FailResponse(
+        'Existen problemas con los demas servicios servicios',
+      );
     }
   }
 
   @ApiTags('Estudiante')
   @Get()
-  @ApiQuery({name:'Like',required:false})
-  async GetAll(@Query() Pagination: PaginationDto,@Query('Like')Like:string) {
+  @ApiQuery({ name: 'Like', required: false })
+  async GetAll(
+    @Query() Pagination: PaginationDto,
+    @Query('Like') Like: string,
+  ) {
     try {
       const DataEstudiante = await firstValueFrom(
         this.client.send<{ Data: estudiante[]; meta: any }>(
           { cmd: 'GetAllEstudiante' },
-          {Pagination,Like}
+          { Pagination, Like },
         ),
       );
       //Obtenemos el apartado de data de la respuesta
@@ -79,12 +84,15 @@ export class EstudianteController {
         }),
       );
       //console.log(CompleteData)
-      return PaginatedSuccessResponse({ data: CompleteData, meta: DataEstudiante.meta });
+      return PaginatedSuccessResponse({
+        data: CompleteData,
+        meta: DataEstudiante.meta,
+      });
     } catch (e) {
       /*if(!noConectionValidator(e)){
         return FailResponse(e);
       }*/
-      return FailResponse(e)
+      return FailResponse(e);
     }
   }
 
@@ -92,26 +100,20 @@ export class EstudianteController {
   @Get('/names')
   async GetAllNames() {
     try {
-      const Data:estudianteGetName[] = await firstValueFrom(
-        this.client.send(
-          { cmd: 'GetAllEstudianteNames' },
-          {}
-        ),
+      const Data: estudianteGetName[] = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllEstudianteNames' }, {}),
       );
-      console.log(Data);
-      //Obtenemos el apartado de data de la respuesta
-      //Completamos los datos con los de usuario
       const CompleteData = await Promise.all(
         Data.map(async (estudiante) => {
           const UserData = await firstValueFrom(
             this.client.send({ cmd: 'GetUsuarioNames' }, estudiante.id_usuario),
           );
-          if(UserData != null){
-            const {id_estudiante} = estudiante
-            const{nombres,apellidos} = UserData
-            return {id_estudiante,nombres,apellidos}
+          if (UserData != null) {
+            const { id_estudiante } = estudiante;
+            const { nombres, apellidos } = UserData;
+            return { id_estudiante, nombres, apellidos };
           }
-          return
+          return;
         }),
       );
       //console.log(CompleteData)
@@ -120,7 +122,7 @@ export class EstudianteController {
       /*if(!noConectionValidator(e)){
         return FailResponse(e);
       }*/
-      return FailResponse(e)
+      return FailResponse(e);
     }
   }
 
@@ -139,10 +141,12 @@ export class EstudianteController {
       const MapedData = { ...userData, ...data };
       return SuccessResponse(MapedData);
     } catch (e) {
-      if(!noConectionValidator(e)){
+      if (!noConectionValidator(e)) {
         return FailResponse(e);
       }
-      return FailResponse('Existen problemas con los demas servicios servicios')
+      return FailResponse(
+        'Existen problemas con los demas servicios servicios',
+      );
     }
   }
 
@@ -159,26 +163,31 @@ export class EstudianteController {
       const MapedData = { ...userData, ...data };
       return SuccessResponse(MapedData);
     } catch (e) {
-      if(!noConectionValidator(e)){
+      if (!noConectionValidator(e)) {
         return FailResponse(e);
       }
-      return FailResponse('Existen problemas con los demas servicios servicios')
+      return FailResponse(
+        'Existen problemas con los demas servicios servicios',
+      );
     }
   }
-
 
   @ApiTags('Estudiante')
   @Put(':id')
   async Update(
     @Param('id') id: number,
     @Body() EstudianteData: EstudianteUpdateDTO,
-  ){
+  ) {
     try {
       //Validacion
-      const Idtesis = EstudianteData.id_tesis; 
-      const Exist = await firstValueFrom(this.client.send({cmd:'GetTesis'},Idtesis))
-      if(!Exist){
-        return 'Tesis no valida'
+      const Idtesis = EstudianteData.id_tesis;
+      if (Idtesis) {
+        const Exist = await firstValueFrom(
+          this.client.send({ cmd: 'GetTesis' }, Idtesis),
+        );
+        if (!Exist) {
+          return 'Tesis no valida';
+        }
       }
       //Modificacion
       const data = await firstValueFrom(
@@ -186,10 +195,13 @@ export class EstudianteController {
       );
       return SuccessResponse(data);
     } catch (e) {
-      if(!noConectionValidator(e)){
+      console.log(e);
+      if (!noConectionValidator(e)) {
         return FailResponse(e);
       }
-      return FailResponse('Existen problemas con los demas servicios servicios')
+      return FailResponse(
+        'Existen problemas con los demas servicios servicios',
+      );
     }
   }
 
