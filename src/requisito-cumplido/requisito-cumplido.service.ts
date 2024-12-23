@@ -5,12 +5,14 @@ import { requisitoCumplido } from './Entitys/requisito-cumplido.entity';
 import { Repository } from 'typeorm';
 import { requisitoCumplidoDTO } from './Entitys/DTO/requisito-cumplido.DTO';
 import { InjectRepository } from '@nestjs/typeorm';
+import { RequisitoService } from 'src/requisito/requisito.service';
 
 @Injectable()
 export class RequisitoCumplidoService {
   constructor(
     @InjectRepository(requisitoCumplido)
     private readonly repository: Repository<requisitoCumplido>,
+    private readonly RequisitoService:RequisitoService
   ) {}
 
   async Create(Data: requisitoCumplidoDTO) {
@@ -29,9 +31,6 @@ export class RequisitoCumplidoService {
     try {
       const { page, limit } = Pagination;
 
-      const TotalData = await this.repository.count({
-        where: { status: 1 },
-      });
       const TotalPages = Math.ceil(TotalData / limit);
 
       const data = await this.repository.find({
