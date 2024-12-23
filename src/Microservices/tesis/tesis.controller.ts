@@ -106,17 +106,50 @@ export class TesisController {
       const EstudiantesData: any[] = await firstValueFrom(
         this.client.send({ cmd: 'GetAllEstudianteTesis' }, idTesis),
       );
-      console.log(EstudiantesData);
-
       const Estudiantes = await Promise.all(
         EstudiantesData.map(async (Estudiante) => {
           const EstudianteData = await firstValueFrom(
-            this.client.send({ cmd: 'GetUsuarioNames' }, Estudiante.id_usuario)
+            this.client.send({ cmd: 'GetUsuarioNames' }, Estudiante.id_usuario),
           );
-          return {...Estudiante, estudiante: `${EstudianteData.nombres} ${EstudianteData.apellidos}`}
+          return {
+            ...Estudiante,
+            estudiante: `${EstudianteData.nombres} ${EstudianteData.apellidos}`,
+          };
         }),
       );
-      return Estudiantes
+      return Estudiantes;
+    } catch (e) {
+      console.log(e);
+      return FailResponse(e);
+    }
+  }
+
+  @ApiTags('Tesis')
+  @Get('DocenteTutor')
+  async GetAllDocenteTutor(@Query('idTesis') idTesis: number) {
+    try {
+      const TesisData: Record<string, any> = await firstValueFrom(
+        this.client.send({ cmd: 'GetTesis' }, idTesis),
+      );
+      console.log(TesisData)
+      const DocenteData = await firstValueFrom(
+        this.client.send(
+          { cmd: 'GetDocenteTutor' },
+          TesisData.id_docente_tutor,
+        ),
+      );
+      console.log(DocenteData)
+      const DocenteTutorName = await firstValueFrom(
+        this.client.send({ cmd: 'GetUsuarioNames' }, DocenteData.id_usuario),
+      );
+      console.log(DocenteTutorName)
+      const Response = {
+        ...TesisData,
+        docenteTutor:
+          `${DocenteTutorName.nombres}` + ' ' + `${DocenteTutorName.apellidos}`,
+      };
+
+      return SuccessResponse(Response);
     } catch (e) {
       console.log(e);
       return FailResponse(e);
