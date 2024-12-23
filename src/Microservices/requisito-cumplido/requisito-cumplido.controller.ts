@@ -68,22 +68,18 @@ export class RequisitoCumplidoController {
   ) {
     try {
 
-      const Data: { data: []; meta: {} } = await firstValueFrom(
+      const ReqData: { Data: []; meta: {} } = await firstValueFrom(
         this.client.send(
           { cmd: 'GetAllByEstudianteRequisitoCumplido' },
           { Pagination, id_estudiante },
         ),
       );
-      const { data, meta } = Data;
-      const MappedData = await Promise.all( data.map(async (RequisitosCumplidos:requisitoCumplidoDTO)=>{
-        const {id_requisito,estado }= RequisitosCumplidos;
-        const Requisitos = await firstValueFrom( this.client.send({cmd:'GetRequisito'},id_requisito))
-        return {...Requisitos,estado}
-      }))
-      console.log(MappedData);
-      return PaginatedMappedResponse(MappedData);
+      return PaginatedSuccessResponse(ReqData);
     } catch (e) {
-      return FailResponse(e);
+      if(!noConectionValidator(e)){
+        return FailResponse(e);
+      }
+      return noConectionValidator(e);
     }
   }
 
