@@ -14,12 +14,14 @@ import { ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
 import {
   FailResponse,
+  PaginatedMappedResponse,
   PaginatedSuccessResponse,
   SuccessResponse,
 } from 'src/Response/Responses';
 import { tesisDTO } from '../DTO/tesis.DTO';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
+import { ResponseAPIDTO } from '../DTO/ResponseDTO';
 
 @Controller('tesis')
 export class TesisController {
@@ -54,11 +56,33 @@ export class TesisController {
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
-      const data = await firstValueFrom(
+      const Tesis:ResponseAPIDTO = await firstValueFrom(
         this.client.send({ cmd: 'GetAllTesis' }, Pagination),
       );
-      return PaginatedSuccessResponse(data);
+      const{Data,meta} = Tesis
+      const Docente =await Promise.all( Data.map(async (Tesis) => {
+        const Docente = await firstValueFrom(
+          this.client.send({ cmd: 'GetDocenteTutor' }, Tesis.id_docente_tutor),
+        );
+        return Docente.id_usuario;
+      }));
+      const UsuariosName =await Promise.all( Docente.map(async (docentes) => {
+        const DocenteData = await firstValueFrom(
+          this.client.send({ cmd: 'GetUsuarioNames' }, docentes),
+        )
+        return DocenteData 
+      }))
+
+      const MappedData = Data.map((Tesis,index)=>{
+        return {
+          ...Tesis,
+          docente_tutor: `${UsuariosName[index].nombres}` + ' ' + `${UsuariosName[index].apellidos}`
+        }
+      })
+      const Response = {Data:MappedData,meta}
+      return PaginatedSuccessResponse(Response);
     } catch (e) {
+      console.log(e)
       return FailResponse(e);
     }
   }

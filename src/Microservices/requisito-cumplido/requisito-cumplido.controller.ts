@@ -59,7 +59,6 @@ export class RequisitoCumplidoController {
   }
 
 
-
   @ApiTags('Requisito Cumplido')
   @Get('ByEstudiante/:id_estudiante')
   async GetAllByEstudiante(
