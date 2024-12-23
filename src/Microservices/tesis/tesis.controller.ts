@@ -92,13 +92,13 @@ export class TesisController {
   @Get('Like/:search')
   async GetAllLike(
     @Query() Pagination: PaginationDto,
-    @Param('search') Like: string,
+    @Query('Like') Like: string,
   ) {
     try {
-      const data = await firstValueFrom(
+      const Data = await firstValueFrom(
         this.client.send({ cmd: 'GetAllLikeTesis' }, { Pagination, Like }),
       );
-      return PaginatedSuccessResponse(data);
+      return PaginatedSuccessResponse(Data);
     } catch (e) {
       return FailResponse(e);
     }
