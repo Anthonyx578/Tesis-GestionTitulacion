@@ -22,6 +22,7 @@ import { tesisDTO } from '../DTO/tesis.DTO';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { ResponseAPIDTO } from '../DTO/ResponseDTO';
+import { docenteTutorGet } from '../docente-tutor/DataClass/docenteTutorGetClass';
 
 @Controller('tesis')
 export class TesisController {
@@ -107,10 +108,21 @@ export class TesisController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data = await firstValueFrom(
+      const data:tesisDTO = await firstValueFrom(
         this.client.send({ cmd: 'GetTesis' }, id),
       );
-      return SuccessResponse(data);
+      
+      const DocenteTutor:docenteTutorGet = await firstValueFrom(
+          this.client.send({ cmd: 'GetDocenteTutor' }, data.id_docente_tutor),
+      );
+
+      const UsuarioName:{nombres:string,apellidos:string} = await firstValueFrom(
+        this.client.send({ cmd: 'GetUsuarioNames' }, DocenteTutor.id_usuario),
+
+      )
+
+      const Response = {...data,docente_tutor: `${UsuarioName.nombres} ${UsuarioName.apellidos}`}
+      return SuccessResponse(Response);
     } catch (e) {
       return FailResponse(e);
     }
