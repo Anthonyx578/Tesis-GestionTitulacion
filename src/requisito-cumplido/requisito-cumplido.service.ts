@@ -69,7 +69,7 @@ export class RequisitoCumplidoService {
       });
       const TotalPages = Math.ceil(TotalData / limit);
 
-      const Data = await this.repository.find({
+      const Requisitos = await this.repository.find({
         where: { status: 1,id_estudiante:Estudiante},
         select: [
           'id',
@@ -83,7 +83,10 @@ export class RequisitoCumplidoService {
           id: 'DESC',
         },
       });
-
+      const Data =await Promise.all( Requisitos.map(async (item)=>{
+        const Requisito = await this.RequisitoService.Get(item.id_requisito);
+        return {...item,...Requisito}
+      }))
       return {
         Data,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
