@@ -238,6 +238,9 @@ export class UsuarioService {
       if (!ExistData) {
         return {};
       }
+      if(ChangeData.contrasena){
+        ChangeData.contrasena = await this.hashPassword(ChangeData.contrasena);  
+      }
       return await this.repository.update(
         { id_usuario: id },
         { ...ChangeData, updated_at: new Date() },
@@ -246,7 +249,6 @@ export class UsuarioService {
       throw new RpcException(e);
     }
   }
-  A;
 
   async delete(id) {
     try {
