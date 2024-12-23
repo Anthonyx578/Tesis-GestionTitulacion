@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { usuario } from 'src/entitys/usuario.entity';
@@ -10,6 +10,7 @@ import { rol } from 'src/entitys/rol.entity';
 import { RolService } from 'src/rol/rol.service';
 import { CarreraService } from 'src/carrera/carrera.service';
 import { findSourceMap } from 'module';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UsuarioService {
@@ -70,6 +71,7 @@ export class UsuarioService {
       throw new RpcException(e);
     }
   }
+  
 
   async GetAllLike(Pagination: PaginationDto, Like: string) {
     try {
