@@ -62,7 +62,7 @@ export class TesisService {
       });
       const TotalPages = Math.ceil(TotalData / limit);
 
-      const data = await this.repository.find({
+      const Data = await this.repository.find({
         where:{status: 1,titulo:ILike(`%${Like}%`)},
         select:['id_tesis', 'titulo','documento', 'fecha','id_docente_tutor'],
         skip:(page - 1) * limit,
@@ -73,7 +73,7 @@ export class TesisService {
       });
 
       return {
-        data,
+        Data,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
       };
     } catch (e) {
