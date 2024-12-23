@@ -131,18 +131,15 @@ export class TesisController {
       const TesisData: Record<string, any> = await firstValueFrom(
         this.client.send({ cmd: 'GetTesis' }, idTesis),
       );
-      console.log(TesisData)
       const DocenteData = await firstValueFrom(
         this.client.send(
           { cmd: 'GetDocenteTutor' },
           TesisData.id_docente_tutor,
         ),
       );
-      console.log(DocenteData)
       const DocenteTutorName = await firstValueFrom(
         this.client.send({ cmd: 'GetUsuarioNames' }, DocenteData.id_usuario),
       );
-      console.log(DocenteTutorName)
       const Response = {
         ...TesisData,
         docenteTutor:
