@@ -89,7 +89,7 @@ export class TesisController {
   }
 
   @ApiTags('Tesis')
-  @Get('Like/:search')
+  @Get('Like')
   async GetAllLike(
     @Query() Pagination: PaginationDto,
     @Query('Like') Like: string,
