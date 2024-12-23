@@ -199,6 +199,7 @@ export class UsuarioService {
           'fecha_nacimiento',
           'id_rol',
           'id_carrera',
+          'status'
         ],
       });
       if (!Find) {
