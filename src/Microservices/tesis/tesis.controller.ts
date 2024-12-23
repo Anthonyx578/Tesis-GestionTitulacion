@@ -23,6 +23,7 @@ import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { ResponseAPIDTO } from '../DTO/ResponseDTO';
 import { docenteTutorGet } from '../docente-tutor/DataClass/docenteTutorGetClass';
+import { log } from 'console';
 
 @Controller('tesis')
 export class TesisController {
@@ -57,33 +58,67 @@ export class TesisController {
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
-      const Tesis:ResponseAPIDTO = await firstValueFrom(
+      const Tesis: ResponseAPIDTO = await firstValueFrom(
         this.client.send({ cmd: 'GetAllTesis' }, Pagination),
       );
-      const{Data,meta} = Tesis
-      const Docente =await Promise.all( Data.map(async (Tesis) => {
-        const Docente = await firstValueFrom(
-          this.client.send({ cmd: 'GetDocenteTutor' }, Tesis.id_docente_tutor),
-        );
-        return Docente.id_usuario;
-      }));
-      const UsuariosName =await Promise.all( Docente.map(async (docentes) => {
-        const DocenteData = await firstValueFrom(
-          this.client.send({ cmd: 'GetUsuarioNames' }, docentes),
-        )
-        return DocenteData 
-      }))
+      const { Data, meta } = Tesis;
+      const Docente = await Promise.all(
+        Data.map(async (Tesis) => {
+          const Docente = await firstValueFrom(
+            this.client.send(
+              { cmd: 'GetDocenteTutor' },
+              Tesis.id_docente_tutor,
+            ),
+          );
+          return Docente.id_usuario;
+        }),
+      );
+      const UsuariosName = await Promise.all(
+        Docente.map(async (docentes) => {
+          const DocenteData = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuarioNames' }, docentes),
+          );
+          return DocenteData;
+        }),
+      );
 
-      const MappedData = Data.map((Tesis,index)=>{
+      const MappedData = Data.map((Tesis, index) => {
         return {
           ...Tesis,
-          docente_tutor: `${UsuariosName[index].nombres}` + ' ' + `${UsuariosName[index].apellidos}`
-        }
-      })
-      const Response = {Data:MappedData,meta}
+          docente_tutor:
+            `${UsuariosName[index].nombres}` +
+            ' ' +
+            `${UsuariosName[index].apellidos}`,
+        };
+      });
+      const Response = { Data: MappedData, meta };
       return PaginatedSuccessResponse(Response);
     } catch (e) {
-      console.log(e)
+      console.log(e);
+      return FailResponse(e);
+    }
+  }
+
+  @ApiTags('Tesis')
+  @Get('Estudiantes')
+  async GetAllEstudiantes(@Query('idTesis') idTesis: number) {
+    try {
+      const EstudiantesData: any[] = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllEstudianteTesis' }, idTesis),
+      );
+      console.log(EstudiantesData);
+
+      const Estudiantes = await Promise.all(
+        EstudiantesData.map(async (Estudiante) => {
+          const EstudianteData = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuarioNames' }, Estudiante.id_usuario)
+          );
+          return {...Estudiante, estudiante: `${EstudianteData.nombres} ${EstudianteData.apellidos}`}
+        }),
+      );
+      return Estudiantes
+    } catch (e) {
+      console.log(e);
       return FailResponse(e);
     }
   }
@@ -108,20 +143,23 @@ export class TesisController {
   @Get(':id')
   async Get(@Param('id') id: number) {
     try {
-      const data:tesisDTO = await firstValueFrom(
+      const data: tesisDTO = await firstValueFrom(
         this.client.send({ cmd: 'GetTesis' }, id),
       );
-      
-      const DocenteTutor:docenteTutorGet = await firstValueFrom(
-          this.client.send({ cmd: 'GetDocenteTutor' }, data.id_docente_tutor),
+
+      const DocenteTutor: docenteTutorGet = await firstValueFrom(
+        this.client.send({ cmd: 'GetDocenteTutor' }, data.id_docente_tutor),
       );
 
-      const UsuarioName:{nombres:string,apellidos:string} = await firstValueFrom(
-        this.client.send({ cmd: 'GetUsuarioNames' }, DocenteTutor.id_usuario),
+      const UsuarioName: { nombres: string; apellidos: string } =
+        await firstValueFrom(
+          this.client.send({ cmd: 'GetUsuarioNames' }, DocenteTutor.id_usuario),
+        );
 
-      )
-
-      const Response = {...data,docente_tutor: `${UsuarioName.nombres} ${UsuarioName.apellidos}`}
+      const Response = {
+        ...data,
+        docente_tutor: `${UsuarioName.nombres} ${UsuarioName.apellidos}`,
+      };
       return SuccessResponse(Response);
     } catch (e) {
       return FailResponse(e);
@@ -149,14 +187,15 @@ export class TesisController {
         this.client.send({ cmd: 'UpdateTesis' }, { id, TesisData }),
       );
 
-
       //Respuesta
       return SuccessResponse(data);
     } catch (e) {
-      if(!noConectionValidator(e)){
+      if (!noConectionValidator(e)) {
         return FailResponse(e);
       }
-      return FailResponse('Existen problemas con los demas servicios servicios')
+      return FailResponse(
+        'Existen problemas con los demas servicios servicios',
+      );
     }
   }
 
