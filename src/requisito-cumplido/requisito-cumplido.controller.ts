@@ -25,7 +25,6 @@ export class RequisitoCumplidoController {
   @MessagePattern({ cmd: 'GetAllByEstudianteRequisitoCumplido' })
   async GetAllByEstudiante(data:{Pagination: PaginationDto, id_estudiante: number}) {
     const {Pagination,id_estudiante} = data
-    console.log(id_estudiante)
     return await this.Services.GetAllByEstudiante(Pagination, id_estudiante);
   }
 
