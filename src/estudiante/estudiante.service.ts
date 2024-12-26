@@ -110,7 +110,7 @@ export class EstudianteService {
         where: {id_tesis:id,status:1},
         select: [
           'id_usuario',
-          //'id_estudiante',
+          'id_estudiante',
           'id_tesis',
         ],
         order: {
