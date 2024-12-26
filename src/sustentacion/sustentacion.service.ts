@@ -12,14 +12,13 @@ export class SustentacionService {
         @InjectRepository(sustentacion)
         private readonly repository: Repository<sustentacion>,
       ) {}
-    
       async Create(Data: sustentacionDTO) {
         try {
-          const Tesis: Partial<sustentacion> = {
+          const Sustentacion: Partial<sustentacion> = {
             ...Data,
             created_at: new Date(),
           };
-          return await this.repository.save(Tesis);
+          return await this.repository.save(Sustentacion);
         } catch (error) {
           throw new RpcException(error);
         }

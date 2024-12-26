@@ -15,11 +15,11 @@ export class JuradoSustentacionService {
     
       async Create(Data: juradoSustentacionDTO) {
         try {
-          const Tesis: Partial<juradoSustentacion> = {
+          const JuradoSustentacion: Partial<juradoSustentacion> = {
             ...Data,
             created_at: new Date(),
           };
-          return await this.repository.save(Tesis);
+          return await this.repository.save(JuradoSustentacion);
         } catch (error) {
           throw new RpcException(error);
         }

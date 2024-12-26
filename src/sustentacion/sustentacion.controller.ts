@@ -4,13 +4,15 @@ import { MessagePattern } from '@nestjs/microservices';
 import { sustentacionDTO } from './Entitys/DTO/sustentacion.DTO';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 
+
 @Controller('sustentacion')
 export class SustentacionController {
     constructor(private readonly Services:SustentacionService){}
 
     @MessagePattern({cmd:'CreateSustentacion'})
-    async Create (Requisito:sustentacionDTO){
-        return await this.Services.Create(Requisito)
+    async Create (sustentacion:sustentacionDTO){
+        console.log(sustentacion)
+        return await this.Services.Create(sustentacion)
     }
 
     @MessagePattern({cmd:'GetAllSustentacion'})
