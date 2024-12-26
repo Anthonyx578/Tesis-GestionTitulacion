@@ -35,23 +35,32 @@ export class SustentacionController {
       const ExistTesis = await firstValueFrom(
         this.client.send({ cmd: 'GetTesis' }, id_tesis),
       );
+
+      console.log('ExistTesis:', ExistTesis);
+
       const ExistCarrera = await firstValueFrom(
         this.client.send({ cmd: 'GetCarrera' }, id_carrera),
       );
+
+      console.log('ExistCarrera:', ExistCarrera);
+
       if (!ExistTesis || !ExistCarrera) {
         return BadRequestResponse('Tesis o Carrera no valida');
       }
       const Sustentacion = await firstValueFrom(
         this.client.send({ cmd: 'CreateSustentacion' }, sustentacion),
       );
+
+      console.log('Respuesta de Crear Sustentacion:', Sustentacion);
+
       return SuccessResponse(Sustentacion);
     } catch (e) {
-      if (!noConectionValidator(e)) {
+      //if (!noConectionValidator(e)) {
         return FailResponse(e);
-      }
-      return FailResponse(
+      //}
+      /*return FailResponse(
         'Existen problemas con los demas servicios servicios',
-      );
+      );*/
     }
   }
 
