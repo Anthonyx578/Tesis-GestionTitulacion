@@ -117,9 +117,6 @@ export class EstudianteService {
           id_estudiante: 'DESC',
         },
       });
-      if(Data.length == 0){
-        return []
-      }
       return Data
     } catch (e) {
       throw new RpcException(e);
