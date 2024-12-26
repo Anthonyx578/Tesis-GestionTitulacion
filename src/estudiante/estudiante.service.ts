@@ -90,6 +90,9 @@ export class EstudianteService {
           'id_usuario',
           'id_estudiante'
         ],
+        where:{
+          id_tesis: null
+        },
         order: {
           id_estudiante: 'DESC',
         },
