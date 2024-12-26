@@ -108,7 +108,7 @@ export class TesisController {
       const EstudiantesData: any[] = await firstValueFrom(
         this.client.send({ cmd: 'GetAllEstudianteTesis' }, idTesis),
       );
-      if( EstudiantesData||EstudiantesData.length === 0){
+      if(!EstudiantesData||EstudiantesData.length === 0){
         return []
       }
       const Estudiantes = await Promise.all(
