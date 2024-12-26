@@ -12,7 +12,7 @@ export class SustentacionService {
         @InjectRepository(sustentacion)
         private readonly repository: Repository<sustentacion>,
       ) {}
-      async Create(Data: sustentacionDTO) {
+      async Create(Data: Partial<sustentacionDTO>) {
         try {
           const Sustentacion: Partial<sustentacion> = {
             ...Data,

@@ -10,7 +10,7 @@ export class SustentacionController {
     constructor(private readonly Services:SustentacionService){}
 
     @MessagePattern({cmd:'CreateSustentacion'})
-    async Create (sustentacion:sustentacionDTO){
+    async Create (sustentacion:Partial<sustentacionDTO>){
         return await this.Services.Create(sustentacion)
     }
 
