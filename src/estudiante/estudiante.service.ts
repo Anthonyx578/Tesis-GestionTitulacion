@@ -118,7 +118,7 @@ export class EstudianteService {
         },
       });
       if(Data.length == 0){
-        return {message:'No hay estudiantes en esta tesis'}
+        return []
       }
       return Data
     } catch (e) {
