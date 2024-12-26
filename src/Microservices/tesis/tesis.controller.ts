@@ -25,6 +25,7 @@ import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator'
 import { ResponseAPIDTO } from '../DTO/ResponseDTO';
 import { docenteTutorGet } from '../docente-tutor/DataClass/docenteTutorGetClass';
 import { log } from 'console';
+import { EstudianteController } from '../estudiante/estudiante.controller';
 
 @Controller('tesis')
 export class TesisController {
@@ -107,7 +108,7 @@ export class TesisController {
       const EstudiantesData: any[] = await firstValueFrom(
         this.client.send({ cmd: 'GetAllEstudianteTesis' }, idTesis),
       );
-      if(EstudiantesData.length == 0){
+      if( EstudiantesData||EstudiantesData.length === 0){
         return BadRequestResponse('No hay estudiantes asignados')
       }
       const Estudiantes = await Promise.all(
