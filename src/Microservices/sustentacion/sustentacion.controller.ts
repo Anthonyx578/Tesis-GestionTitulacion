@@ -31,32 +31,29 @@ export class SustentacionController {
   async Create(@Body() sustentacion: sustentacionDTO) {
     try {
       //Validamos su existencia
-      const { id_carrera, id_tesis } = sustentacion;
-      const ExistTesis = await firstValueFrom(
-        this.client.send({ cmd: 'GetTesis' }, id_tesis),
-      );
-
-      console.log('ExistTesis:', ExistTesis);
-
-      const ExistCarrera = await firstValueFrom(
-        this.client.send({ cmd: 'GetCarrera' }, id_carrera),
-      );
-
-      console.log('ExistCarrera:', ExistCarrera);
-
-      if (!ExistTesis || !ExistCarrera) {
-        return BadRequestResponse('Tesis o Carrera no valida');
+      if (sustentacion.id_carrera || sustentacion.id_carrera == 0) {
+        const ExistCarrera = await firstValueFrom(
+          this.client.send({ cmd: 'GetCarrera' }, sustentacion.id_carrera),
+        );
+        if (!ExistCarrera) {
+          return BadRequestResponse('Carrera no valida');
+        }
+      }
+      if(sustentacion.id_tesis || sustentacion.id_carrera == 0){ 
+        const ExistTesis = await firstValueFrom(
+          this.client.send({ cmd: 'GetTesis' }, sustentacion.id_tesis),
+        );
+        if(!ExistTesis){
+          return BadRequestResponse('Tesis no valida');
+        }
       }
       const Sustentacion = await firstValueFrom(
         this.client.send({ cmd: 'CreateSustentacion' }, sustentacion),
       );
-
-      console.log('Respuesta de Crear Sustentacion:', Sustentacion);
-
       return SuccessResponse(Sustentacion);
     } catch (e) {
       //if (!noConectionValidator(e)) {
-        return FailResponse(e);
+      return FailResponse(e);
       //}
       /*return FailResponse(
         'Existen problemas con los demas servicios servicios',
