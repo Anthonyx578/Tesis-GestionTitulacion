@@ -22,7 +22,7 @@ import {
   SuccessResponse,
 } from 'src/Response/Responses';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
-import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
+import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { requisitoDTO } from '../DTO/requisito.DTO';
 
 @Controller('requisito-cumplido')
@@ -75,10 +75,7 @@ export class RequisitoCumplidoController {
       );
       return PaginatedSuccessResponse(ReqData);
     } catch (e) {
-      if(!noConectionValidator(e)){
-        return FailResponse(e);
-      }
-      return noConectionValidator(e);
+        return FailResponse(ExeptValidator(e));
     }
   }
 

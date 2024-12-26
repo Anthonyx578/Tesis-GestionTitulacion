@@ -21,7 +21,7 @@ import {
 } from 'src/Response/Responses';
 import { tesisDTO } from '../DTO/tesis.DTO';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
-import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
+import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { ResponseAPIDTO } from '../DTO/ResponseDTO';
 import { docenteTutorGet } from '../docente-tutor/DataClass/docenteTutorGetClass';
 import { log } from 'console';
@@ -47,12 +47,7 @@ export class TesisController {
       );
       return SuccessResponse(Data);
     } catch (e) {
-      if (!noConectionValidator(e)) {
-        return FailResponse(e);
-      }
-      return FailResponse(
-        'Existen problemas con los demas servicios servicios',
-      );
+      return FailResponse(ExeptValidator(e))
     }
   }
 
@@ -225,12 +220,7 @@ export class TesisController {
       //Respuesta
       return SuccessResponse(data);
     } catch (e) {
-      if (!noConectionValidator(e)) {
-        return FailResponse(e);
-      }
-      return FailResponse(
-        'Existen problemas con los demas servicios servicios',
-      );
+        return FailResponse(ExeptValidator(e));
     }
   }
 

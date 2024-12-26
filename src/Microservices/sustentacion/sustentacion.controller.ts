@@ -20,7 +20,7 @@ import {
   SuccessResponse,
 } from 'src/Response/Responses';
 import { sustentacionDTO } from './DTO/sustentacion.DTO';
-import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
+import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
 
 @Controller('sustentacion')
 export class SustentacionController {
@@ -52,12 +52,7 @@ export class SustentacionController {
       );
       return SuccessResponse(Sustentacion);
     } catch (e) {
-      //if (!noConectionValidator(e)) {
-      return FailResponse(e);
-      //}
-      /*return FailResponse(
-        'Existen problemas con los demas servicios servicios',
-      );*/
+      return FailResponse(ExeptValidator(e));
     }
   }
 

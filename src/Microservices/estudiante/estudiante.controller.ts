@@ -24,7 +24,7 @@ import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { EstudianteUpdateDTO } from '../DTO/estudiante.Update.DTO';
 import { firstValueFrom } from 'rxjs';
 import { estudiante } from './Entity/estudiante.entity';
-import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
+import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { estudianteGetName } from './Entity/estudianteGetName';
 
 @Controller('estudiante')
@@ -49,12 +49,7 @@ export class EstudianteController {
       );
       return SuccessResponse(Usuario);
     } catch (e) {
-      if (!noConectionValidator(e)) {
-        return FailResponse(e);
-      }
-      return FailResponse(
-        'Existen problemas con los demas servicios servicios',
-      );
+        return FailResponse(ExeptValidator(e));
     }
   }
 
@@ -141,12 +136,7 @@ export class EstudianteController {
       const MapedData = { ...userData, ...data };
       return SuccessResponse(MapedData);
     } catch (e) {
-      if (!noConectionValidator(e)) {
-        return FailResponse(e);
-      }
-      return FailResponse(
-        'Existen problemas con los demas servicios servicios',
-      );
+        return FailResponse(ExeptValidator(e));
     }
   }
 
@@ -163,12 +153,7 @@ export class EstudianteController {
       const MapedData = { ...userData, ...data };
       return SuccessResponse(MapedData);
     } catch (e) {
-      if (!noConectionValidator(e)) {
-        return FailResponse(e);
-      }
-      return FailResponse(
-        'Existen problemas con los demas servicios servicios',
-      );
+        return FailResponse(ExeptValidator(e));
     }
   }
 
@@ -195,13 +180,7 @@ export class EstudianteController {
       );
       return SuccessResponse(data);
     } catch (e) {
-      console.log(e);
-      if (!noConectionValidator(e)) {
-        return FailResponse(e);
-      }
-      return FailResponse(
-        'Existen problemas con los demas servicios servicios',
-      );
+        return FailResponse(ExeptValidator(e));
     }
   }
 

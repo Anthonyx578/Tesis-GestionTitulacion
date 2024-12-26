@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query } from '
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
-import { noConectionValidator } from 'src/ExceptionValidator/ExceptionValidator';
+import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { PaginationDto } from 'src/Pagination/PaginationDTO';
 import { BadRequestResponse, FailResponse, PaginatedSuccessResponse, SuccessResponse } from 'src/Response/Responses';
 import { juradoSustentacionDTO } from '../DTO/jurado-sustentacion.DTO';
@@ -35,10 +35,7 @@ export class JuradoSustentacionController {
           );
           return SuccessResponse(JuradoSus);
         } catch (e) {
-          if(!noConectionValidator(e)){
-            return FailResponse(e);
-          }
-          return FailResponse('Existen problemas con los demas servicios servicios')
+            return FailResponse(ExeptValidator(e));
         }
       }
     
@@ -88,10 +85,7 @@ export class JuradoSustentacionController {
           const MapedData = { ...userData, ...data };
           return SuccessResponse(MapedData);
         } catch (e) {
-          if(!noConectionValidator(e)){
-            return FailResponse(e);
-          }
-          return FailResponse('Existen problemas con los demas servicios servicios')
+            return FailResponse(ExeptValidator(e));
         }
       }
     
