@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { estudianteUpdateDTO } from 'src/estudiante/Entitys/DTO/estudianteUpdateDTO';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { estudiante } from 'src/estudiante/Entitys/estudiante.entity';
-import { ILike, Repository } from 'typeorm';
+import { ILike, IsNull, Repository } from 'typeorm';
 
 @Injectable()
 export class EstudianteService {
@@ -91,7 +91,7 @@ export class EstudianteService {
           'id_estudiante'
         ],
         where:{
-          id_tesis: null
+          id_tesis: IsNull()
         },
         order: {
           id_estudiante: 'DESC',
