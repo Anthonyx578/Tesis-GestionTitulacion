@@ -109,7 +109,7 @@ export class TesisController {
         this.client.send({ cmd: 'GetAllEstudianteTesis' }, idTesis),
       );
       if( EstudiantesData||EstudiantesData.length === 0){
-        return BadRequestResponse('No hay estudiantes asignados')
+        return []
       }
       const Estudiantes = await Promise.all(
         EstudiantesData.map(async (Estudiante) => {
