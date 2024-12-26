@@ -11,7 +11,6 @@ export class SustentacionController {
 
     @MessagePattern({cmd:'CreateSustentacion'})
     async Create (sustentacion:sustentacionDTO){
-        console.log(sustentacion)
         return await this.Services.Create(sustentacion)
     }
 
