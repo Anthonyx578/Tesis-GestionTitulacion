@@ -13,6 +13,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UsuarioCreateDTO } from '../DTO/usuario.Create.DTO';
 import {
+  BadRequestResponse,
   FailResponse,
   PaginatedMappedResponse,
   PaginatedSuccessResponse,
@@ -31,6 +32,22 @@ export class UsuarioController {
   @Post()
   async Create(@Body() Usuario: UsuarioUpdateDTO) {
     try {
+      if(Usuario.id_rol || Usuario.id_rol == 0 ){
+        const Exist = await firstValueFrom(
+          this.client.send({cmd:'GetRol'},Usuario.id_rol)
+        ) 
+        if(!Exist){
+          return BadRequestResponse('Rol no valido')
+        }
+      }
+      if(Usuario.id_carrera || Usuario.id_carrera == 0){
+        const Exist = await firstValueFrom(
+          this.client.send({cmd:'GetCarrera'},Usuario.id_carrera)
+        )
+        if(!Exist){
+          return BadRequestResponse('Carrera no valida')
+        }
+      }
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'CreateUsuario' }, Usuario),
       );
@@ -39,7 +56,6 @@ export class UsuarioController {
       return FailResponse();
     }
   }
-
 
   /*
   @ApiTags('Usuario')
@@ -57,12 +73,20 @@ export class UsuarioController {
 
   @ApiTags('Usuario')
   @Get()
-  @ApiQuery({name:'Like',required:false,description:'Valor de busqueda opcional',example:''})
-  async GetAllLike(@Query() Pagination: PaginationDto,@Query('Like') Like: string) {
+  @ApiQuery({
+    name: 'Like',
+    required: false,
+    description: 'Valor de busqueda opcional',
+    example: '',
+  })
+  async GetAllLike(
+    @Query() Pagination: PaginationDto,
+    @Query('Like') Like: string,
+  ) {
     try {
-      console.log(Like)
+      console.log(Like);
       const data = await firstValueFrom(
-        this.client.send({ cmd: 'GetAllUsuarioLike' }, {Pagination,Like}),
+        this.client.send({ cmd: 'GetAllUsuarioLike' }, { Pagination, Like }),
       );
       return PaginatedSuccessResponse(data);
     } catch (e) {
@@ -110,7 +134,7 @@ export class UsuarioController {
               ),
             );
           var ProfesorTutorMP: {};
-          var ProfesorJuradoMp:{};
+          var ProfesorJuradoMp: {};
           if (Istutor != null) {
             if (Istutor.status == 0) {
               ProfesorTutorMP = {
@@ -129,7 +153,6 @@ export class UsuarioController {
             }
           }
           if (ProfesorTutorMP) {
-            
             if (IsJurado != null) {
               ProfesorJuradoMp = {
                 ...ProfesorTutorMP,
@@ -142,19 +165,18 @@ export class UsuarioController {
                 ProfesorJuradoMp = { ...ProfesorJuradoMp, isJurado: 1 };
               }
             }
-
           }
-          if(ProfesorJuradoMp){
-            console.log(ProfesorJuradoMp)
-            return ProfesorJuradoMp
+          if (ProfesorJuradoMp) {
+            console.log(ProfesorJuradoMp);
+            return ProfesorJuradoMp;
           }
         }),
       );
       //console.log(ProfesorMapped);
-      const Response={
-        Data:ProfesorMapped,
-        meta
-      }
+      const Response = {
+        Data: ProfesorMapped,
+        meta,
+      };
       return PaginatedSuccessResponse(Response);
     } catch (e) {
       return FailResponse(e.message);
@@ -177,6 +199,23 @@ export class UsuarioController {
   @Put(':id')
   async Update(@Param('id') id: number, @Body() UsuarioData: UsuarioUpdateDTO) {
     try {
+
+      if(UsuarioData.id_rol || UsuarioData.id_rol == 0 ){
+        const Exist = await firstValueFrom(
+          this.client.send({cmd:'GetRol'},UsuarioData.id_rol)
+        ) 
+        if(!Exist){
+          return BadRequestResponse('Rol no valido')
+        }
+      }
+      if(UsuarioData.id_carrera || UsuarioData.id_carrera == 0){
+        const Exist = await firstValueFrom(
+          this.client.send({cmd:'GetCarrera'},UsuarioData.id_carrera)
+        )
+        if(!Exist){
+          return BadRequestResponse('Carrera no valida')
+        }
+      }
       const data = await firstValueFrom(
         this.client.send({ cmd: 'UpdateUsuario' }, { id, UsuarioData }),
       );

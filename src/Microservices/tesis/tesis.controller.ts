@@ -13,6 +13,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
 import {
+  BadRequestResponse,
   FailResponse,
   PaginatedMappedResponse,
   PaginatedSuccessResponse,
@@ -106,6 +107,9 @@ export class TesisController {
       const EstudiantesData: any[] = await firstValueFrom(
         this.client.send({ cmd: 'GetAllEstudianteTesis' }, idTesis),
       );
+      if(EstudiantesData.length == 0){
+        return BadRequestResponse('No hay estudiantes asignados')
+      }
       const Estudiantes = await Promise.all(
         EstudiantesData.map(async (Estudiante) => {
           const EstudianteData = await firstValueFrom(
