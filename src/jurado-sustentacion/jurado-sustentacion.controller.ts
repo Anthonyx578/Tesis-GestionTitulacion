@@ -24,9 +24,9 @@ export class JuradoSustentacionController {
     }
 
     @MessagePattern({cmd:'UpdateJuradoSustentacion'})
-        async Update(data:{id:number,RequisitoData:juradoSustentacionDTO}){
-        const {id,RequisitoData} = data;
-        return await this.Services.update(id,RequisitoData);
+        async Update(data:{id:number,JuradoSustentacion:juradoSustentacionDTO}){
+        const {id,JuradoSustentacion} = data;
+        return await this.Services.update(id,JuradoSustentacion);
     }
 
     @MessagePattern({cmd:'DeleteJuradoSustentacion'})
