@@ -16,20 +16,31 @@ export class JuradoSustentacionController {
       async Create(@Body() JuradoSustentacion: juradoSustentacionDTO) {
         try {
           //Validamos su existencia
-          const {id_jurado,id_sustentacion} = JuradoSustentacion
-          const ExistJurado = await firstValueFrom(
-            this.client.send({ cmd: 'GetJurado' }, id_jurado),
-          );
 
-          const Existsustentacion = await firstValueFrom(
-            this.client.send({ cmd: 'GetSustentacion' }, id_sustentacion),
-          );
-          
-          if (!ExistJurado || !Existsustentacion) {
-            return BadRequestResponse(
-              'El Jurado o Sustentacion no es valido',
+          if(JuradoSustentacion.id_jurado){
+            const ExistJurado = await firstValueFrom(
+              this.client.send({ cmd: 'GetJurado' }, JuradoSustentacion.id_jurado),
             );
+
+            if (!ExistJurado ) {
+              return BadRequestResponse(
+                'El Jurado  no es valido',
+              );
+            }
           }
+          
+          if(JuradoSustentacion.id_sustentacion){
+            const Existsustentacion = await firstValueFrom(
+              this.client.send({ cmd: 'GetSustentacion' }, JuradoSustentacion.id_sustentacion),
+            );
+            
+            if (!Existsustentacion) {
+              return BadRequestResponse(
+                'La Sustentacion no es valida',
+              );
+            }
+          }
+          
           const JuradoSus = await firstValueFrom(
             this.client.send({ cmd: 'CreateJuradoSustentacion' }, JuradoSustentacion),
           );
@@ -95,26 +106,40 @@ export class JuradoSustentacionController {
       @Put(':id')
       async Update(
         @Param('id') id: number,
-        @Body() EstudianteData: juradoSustentacionDTO,
+        @Body() JuradoSustentacion: juradoSustentacionDTO,
       ){
-        /*try {
+        try {
           //Validacion
-          const Idtesis = EstudianteData.id_tesis; 
-          const Exist = await firstValueFrom(this.client.send({cmd:'GetTesis'},Idtesis))
-          if(!Exist){
-            return 'Tesis no valida'
+          if(JuradoSustentacion.id_jurado){
+            const ExistJurado = await firstValueFrom(
+              this.client.send({ cmd: 'GetJurado' }, JuradoSustentacion.id_jurado),
+            );
+
+            if (!ExistJurado ) {
+              return BadRequestResponse(
+                'El Jurado  no es valido',
+              );
+            }
           }
-          //Modificacion
+          
+          if(JuradoSustentacion.id_sustentacion){
+            const Existsustentacion = await firstValueFrom(
+              this.client.send({ cmd: 'GetSustentacion' }, JuradoSustentacion.id_sustentacion),
+            );
+            
+            if (!Existsustentacion) {
+              return BadRequestResponse(
+                'La Sustentacion no es valida',
+              );
+            }
+          }
           const data = await firstValueFrom(
-            this.client.send({ cmd: 'UpdateEstudiante' }, { id, EstudianteData }),
+            this.client.send({ cmd: 'UpdateEstudiante' }, { id, JuradoSustentacion }),
           );
           return SuccessResponse(data);
         } catch (e) {
-          if(!noConectionValidator(e)){
-            return FailResponse(e);
-          }
-          return FailResponse('Existen problemas con los demas servicios servicios')
-        }*/
+            return FailResponse(ExeptValidator(e));
+        }
       }
     
       @ApiTags('Jurado Sustentacion')

@@ -35,7 +35,7 @@ export class EstudianteController {
   @Post(':id_usuario')
   async Create(@Param('id_usuario') id_usuario: number) {
     try {
-      //Validamos su existencia
+      //Validamos su existencia}
       const Exist = await firstValueFrom(
         this.client.send({ cmd: 'GetUsuario' }, id_usuario),
       );
@@ -113,11 +113,8 @@ export class EstudianteController {
       );
       //console.log(CompleteData)
       return PaginatedMappedResponse(CompleteData);
-    } catch (e) {
-      /*if(!noConectionValidator(e)){
-        return FailResponse(e);
-      }*/
-      return FailResponse(e);
+    } catch (e){
+      return FailResponse(ExeptValidator(e));
     }
   }
 
@@ -165,10 +162,9 @@ export class EstudianteController {
   ) {
     try {
       //Validacion
-      const Idtesis = EstudianteData.id_tesis;
-      if (Idtesis) {
+      if(EstudianteData.id_tesis){
         const Exist = await firstValueFrom(
-          this.client.send({ cmd: 'GetTesis' }, Idtesis),
+          this.client.send({ cmd: 'GetTesis' },EstudianteData.id_tesis),
         );
         if (!Exist) {
           return 'Tesis no valida';

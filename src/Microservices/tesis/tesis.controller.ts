@@ -35,19 +35,20 @@ export class TesisController {
   @Post()
   async Create(@Body() Tesis: tesisDTO) {
     try {
-      const IdDocente = Tesis.id_docente_tutor;
-      const Exist = await firstValueFrom(
-        this.client.send({ cmd: 'GetDocenteTutor' }, IdDocente),
-      );
-      if (!Exist) {
-        return FailResponse('Docente Tutor no valido');
+      if (Tesis.id_docente_tutor) {
+        const Exist = await firstValueFrom(
+          this.client.send({ cmd: 'GetDocenteTutor' }, Tesis.id_docente_tutor),
+        );
+        if (!Exist) {
+          return FailResponse('Docente Tutor no valido');
+        }
       }
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'CreateTesis' }, Tesis),
       );
       return SuccessResponse(Data);
     } catch (e) {
-      return FailResponse(ExeptValidator(e))
+      return FailResponse(ExeptValidator(e));
     }
   }
 
@@ -92,7 +93,7 @@ export class TesisController {
       return PaginatedSuccessResponse(Response);
     } catch (e) {
       console.log(e);
-      return FailResponse(e);
+      return FailResponse(ExeptValidator(e));
     }
   }
 
@@ -103,8 +104,8 @@ export class TesisController {
       const EstudiantesData: any[] = await firstValueFrom(
         this.client.send({ cmd: 'GetAllEstudianteTesis' }, idTesis),
       );
-      if(!EstudiantesData||EstudiantesData.length === 0){
-        return []
+      if (!EstudiantesData || EstudiantesData.length === 0) {
+        return [];
       }
       const Estudiantes = await Promise.all(
         EstudiantesData.map(async (Estudiante) => {
@@ -120,7 +121,7 @@ export class TesisController {
       return Estudiantes;
     } catch (e) {
       console.log(e);
-      return FailResponse(e);
+      return FailResponse(ExeptValidator(e));
     }
   }
 
@@ -149,7 +150,7 @@ export class TesisController {
       return SuccessResponse(Response);
     } catch (e) {
       console.log(e);
-      return FailResponse(e);
+      return FailResponse(ExeptValidator(e));
     }
   }
 
@@ -200,19 +201,16 @@ export class TesisController {
   @Put(':id')
   async Update(@Param('id') id: number, @Body() TesisData: tesisDTO) {
     try {
-      const IdDocente = TesisData.id_docente_tutor;
+      if(TesisData.id_docente_tutor){
+        const Exist = await firstValueFrom(
+          this.client.send({ cmd: 'GetDocenteTutor' }, TesisData.id_docente_tutor),
+        );
+  
+        if (!Exist) {
+          return FailResponse('Docente Tutor no valido');
+        }
+      };
 
-      //Llamado a servicio
-      const Exist = await firstValueFrom(
-        this.client.send({ cmd: 'GetDocenteTutor' }, IdDocente),
-      );
-
-      //Validacion
-      if (!Exist) {
-        return FailResponse('Docente Tutor no valido');
-      }
-
-      //Llamado a servicio
       const data = await firstValueFrom(
         this.client.send({ cmd: 'UpdateTesis' }, { id, TesisData }),
       );
@@ -220,7 +218,7 @@ export class TesisController {
       //Respuesta
       return SuccessResponse(data);
     } catch (e) {
-        return FailResponse(ExeptValidator(e));
+      return FailResponse(ExeptValidator(e));
     }
   }
 

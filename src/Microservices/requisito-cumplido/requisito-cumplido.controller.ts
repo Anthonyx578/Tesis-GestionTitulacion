@@ -15,6 +15,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { requisitoCumplidoDTO } from '../DTO/requisito-cumplido.DTO';
 import { first, firstValueFrom } from 'rxjs';
 import {
+  BadRequestResponse,
   FailResponse,
   FailServiceResponse,
   PaginatedMappedResponse,
@@ -32,16 +33,20 @@ export class RequisitoCumplidoController {
   @Post()
   async Create(@Body() RequisitoCumplido: requisitoCumplidoDTO) {
     try {
+      if(RequisitoCumplido.id_estudiante){
+        const Exist = await firstValueFrom(
+          this.client.send({cmd:'GetEstudiante'},RequisitoCumplido.id_estudiante)
+        )
+        if(!Exist){
+          return BadRequestResponse('El Estudiante no es valido')
+        }
+      }
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'CreateRequisitoCumplido' }, RequisitoCumplido),
       );
       return SuccessResponse(Data);
     } catch (e) {
-      /*const Validator = noConectionValidator(e)
-            if(!Validator){
-                return FailResponse();
-            }*/
-      return FailServiceResponse();
+      return FailServiceResponse(ExeptValidator(e));
     }
   }
 
@@ -99,6 +104,14 @@ export class RequisitoCumplidoController {
     @Body() RequisitoCumplidoData: requisitoCumplidoDTO,
   ) {
     try {
+      if(RequisitoCumplidoData.id_estudiante){
+        const Exist = await firstValueFrom(
+          this.client.send({cmd:'GetEstudiante'},RequisitoCumplidoData.id_estudiante)
+        )
+        if(!Exist){
+          return BadRequestResponse('El Estudiante no es valido')
+        }
+      }
       const data = await firstValueFrom(
         this.client.send(
           { cmd: 'UpdateRequisitoCumplido' },
@@ -107,7 +120,7 @@ export class RequisitoCumplidoController {
       );
       return SuccessResponse(data);
     } catch (e) {
-      return FailResponse(e);
+      return FailResponse(ExeptValidator(e));
     }
   }
 
