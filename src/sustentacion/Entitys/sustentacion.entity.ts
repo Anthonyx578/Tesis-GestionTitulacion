@@ -30,4 +30,5 @@ export class sustentacion {
   updated_at: Date;
   @Column()
   status: number;
+  
 }

@@ -24,6 +24,11 @@ export class SustentacionController {
         return await this.Services.Get(id);
     }
 
+    @MessagePattern({cmd:'GetSustentacionTesis'})
+        async GetTesis(id:number){
+        return await this.Services.GetTesis(id);
+    }
+
     @MessagePattern({cmd:'UpdateSustentacion'})
         async Update(data:{id:number,SustentacionData:sustentacionDTO}){
         const {id,SustentacionData} = data;

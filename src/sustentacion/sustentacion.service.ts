@@ -63,6 +63,20 @@ export class SustentacionService {
           throw new RpcException(e);
         }
       }
+
+      async GetTesis(id: number) {
+        try {
+          const Data = await this.repository.findOne({
+            where: { id_tesis: id, status: 1 },
+            select: ['fecha_sustentacion','periodo_academico','tipo','estado_sustentacion'],
+          });
+          return Data
+        } catch (e) {
+          throw new RpcException(e);
+        }
+      }
+
+      
       async update(id: number, ChangeData: sustentacionDTO) {
         try {
           const ExistData = await this.repository.findOne({
