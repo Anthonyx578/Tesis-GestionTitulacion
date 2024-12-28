@@ -129,8 +129,8 @@ export class SustentacionController {
   }
 
   @ApiTags('Sustentacion')
-    @Get('Tesis')
-    async GetSustentaicon(@Query('id_tesis') id_tesis: number) {
+    @Get('/buscar/:Tesis')
+    async GetSustentaicon(@Param('Tesis') id_tesis: number) {
       console.log('Entre al servicio')
       const data = await firstValueFrom(
         this.client.send({ cmd: 'GetSustentacionTesis' }, id_tesis),
