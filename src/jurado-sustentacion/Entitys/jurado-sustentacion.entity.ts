@@ -1,11 +1,13 @@
 import internal from "stream";
-import { Column, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+@Entity({name:'jurado_sustentacion'})
 export class juradoSustentacion{
     @PrimaryGeneratedColumn()
     id:number
     @Column()
     id_jurado:number;
+    @Column()
+    id_sustentacion:number;
     @Column()
     estado:string
     @Column()

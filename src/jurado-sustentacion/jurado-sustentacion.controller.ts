@@ -9,13 +9,19 @@ export class JuradoSustentacionController {
     constructor(private readonly Services:JuradoSustentacionService){}
 
     @MessagePattern({cmd:'CreateJuradoSustentacion'})
-    async Create (Requisito:juradoSustentacionDTO){
+    async Create (Requisito:Partial<juradoSustentacionDTO>){
         return await this.Services.Create(Requisito)
     }
 
     @MessagePattern({cmd:'GetAllJuradoSustentacion'})
         async GetAll(Pagination:PaginationDto){
         return await this.Services.GetAll(Pagination);
+    }
+
+    @MessagePattern({cmd:'GetAllJuradoSustentacionJurado'})
+        async GetAllJUrado(data:{Pagination:PaginationDto,id_jurado}){
+        const {Pagination,id_jurado} = data
+        return await this.Services.GetAllJurado(Pagination,id_jurado);
     }
 
     @MessagePattern({cmd:'GetJuradoSustentacion'})

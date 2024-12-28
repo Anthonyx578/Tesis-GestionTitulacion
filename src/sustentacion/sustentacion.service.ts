@@ -54,10 +54,11 @@ export class SustentacionService {
     
       async Get(id: number) {
         try {
-          return await this.repository.findOne({
+          const Data = await this.repository.findOne({
             where: { id_sustentacion: id, status: 1 },
             select: ['id_sustentacion','id_tesis','id_carrera','fecha_sustentacion','periodo_academico','tipo','estado_sustentacion'],
           });
+          return Data
         } catch (e) {
           throw new RpcException(e);
         }

@@ -13,7 +13,7 @@ export class JuradoSustentacionService {
         private readonly repository: Repository<juradoSustentacion>,
       ) {}
     
-      async Create(Data: juradoSustentacionDTO) {
+      async Create(Data: Partial<juradoSustentacionDTO>) {
         try {
           const JuradoSustentacion: Partial<juradoSustentacion> = {
             ...Data,
@@ -50,6 +50,31 @@ export class JuradoSustentacionService {
         }
       }
     
+      async GetAllJurado(Pagination: PaginationDto,id_jurado:number) {
+        try {
+          const { page, limit } = Pagination;
+    
+          const TotalData = await this.repository.count({
+            where: { status: 1 },
+          });
+          const TotalPages = Math.ceil(TotalData / limit);
+    
+          const Data = await this.repository.find({
+            where: { status: 1 ,id_jurado:id_jurado},
+            select: ['id','id_jurado','id_sustentacion'],
+            skip: (page - 1) * limit,
+            take: limit,
+          });
+    
+          return {
+            Data,
+            meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
+          };
+        } catch (e) {
+          throw new RpcException(e);
+        }
+      }
+
       async Get(id: number) {
         try {
           return await this.repository.findOne({
