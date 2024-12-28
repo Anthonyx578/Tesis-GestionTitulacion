@@ -127,6 +127,17 @@ export class SustentacionController {
       return FailResponse(e);
     }
   }
+
+  @ApiTags('Sustentacion')
+    @Get('IdTesis')
+    async GetSustentaicon(@Query('id_tesis') id_tesis: number) {
+      console.log('Entre al servicio')
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetSustentacionTesis' }, id_tesis),
+      );
+      return data;
+    }
+
   @ApiTags('Sustentacion')
   @Put(':id')
   async Update(

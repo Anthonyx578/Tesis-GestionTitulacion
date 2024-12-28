@@ -26,6 +26,7 @@ import { ResponseAPIDTO } from '../DTO/ResponseDTO';
 import { docenteTutorGet } from '../docente-tutor/DataClass/docenteTutorGetClass';
 import { log } from 'console';
 import { EstudianteController } from '../estudiante/estudiante.controller';
+import { consumerOpts } from 'nats';
 
 @Controller('tesis')
 export class TesisController {
@@ -196,14 +197,7 @@ export class TesisController {
       return FailResponse(e);
     }
   }
-  @ApiTags('Tesis')
-  @Get('Sustentacion')
-  async GetSustentaicon(@Query('id_tesis') id_tesis: number) {
-    const data = await firstValueFrom(
-      this.client.send({ cmd: 'GetSustentacionTesis' }, id_tesis),
-    );
-    return data;
-  }
+  
 
   @ApiTags('Tesis')
   @Put(':id')
