@@ -196,20 +196,31 @@ export class TesisController {
       return FailResponse(e);
     }
   }
+  @ApiTags('Tesis')
+  @Get('Sustentacion')
+  async GetSustentaicon(@Query('id_tesis') id_tesis: number) {
+    const data = await firstValueFrom(
+      this.client.send({ cmd: 'GetSustentacionTesis' }, id_tesis),
+    );
+    return data;
+  }
 
   @ApiTags('Tesis')
   @Put(':id')
   async Update(@Param('id') id: number, @Body() TesisData: tesisDTO) {
     try {
-      if(TesisData.id_docente_tutor){
+      if (TesisData.id_docente_tutor) {
         const Exist = await firstValueFrom(
-          this.client.send({ cmd: 'GetDocenteTutor' }, TesisData.id_docente_tutor),
+          this.client.send(
+            { cmd: 'GetDocenteTutor' },
+            TesisData.id_docente_tutor,
+          ),
         );
-  
+
         if (!Exist) {
           return FailResponse('Docente Tutor no valido');
         }
-      };
+      }
 
       const data = await firstValueFrom(
         this.client.send({ cmd: 'UpdateTesis' }, { id, TesisData }),

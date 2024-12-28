@@ -22,6 +22,25 @@ export function ExeptValidator(e: any): string | null {
     return 'La operación excedió el tiempo de espera permitido.';
   }
 
-  // Agregar más validaciones si es necesario
-  return 'Error en la operacion';
+  if (e.error) {
+    const query = e.error.query || '';
+    const driverError = e.error.driverError || {};
+    const code = e.error.code || '';
+
+    // Validar errores relacionados con consultas SQL
+    if (query && code === '22P02') {
+      return 'Error en la consulta: un parámetro tiene un formato incorrecto.';
+    }
+
+    if (driverError.name === 'error' && driverError.code) {
+      return `Error del controlador de base de datos: ${driverError.code}`;
+    }
+
+    if (query) {
+      return 'Ocurrió un error al realizar una operación en la base de datos.';
+    }
+  }
+
+  // Mensaje genérico si no se encontró una coincidencia
+  return 'Error en la operación';;
 }
