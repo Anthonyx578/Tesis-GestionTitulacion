@@ -49,6 +49,21 @@ export class CarreraController {
       return FailResponse(e);
     }
   }
+
+
+  @ApiTags('Carrera')
+  @Get('Select')
+  async GetAllSelect() {
+    try {
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllCarreraSelect' },{}),
+      );
+      return PaginatedSuccessResponse(data);
+    } catch (e) {
+      return FailResponse(e);
+    }
+  }
+
   @ApiTags('Carrera')
   @Get('like/:search')
   async GetAllLike(@Query() Pagination: PaginationDto,@Param('search') Like:string) {

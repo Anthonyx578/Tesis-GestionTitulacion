@@ -46,6 +46,7 @@ export class JuradoSustentacionController {
           );
           return SuccessResponse(JuradoSus);
         } catch (e) {
+            console.log(e)
             return FailResponse(ExeptValidator(e));
         }
       }
