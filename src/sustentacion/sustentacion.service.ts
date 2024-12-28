@@ -68,7 +68,7 @@ export class SustentacionService {
         try {
           const Data = await this.repository.findOne({
             where: { id_tesis: id, status: 1 },
-            select: ['fecha_sustentacion','periodo_academico','tipo','estado_sustentacion'],
+            select: ['id_sustentacion','id_tesis','id_carrera','fecha_sustentacion','periodo_academico','tipo','estado_sustentacion'],
           });
           return Data
         } catch (e) {
