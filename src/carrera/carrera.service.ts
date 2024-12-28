@@ -51,6 +51,23 @@ export class CarreraService {
     }
   }
 
+
+  async GetAllSelect() {
+    try {
+      const Data = await this.repositoty.find({
+        where:{status:1},
+        select: ['id_carrera', 'nombre_carrera'],
+        order:{
+            id_carrera:'DESC'
+        }
+      });
+
+      return {Data}
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
   async GetAllLike(Pagination: PaginationDto,Like:string) {
     try {
       const { page, limit } = Pagination;

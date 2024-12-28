@@ -17,6 +17,12 @@ export class CarreraController {
         async GetAll(Pagination:PaginationDto){
         return await this.Services.GetAll(Pagination);
     }
+
+    @MessagePattern({cmd:'GetAllCarreraSelect'})
+        async GetAllSelect(Pagination:PaginationDto){
+        return await this.Services.GetAllSelect();
+    }
+
     @MessagePattern({cmd:'GetAllLikeCarrera'})
         async GetAllLike(data:{Pagination:PaginationDto,Like:string}){
         const {Pagination,Like} = data
@@ -27,6 +33,8 @@ export class CarreraController {
         async Get(id:number){
         return await this.Services.Get(id);
     }
+
+    
 
     @MessagePattern({cmd:'UpdateCarrera'})
         async Update(data:{id:number,CarreraData:carreraDTO}){
