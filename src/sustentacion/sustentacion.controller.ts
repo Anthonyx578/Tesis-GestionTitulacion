@@ -25,8 +25,8 @@ export class SustentacionController {
     }
 
     @MessagePattern({cmd:'GetSustentacionTesis'})
-        async GetTesis(id:number){
-        return await this.Services.GetTesis(id);
+        async GetSustentacion(id:number){
+        return await this.Services.GetSustentacion(id);
     }
 
     @MessagePattern({cmd:'UpdateSustentacion'})

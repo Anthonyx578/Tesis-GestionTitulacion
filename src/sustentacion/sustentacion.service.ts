@@ -64,7 +64,7 @@ export class SustentacionService {
         }
       }
 
-      async GetTesis(id: number) {
+      async GetSustentacion(id: number) {
         try {
           const Data = await this.repository.findOne({
             where: { id_tesis: id, status: 1 },
