@@ -129,7 +129,7 @@ export class SustentacionController {
   }
 
   @ApiTags('Sustentacion')
-    @Get('IdTesis')
+    @Get('Tesis')
     async GetSustentaicon(@Query('id_tesis') id_tesis: number) {
       console.log('Entre al servicio')
       const data = await firstValueFrom(
