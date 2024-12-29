@@ -26,6 +26,7 @@ import {
 import { sustentacionDTO } from './DTO/sustentacion.DTO';
 import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { ResponseAPIDTO } from '../DTO/ResponseDTO';
+import { response } from 'express';
 
 @Controller('sustentacion')
 export class SustentacionController {
@@ -132,10 +133,22 @@ export class SustentacionController {
     @Get('/buscar/:Tesis')
     async GetSustentaicon(@Param('Tesis') id_tesis: number) {
       console.log('Entre al servicio')
-      const data = await firstValueFrom(
+      const data:{id_carrera:number,id_tesis:number} = await firstValueFrom(
         this.client.send({ cmd: 'GetSustentacionTesis' }, id_tesis),
       );
-      return data;
+
+      const carrera:{nombre_carrera:string} = await firstValueFrom(
+        this.client.send({cmd:'GetCarrera'},data.id_carrera)
+      ) 
+
+      const tesis:{titulo:string} = await firstValueFrom(
+        this.client.send({cmd:'GetTesis'},data.id_tesis)
+
+      )
+      const response= {...data,carrera:carrera.nombre_carrera,tesis: tesis.titulo} 
+      console.log(response)
+
+      return response;
     }
 
   @ApiTags('Sustentacion')
