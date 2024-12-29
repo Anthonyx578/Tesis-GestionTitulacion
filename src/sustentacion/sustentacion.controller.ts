@@ -21,7 +21,6 @@ export class SustentacionController {
 
     @MessagePattern({cmd:'GetSustentacion'})
         async Get(id:number){
-        console.log('controlador de get individual')
         return await this.Services.Get(id);
     }
 
