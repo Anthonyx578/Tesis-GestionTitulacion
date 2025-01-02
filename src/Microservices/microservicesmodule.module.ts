@@ -13,6 +13,7 @@ import { RequisitoController } from './requisito/requisito.controller';
 import { SustentacionController } from './sustentacion/sustentacion.controller';
 import { JuradoSustentacionController } from './jurado-sustentacion/jurado-sustentacion.controller';
 import { RequisitoCumplidoController } from './requisito-cumplido/requisito-cumplido.controller';
+import { FilesController } from './files/files.controller';
 @Module({
   imports:[
     ConfigModule.forRoot(), 
@@ -26,6 +27,6 @@ import { RequisitoCumplidoController } from './requisito-cumplido/requisito-cump
       },
     },
   ]),],
-  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController, TesisController, RequisitoController, SustentacionController, JuradoSustentacionController, RequisitoCumplidoController]
+  controllers: [RolController, UsuarioController, CarreraController, AuthenticacionController, EstudianteController, DocenteTutorController, JuradoController, TesisController, RequisitoController, SustentacionController, JuradoSustentacionController, RequisitoCumplidoController, FilesController]
 })
 export class MicroservicesmoduleModule {}
