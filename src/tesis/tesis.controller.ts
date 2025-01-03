@@ -48,40 +48,24 @@ export class TesisController {
   }
 
   @MessagePattern({ cmd: 'SaveTesis' })
-  async savePdf(payload: {
-    buffer: string;
-    fileName: string;
-    folderName: string;
-    idTesis: number;
-  }) {
-    try {
-      const { buffer, fileName, folderName, idTesis } = payload;
-
-      // Llamamos al servicio para guardar el archivo y actualizar la base de datos
-      const result = await this.Services.saveTesisPdf(
-        buffer,
-        fileName,
-        folderName,
-        idTesis,
-      );
-      return result;
-    } catch (error) {
-      return { message: 'Error al guardar el archivo', error: error.message };
-    }
+  async savePdf(payload: { idTesis: number; filePath: string }) {
+    return this.Services.savePdf(payload);
   }
 
-  @MessagePattern({ cmd: 'DownloadTesis' })
-  async downloadTesis(idTesis: number): Promise<any> {
-    console.log(`ID Tesis recibido en el microservicio: ${idTesis}`);
+  @MessagePattern({ cmd: 'GetTesisFilePath' })
+  async getTesisFilePath(data: { idTesis: number }): Promise<any> {
+    const { idTesis } = data;
 
-    const filePath = await this.Services.downloadTesis(idTesis);
-    if (!filePath) {
-      return { error: 'Archivo no encontrado' };
+    if (!idTesis) {
+      return { error: 'El ID de tesis es obligatorio' };
     }
 
-    // Crear el stream del archivo
-    const fileStream = fs.createReadStream(filePath);
-    console.log(fileStream)
-    return fileStream; // Retorna el stream del archivo
+    const filePath = await this.Services.getTesisFilePath(idTesis);
+
+    if (!filePath) {
+      return { error: 'No se encontró el archivo correspondiente al ID de tesis' };
+    }
+
+    return filePath;
   }
 }

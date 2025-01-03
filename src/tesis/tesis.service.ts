@@ -164,70 +164,28 @@ export class TesisService {
     }
   }
 
-  async saveTesisPdf(
-    buffer: string,
-    fileName: string,
-    folderName: string,
-    idTesis: number,
-  ) {
+  async savePdf(payload: { idTesis: number; filePath: string }) {
     try {
-      // Usamos solo la carpeta "TesisDoc" sin crear una subcarpeta adicional
-      const folderPath = path.join('TesisDoc'); // Usar la ruta relativa
+      const { idTesis, filePath } = payload;
 
-      // Crear la carpeta "TesisDoc" si no existe
-      if (!fs.existsSync(folderPath)) {
-        fs.mkdirSync(folderPath, { recursive: true });
-      }
-
-      // Generar un nombre único para el archivo usando id_tesis y el nombre del archivo
-      const uniqueFileName = `${idTesis}_${fileName}`;
-      const filePath = path.join(folderPath, uniqueFileName); // Ruta relativa del archivo
-
-      // Convertir el buffer a un archivo PDF
-      fs.writeFileSync(filePath, Buffer.from(buffer, 'base64'));
-
-      // Actualizar la base de datos con la ruta relativa del archivo
-      const tesis = await this.repository.findOne({
-        where: { id_tesis: idTesis },
-      });
+      // Buscar la tesis por ID
+      const tesis = await this.repository.findOne({ where: { id_tesis: idTesis } });
       if (!tesis) {
         throw new Error('Tesis no encontrada');
       }
 
-      tesis.documento = path.join('TesisDoc', uniqueFileName); // Guardamos la ruta relativa en el campo documento
+      // Actualizar la ruta del archivo
+      tesis.documento = filePath;
       await this.repository.save(tesis);
 
-      return { filePath, documento: tesis.documento };
+      return { message: 'Ruta del archivo guardada correctamente', filePath };
     } catch (error) {
-      throw new Error(`Error al guardar la tesis: ${error.message}`);
+      throw new Error(`Error al guardar la ruta: ${error.message}`);
     }
   }
 
-  async downloadTesis(idTesis: number): Promise<string | null> {
-    try {
-      console.log(`ID Tesis recibido en el servicio: ${idTesis}`);
-  
-      const rutaArchivoDb = await this.getRutaArchivoFromDb(idTesis); // Suponiendo que tienes esta función para obtener la ruta del archivo
-      if (!rutaArchivoDb) {
-        console.log('Archivo no encontrado en la base de datos');
-        return null;
-      }
-  
-      // Usar directamente la ruta proporcionada por la base de datos
-      const filePath = path.join(__dirname, '../../', rutaArchivoDb); // Aquí no agregamos 'TesisDoc' nuevamente
-      console.log(`Ruta del archivo: ${filePath}`); // Verificación de la ruta
-  
-      // Comprobar si el archivo existe
-      if (!fs.existsSync(filePath)) {
-        console.log('Archivo no encontrado en la ruta:', filePath);
-        return null;
-      }
-  
-      return filePath; // Retornar la ruta del archivo
-    } catch (error) {
-      console.error('Error al descargar la tesis:', error);
-      return null;
-    }
+  async getTesisFilePath(idTesis:number){
+    return await this.repository.findOne({where:{id_tesis:idTesis,},select:['documento']})
   }
 
   // Función para obtener la ruta del archivo desde la base de datos
