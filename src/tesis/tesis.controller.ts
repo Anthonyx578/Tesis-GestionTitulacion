@@ -31,6 +31,8 @@ export class TesisController {
     return await this.Services.Get(id);
   }
 
+
+  
   @MessagePattern({ cmd: 'UpdateTesis' })
   async Update(data: { id: number; TesisData: tesisDTO }) {
     const { id, TesisData } = data;
