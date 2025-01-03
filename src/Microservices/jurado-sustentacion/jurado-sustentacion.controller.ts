@@ -105,13 +105,33 @@ export class JuradoSustentacionController {
   @Get('verjurados/buscar')
   async GetAllVerJUrados(@Query('idSustentacion') id_sustentaicon: number) {
     try {
-      console.log(id_sustentaicon)
-      const Jurados = await firstValueFrom(
+      console.log(id_sustentaicon);
+      const Jurados: any[] = await firstValueFrom(
         this.client.send({ cmd: 'GetSustentacionVerJurados' }, id_sustentaicon),
       );
+      const IdUsuarios = await Promise.all(
+        Jurados.map(async (jurados) => {
+          const IdUsuarios = await firstValueFrom(
+            this.client.send({ cmd: 'GetJurado' }, jurados.id_jurado),
+          );
+          return IdUsuarios.id_usuario;
+        }),
+      );
+      const nombres = await Promise.all(
+        IdUsuarios.map(async (ids)=>{
+          const Nombres = await firstValueFrom( this.client.send({cmd:'GetUsuarioNames'},ids))
+          return Nombres
+        })
+      )
       console.log(Jurados);
+      console.log(IdUsuarios);
+      console.log(nombres);
+      const Response = await Jurados.map((jurados,index)=>{
+        return {...jurados,...nombres[index]}
+      })
+      return SuccessResponse(Response)
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return FailResponse(e);
     }
   }
