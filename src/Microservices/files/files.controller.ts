@@ -117,14 +117,12 @@ export class FilesController {
       const filePathResponse = await firstValueFrom(
         this.client.send({ cmd: 'GetTesisFilePath' }, { idTesis }),
       );
-      console.log(filePathResponse)
 
       if (!filePathResponse) {
         throw new HttpException('No se encontró la ruta del archivo', HttpStatus.NOT_FOUND);
       }
       console.log('Paso el FilePathRepsonse')
       const fullPath = path.join(filePathResponse.documento);
-      console.log('Full Path: '+fullPath)
       // Verificar si el archivo existe
       if (!fs.existsSync(fullPath)) {
         throw new HttpException('El archivo no existe en el servidor', HttpStatus.NOT_FOUND);
