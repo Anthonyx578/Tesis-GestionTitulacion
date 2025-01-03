@@ -34,15 +34,15 @@ export class JuradoSustentacionService {
           });
           const TotalPages = Math.ceil(TotalData / limit);
     
-          const data = await this.repository.find({
+          const Data = await this.repository.find({
             where: { status: 1 },
-            select: ['id','id_jurado','indicacion','presente','suplente','documento_revisar','documento_revisado','indicacion'],
+            select: ['id','id_jurado','id_sustentacion','indicacion','presente','suplente','documento_revisar','documento_revisado','indicacion'],
             skip: (page - 1) * limit,
             take: limit,
           });
     
           return {
-            data,
+            Data,
             meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
           };
         } catch (e) {
@@ -75,6 +75,17 @@ export class JuradoSustentacionService {
         }
       }
 
+      async GetAllVerJUrados(idSustentacion: number) {
+        try {
+          console.log(idSustentacion)
+          return await this.repository.find({
+            where: { id_sustentacion: idSustentacion, status:1 },
+            select: ['id','id_jurado'],
+          });
+        } catch (e) {
+          throw new RpcException(e);
+        }
+      }
       async Get(id: number) {
         try {
           return await this.repository.findOne({
