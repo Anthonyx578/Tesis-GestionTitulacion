@@ -99,8 +99,8 @@ export class SustentacionController {
           return DataSustentaciones;
         }),
       );
-      const carreras = await this.MappearCarrera(Sustentaicones)
-      const tesis = await this.MappearTesis(Sustentaicones)
+      const carreras = await this.MappearCarrera(Sustentaicones);
+      const tesis = await this.MappearTesis(Sustentaicones);
       const SustentacionMapeada = Sustentaicones.map((sustentacion, index) => {
         return {
           ...sustentacion,
@@ -130,26 +130,30 @@ export class SustentacionController {
   }
 
   @ApiTags('Sustentacion')
-    @Get('/buscar/:Tesis')
-    async GetSustentaicon(@Param('Tesis') id_tesis: number) {
-      console.log('Entre al servicio')
-      const data:{id_carrera:number,id_tesis:number} = await firstValueFrom(
-        this.client.send({ cmd: 'GetSustentacionTesis' }, id_tesis),
-      );
+  @Get('/buscar/:Tesis')
+  async GetSustentaicon(@Param('Tesis') id_tesis: number) {
+    console.log('Entre al servicio');
+    const data: { id_carrera: number; id_tesis: number } = await firstValueFrom(
+      this.client.send({ cmd: 'GetSustentacionTesis' }, id_tesis),
+    );
 
-      const carrera:{nombre_carrera:string} = await firstValueFrom(
-        this.client.send({cmd:'GetCarrera'},data.id_carrera)
-      ) 
+    const carrera: { nombre_carrera: string } = await firstValueFrom(
+      this.client.send({ cmd: 'GetCarrera' }, data.id_carrera),
+    );
 
-      const tesis:{titulo:string} = await firstValueFrom(
-        this.client.send({cmd:'GetTesis'},data.id_tesis)
+    const tesis: { titulo: string } = await firstValueFrom(
+      this.client.send({ cmd: 'GetTesis' }, data.id_tesis),
+    );
+    const response = {
+      ...data,
+      carrera: carrera.nombre_carrera,
+      tesis: tesis.titulo,
+    };
+    console.log(response);
 
-      )
-      const response= {...data,carrera:carrera.nombre_carrera,tesis: tesis.titulo} 
-      console.log(response)
+    return response;
+  }
 
-      return response;
-    }
 
   @ApiTags('Sustentacion')
   @Put(':id')
@@ -205,18 +209,18 @@ export class SustentacionController {
         return carreras;
       }),
     );
-    return Carrera
+    return Carrera;
   }
 
-  async MappearTesis(Sustentaciones:any[]){
+  async MappearTesis(Sustentaciones: any[]) {
     const Tesis = await Promise.all(
       Sustentaciones.map(async (sustentacion) => {
-        const tesis =await firstValueFrom(
+        const tesis = await firstValueFrom(
           this.client.send({ cmd: 'GetTesis' }, sustentacion.id_tesis),
         );
         return tesis;
       }),
     );
-    return Tesis
+    return Tesis;
   }
 }

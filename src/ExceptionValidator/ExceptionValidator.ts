@@ -1,9 +1,6 @@
 
 export function ExeptValidator(e: any): string | null {
   // Validar que el error sea válido
-  if (!e || !e.message) {
-    return 'Error desconocido: el error no contiene un mensaje válido.';
-  }
 
   const message = e.message.toLowerCase();
 
