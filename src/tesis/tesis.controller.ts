@@ -26,6 +26,14 @@ export class TesisController {
     return await this.Services.GetAllLike(Pagination, Like);
   }
 
+
+  @MessagePattern({ cmd: 'GetAllTesisByDocenteId' })
+  async GetAllByDocenteID(data: { idDocenteTutor: number,Paginado: PaginationDto }) {
+    console.log(data)
+    const { Paginado, idDocenteTutor } = data;
+    return await this.Services.GetAllByDocenteID(Paginado, idDocenteTutor);
+  }
+
   @MessagePattern({ cmd: 'GetTesis' })
   async Get(id: number) {
     return await this.Services.Get(id);

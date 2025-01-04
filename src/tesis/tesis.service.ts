@@ -97,6 +97,40 @@ export class TesisService {
     }
   }
 
+
+  async GetAllByDocenteID(Pagination: PaginationDto, idDocente:number) {
+    try {
+      const { page, limit } = Pagination;
+
+      const TotalData = await this.repository.count({
+        where: {id_docente_tutor:idDocente, status: 1 },
+      });
+      const TotalPages = Math.ceil(TotalData / limit);
+
+      const Data = await this.repository.find({
+        where: { id_docente_tutor:idDocente,status: 1},
+        select: [
+          'id_tesis',
+          'titulo',
+          'documento',
+          'fecha',
+          'id_docente_tutor',
+        ],
+        skip: (page - 1) * limit,
+        take: limit,
+        order: {
+          id_tesis: 'DESC',
+        },
+      });
+
+      return {
+        Data,
+        meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
+      };
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
   async Get(id: number) {
     try {
       return await this.repository.findOne({
