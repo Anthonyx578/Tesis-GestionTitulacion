@@ -2,7 +2,7 @@
 export function ExeptValidator(e: any): string | null {
   // Validar que el error sea válido
 
-  const message = e.message.toLowerCase();
+  const message = e.message;
 
   // Validar errores de microservicios
   if (message.includes('empty response') || message.includes('no subscribers')) {

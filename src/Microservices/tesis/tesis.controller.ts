@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
 import {
   BadRequestResponse,
@@ -27,6 +27,8 @@ import { docenteTutorGet } from '../docente-tutor/DataClass/docenteTutorGetClass
 import { log } from 'console';
 import { EstudianteController } from '../estudiante/estudiante.controller';
 import { consumerOpts } from 'nats';
+import { get } from 'http';
+import e from 'express';
 
 @Controller('tesis')
 export class TesisController {
@@ -127,6 +129,31 @@ export class TesisController {
   }
 
   @ApiTags('Tesis')
+  @Get('AllTesisByDocenteTutor/Search')
+  @ApiProperty({
+    description: 'Obtener todas las tesis asignadas a un docente tutor',
+  })
+  async GetAllTesisByDocente(
+    @Query('idDocenteTutor') idDocenteTutor: number,
+    @Query() Paginado: PaginationDto,
+  ) {
+    try {
+      console.log(idDocenteTutor)
+      const Tesis = await firstValueFrom(
+        this.client.send(
+          { cmd: 'GetAllTesisByDocenteId' },
+          { idDocenteTutor, Paginado },
+        ),
+      );
+      console.log(Tesis)
+      return Tesis;
+    } catch (error) {
+      console.log(e)
+      return FailResponse(error);
+    }
+  }
+
+  @ApiTags('Tesis')
   @Get('DocenteTutor')
   async GetAllDocenteTutor(@Query('idTesis') idTesis: number) {
     try {
@@ -197,7 +224,6 @@ export class TesisController {
       return FailResponse(e);
     }
   }
-  
 
   @ApiTags('Tesis')
   @Put(':id')
