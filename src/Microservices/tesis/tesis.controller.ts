@@ -130,9 +130,6 @@ export class TesisController {
 
   @ApiTags('Tesis')
   @Get('AllTesisByDocenteTutor/Search')
-  @ApiProperty({
-    description: 'Obtener todas las tesis asignadas a un docente tutor',
-  })
   async GetAllTesisByDocente(
     @Query('idDocenteTutor') idDocenteTutor: number,
     @Query() Paginado: PaginationDto,
