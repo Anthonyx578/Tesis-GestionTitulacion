@@ -29,7 +29,6 @@ export class AuthenticacionController {
         RolName: string;
         CarreraName: string;
       } = await firstValueFrom(this.client.send({ cmd: 'Login' }, Login));
-      console.log(login);
       if (!login.RolName) {
         throw new HttpException('no se obtuvo rol', HttpStatus.BAD_REQUEST);
       }
@@ -77,11 +76,6 @@ export class AuthenticacionController {
         maxAge: 2 * 60 * 60 * 1000,
       });
       return response.send('Sesion iniciada con exito');
-      
-      
-
-      return response.send(login);
-      return response.send();
     } catch (error) {
       console.log(error);
       return FailResponse(ExeptValidator(error));
