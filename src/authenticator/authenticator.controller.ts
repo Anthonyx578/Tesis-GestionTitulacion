@@ -17,4 +17,11 @@ export class AuthenticatorController {
         return await this.service.Login(LoginData)
     }
 
+    @MessagePattern({cmd:'Token'})
+    async Token(Data:{payload:{},Rol:string}){
+        const {payload,Rol} = Data
+        console.log(payload)
+        return await this.service.createToken(payload,Rol)
+    }
+
 }

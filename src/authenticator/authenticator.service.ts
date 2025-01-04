@@ -32,15 +32,18 @@ export class AuthenticatorService {
             if(!compare){
                 throw new RpcException('Usuario o contraseña incorrectos')
             }
+            
             const RolName = await this.ObtainRolName(id_rol);
+            
             const CarreraName = await this.obtainCarreraName(id_carrera)
-            const Payload = {
+            return {id_usuario,nombre_usuario,RolName,CarreraName}
+            /*const Payload = {
                 id:id_usuario,
                 usuario: nombre_usuario,
                 rol:RolName,
                 carrera:CarreraName
             }
-            return this.createToken(Payload)
+            return this.createToken(Payload)*/
         } catch (error) {
             throw new RpcException(error)
         }
@@ -58,7 +61,7 @@ export class AuthenticatorService {
     }
 
 
-    async createToken (payload:jwtpayload){
+    async createToken (payload:{},Rol:string){
         try{
             return await this.jwtService.sign(payload);
         }
