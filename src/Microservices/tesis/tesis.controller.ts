@@ -146,7 +146,7 @@ export class TesisController {
       return Tesis;
     } catch (error) {
       console.log(e)
-      return FailResponse(error);
+      return FailResponse(ExeptValidator(error));
     }
   }
 
