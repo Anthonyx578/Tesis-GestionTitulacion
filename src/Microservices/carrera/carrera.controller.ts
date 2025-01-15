@@ -32,6 +32,7 @@ export class CarreraController {
       const Data = await firstValueFrom(
         this.client.send({ cmd: 'CreateCarrera' }, Carrera),
       );
+      return SuccessResponse(Data)
     } catch (error) {
       return FailResponse(error);
     }

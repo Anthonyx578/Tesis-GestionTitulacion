@@ -13,7 +13,7 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { requisitoCumplidoDTO } from '../DTO/requisito-cumplido.DTO';
-import { first, firstValueFrom } from 'rxjs';
+import { first, firstValueFrom, retry } from 'rxjs';
 import {
   BadRequestResponse,
   FailResponse,
@@ -124,10 +124,25 @@ export class RequisitoCumplidoController {
     }
   }
 
+
+  @ApiTags('Requisito Cumplido')
+  @Delete('AllRequisitos')
+  async DeleteAll(@Query('id') id: number) {
+    try {
+      const data = await firstValueFrom(
+        this.client.send({ cmd: 'DeleteAllRequisitoCumplido' }, id),
+      );
+      return SuccessResponse(data);
+    } catch (e) {
+      return FailResponse(ExeptValidator(e));
+    }
+  }
+
   @ApiTags('Requisito Cumplido')
   @Delete(':id')
   async Delete(@Param('id') id: number) {
     try {
+      console.log('Llamo al controlador equivocado')
       const data = await firstValueFrom(
         this.client.send({ cmd: 'DeleteRequisitoCumplido' }, id),
       );
@@ -144,6 +159,7 @@ export class RequisitoCumplidoController {
       const data = await firstValueFrom(
         this.client.send({ cmd: 'RestoreRequisitoCumplido' }, id),
       );
+      return SuccessResponse();
     } catch (error) {
       return FailResponse(error);
     }

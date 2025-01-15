@@ -22,7 +22,7 @@ import { FilesController } from './files/files.controller';
       name: process.env.Servicio, 
       transport: Transport.NATS,
       options: {
-        servers: ['nats://localhost:4222'],
+        servers: ['nats://157.245.92.194:4222'],
         maxReconnectAttempts: -1
       },
     },

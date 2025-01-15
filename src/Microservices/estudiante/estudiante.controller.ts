@@ -35,7 +35,6 @@ export class EstudianteController {
   @Post(':id_usuario')
   async Create(@Param('id_usuario') id_usuario: number) {
     try {
-      //Validamos su existencia}
       const Exist = await firstValueFrom(
         this.client.send({ cmd: 'GetUsuario' }, id_usuario),
       );
@@ -67,9 +66,7 @@ export class EstudianteController {
           { Pagination, Like },
         ),
       );
-      //Obtenemos el apartado de data de la respuesta
       const { Data } = DataEstudiante;
-      //Completamos los datos con los de usuario
       const CompleteData = await Promise.all(
         Data.map(async (estudiante) => {
           const UserData = await firstValueFrom(
@@ -78,16 +75,12 @@ export class EstudianteController {
           return { ...UserData, ...estudiante };
         }),
       );
-      //console.log(CompleteData)
       return PaginatedSuccessResponse({
         data: CompleteData,
         meta: DataEstudiante.meta,
       });
     } catch (e) {
-      /*if(!noConectionValidator(e)){
-        return FailResponse(e);
-      }*/
-      return FailResponse(e);
+      return FailResponse(ExeptValidator(e));
     }
   }
 

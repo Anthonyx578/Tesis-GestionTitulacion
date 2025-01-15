@@ -9,7 +9,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
               name: 'NAT_Service', 
               transport: Transport.NATS,
               options: {
-                servers: ['nats://localhost:4222'],
+                servers: ['nats://157.245.92.194:4222'],
                 maxReconnectAttempts: -1
               },
             },

@@ -93,6 +93,7 @@ export class RequisitoController {
         const data = await firstValueFrom(
           this.client.send({ cmd: 'RestoreRequisito' }, id),
         );
+        return SuccessResponse();
       } catch (error) {
         return FailResponse(error);
       }
