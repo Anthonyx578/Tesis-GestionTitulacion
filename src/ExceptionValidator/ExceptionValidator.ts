@@ -3,7 +3,9 @@ export function ExeptValidator(e: any): string | null {
   // Validar que el error sea válido
 
   const message = e.message;
-
+  if(!message.includes){
+    return e
+  }
   // Validar errores de microservicios
   if (message.includes('empty response') || message.includes('no subscribers')) {
     return 'No se pudo establecer conexión con el microservicio solicitado.';
