@@ -126,7 +126,7 @@ export class RequisitoCumplidoController {
 
 
   @ApiTags('Requisito Cumplido')
-  @Delete('AllRequisitos')
+  @Delete('AllRequisitos/delete')
   async DeleteAll(@Query('id') id: number) {
     try {
       console.log('delete todos')
@@ -144,7 +144,6 @@ export class RequisitoCumplidoController {
   async Delete(@Param('id') id: number) {
     try {
       console.log('delete normal')
-      console.log('Llamo al controlador equivocado')
       const data = await firstValueFrom(
         this.client.send({ cmd: 'DeleteRequisitoCumplido' }, id),
       );
