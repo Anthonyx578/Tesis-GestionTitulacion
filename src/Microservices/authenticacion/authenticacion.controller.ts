@@ -29,10 +29,13 @@ export class AuthenticacionController {
         RolName: string;
         CarreraName: string;
       } = await firstValueFrom(this.client.send({ cmd: 'Login' }, Login));
+
+      console.log('Este es el nombre del ROl'+login.RolName);
       if (!login.RolName) {
         throw new HttpException('no se obtuvo rol', HttpStatus.BAD_REQUEST);
       }
       if (login.RolName === 'profesor') {
+        console.log('Entro a la validacion de profesor');
         const Docente:{id_usuario:number,id_docente_tutor:number,status:number} = await firstValueFrom(
           this.client.send({ cmd: 'GetDocenteTutorByUser' }, login.id_usuario),
         );
@@ -51,6 +54,7 @@ export class AuthenticacionController {
         return response.send('Sesion iniciada con exito');
       }
       if (login.RolName === 'estudiante') {
+        console.log('Entro a la validacion de estudiante');
         console.log(login.RolName)
         const Estudiante:{id_usuario:number,id_estudiante:number,status:number} = await firstValueFrom(
           this.client.send({ cmd: 'GetEstudiantebyUser' }, login.id_usuario),
@@ -67,6 +71,7 @@ export class AuthenticacionController {
         });
         return response.send('Sesion iniciada con exito');
       }
+      console.log('Se fue al validador que queda que es para admin y secretario que no necesitan id especiales en el token');
       const Token = await firstValueFrom(
         this.client.send({ cmd: 'Token' }, { payload:login, Rol: login.RolName }),
       );

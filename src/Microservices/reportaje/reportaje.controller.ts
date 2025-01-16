@@ -1,4 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { first, firstValueFrom, map } from 'rxjs';
@@ -10,7 +10,7 @@ export class ReportajeController {
   constructor(@Inject('NAT_Service') private readonly client: ClientProxy) {}
 
   @ApiTags('Reportaje')
-  @Get()
+  @Get('RequisitosEstudiantes')
   async RequisitosCumplidos() {
     try {
       const EstudiantesIDs: any[] = await firstValueFrom(
@@ -96,6 +96,18 @@ export class ReportajeController {
       return Mapeo;
     } catch (error) {
       return FailResponse(error);
+    }
+  }
+
+
+
+  @ApiTags('Reportaje')
+  @Get('TesisTutor')
+  async TesisTutor(@Query('id_tutor')Id_tutor:number) {
+    try {
+        
+    } catch (error) {
+      
     }
   }
 }
