@@ -33,6 +33,17 @@ export class EstudianteService {
     }
   }
 
+
+async GetAllIDs(){
+  try {
+    const EstudiantesID:any[] = await this.repository.find({where:{status:1},select:['id_estudiante','id_usuario']}) 
+    return EstudiantesID
+  } catch (error) {
+    throw new RpcException(error)
+  }
+}
+
+
   async GetAll(Pagination: PaginationDto, Like) {
     try {
       const { page, limit } = Pagination;

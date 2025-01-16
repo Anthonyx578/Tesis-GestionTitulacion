@@ -83,7 +83,7 @@ export class JuradoService {
     try {
       return await this.repository.findOne({
         where: { id_usuario: id},
-        select: ['id_usuario', 'id_jurado','status'],
+        select: ['id_usuario','id_jurado','status'],
       });
     } catch (e) {
       throw new RpcException(e);
