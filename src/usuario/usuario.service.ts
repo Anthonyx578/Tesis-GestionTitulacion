@@ -221,6 +221,7 @@ export class UsuarioService {
         select: [
           'nombres',
           'apellidos',
+          'id_carrera'
         ],
       });
       if (!Find) {
