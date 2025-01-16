@@ -27,6 +27,8 @@ export class RequisitoController {
         return await this.Services.Get(id);
     }
 
+    
+
     @MessagePattern({cmd:'UpdateRequisito'})
         async Update(data:{id:number,RequisitoData:requisitoDTO}){
         const {id,RequisitoData} = data;

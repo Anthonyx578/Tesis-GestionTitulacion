@@ -23,9 +23,22 @@ export class RequisitoCumplidoController {
   }
 
   @MessagePattern({ cmd: 'GetAllByEstudianteRequisitoCumplido' })
-  async GetAllByEstudiante(data:{Pagination: PaginationDto, id_estudiante: number}) {
-    const {Pagination,id_estudiante} = data
+  async GetAllByEstudiante(data: {
+    Pagination: PaginationDto;
+    id_estudiante: number;
+  }) {
+    const { Pagination, id_estudiante } = data;
     return await this.Services.GetAllByEstudiante(Pagination, id_estudiante);
+  }
+
+  @MessagePattern({ cmd: 'ContarRequisito' })
+  async ContarRequisitos(id: number) {
+    return await this.Services.contarRequisitos(id);
+  }
+
+  @MessagePattern({ cmd: 'GetRequisitoCumplidoEstudiante' })
+  async GetParaEstudiante(id: number) {
+    return await this.Services.GetRequisitosEstudiante(id);
   }
 
   @MessagePattern({ cmd: 'UpdateRequisitoCumplido' })
@@ -35,6 +48,11 @@ export class RequisitoCumplidoController {
   }) {
     const { id, RequisitoCumplidoData } = data;
     return await this.Services.update(id, RequisitoCumplidoData);
+  }
+
+  @MessagePattern({ cmd: 'DeleteAllRequisitoCumplido' })
+  async DeleteAllRequisitos(id_estudiante: number) {
+    return await this.Services.deleteAllRequisitos(id_estudiante);
   }
 
   @MessagePattern({ cmd: 'DeleteRequisitoCumplido' })

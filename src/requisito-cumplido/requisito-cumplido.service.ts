@@ -6,13 +6,14 @@ import { Repository } from 'typeorm';
 import { requisitoCumplidoDTO } from './Entitys/DTO/requisito-cumplido.DTO';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RequisitoService } from 'src/requisito/requisito.service';
+import { throwIfEmpty } from 'rxjs';
 
 @Injectable()
 export class RequisitoCumplidoService {
   constructor(
     @InjectRepository(requisitoCumplido)
     private readonly repository: Repository<requisitoCumplido>,
-    private readonly RequisitoService:RequisitoService
+    private readonly RequisitoService: RequisitoService,
   ) {}
 
   async Create(Data: requisitoCumplidoDTO) {
@@ -38,12 +39,7 @@ export class RequisitoCumplidoService {
 
       const Data = await this.repository.find({
         where: { status: 1 },
-        select: [
-          'id',
-          'id_estudiante',
-          'id_requisito',
-          'estado',
-        ],
+        select: ['id', 'id_estudiante', 'id_requisito', 'estado'],
         skip: (page - 1) * limit,
         take: limit,
         order: {
@@ -60,7 +56,23 @@ export class RequisitoCumplidoService {
     }
   }
 
-  async GetAllByEstudiante(Pagination: PaginationDto,Estudiante:number) {
+
+  async GetRequisitosEstudiante (id:number){
+    try {
+      const Requisitos = await this.repository.find({where:{id_estudiante:id,status:1},select:['id_requisito','estado']})
+      return Requisitos;
+    } catch (error) {
+      throw new RpcException(error)
+    }
+  }
+
+  async contarRequisitos(idEstudiante:number){
+    const requisitos =await this.repository.count({where:{id_estudiante:idEstudiante,status:1}})
+    const comuplidos = await this.repository.count({where:{id_estudiante:idEstudiante,status:1,estado:1}})
+    return {Cumplidos:`${comuplidos}/${requisitos}`}
+  }
+
+  async GetAllByEstudiante(Pagination: PaginationDto, Estudiante: number) {
     try {
       const { page, limit } = Pagination;
 
@@ -70,23 +82,20 @@ export class RequisitoCumplidoService {
       const TotalPages = Math.ceil(TotalData / limit);
 
       const Requisitos = await this.repository.find({
-        where: { status: 1,id_estudiante:Estudiante},
-        select: [
-          'id',
-          'id_estudiante',
-          'id_requisito',
-          'estado',
-        ],
+        where: { status: 1, id_estudiante: Estudiante },
+        select: ['id', 'id_estudiante', 'id_requisito', 'estado'],
         skip: (page - 1) * limit,
         take: limit,
         order: {
           id: 'DESC',
         },
       });
-      const Data =await Promise.all( Requisitos.map(async (item)=>{
-        const Requisito = await this.RequisitoService.Get(item.id_requisito);
-        return {...item,...Requisito}
-      }))
+      const Data = await Promise.all(
+        Requisitos.map(async (item) => {
+          const Requisito = await this.RequisitoService.Get(item.id_requisito);
+          return { ...item, ...Requisito };
+        }),
+      );
       return {
         Data,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
@@ -100,12 +109,7 @@ export class RequisitoCumplidoService {
     try {
       return await this.repository.findOne({
         where: { id: id, status: 1 },
-        select: [
-          'id',
-          'id_estudiante',
-          'id_requisito',
-          'estado',
-        ],
+        select: ['id', 'id_estudiante', 'id_requisito', 'estado'],
       });
     } catch (e) {
       throw new RpcException(e);
@@ -125,6 +129,32 @@ export class RequisitoCumplidoService {
       );
     } catch (e) {
       throw new RpcException(e);
+    }
+  }
+
+  async deleteAllRequisitos(id_estudiante: number) {
+    try {
+      const Requisitos:any[] = await this.repository.find({
+        where: { id_estudiante: id_estudiante, status: 1 },
+        select: ['id'],
+      });
+      if(Requisitos.length === 0){
+        throw new RpcException('No existen reqisitos para ese estudiante')
+      }
+      await Requisitos.map(
+        async (requisitos)=>{
+          try {
+            await this.delete(requisitos.id)
+            return 'Requisito Eliminado'
+          } catch (error) {
+            return 'Error al eliminar el requisito '+requisitos.id
+          }
+          
+        }
+      )
+      return 'Operacion Realizada'
+    } catch (error) {
+      throw new RpcException(error);
     }
   }
 
