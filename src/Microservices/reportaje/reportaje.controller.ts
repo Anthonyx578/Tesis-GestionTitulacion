@@ -29,11 +29,9 @@ export class ReportajeController {
               estudiantesIDs.id_usuario,
             ),
           );
-          console.log(nombres);
           const Carrera = await firstValueFrom(
             this.client.send({ cmd: 'GetCarrera' }, nombres.id_carrera),
           );
-          console.log(Carrera);
           return {
             nombres: `${nombres.apellidos} ${nombres.apellidos}`,
             Carrera: Carrera.nombre_carrera,
@@ -63,25 +61,29 @@ export class ReportajeController {
       );
       const RequisitosNombre = await Promise.all(
         IdRequisitos.map(async (idrequisitos) => {
-          console.log(idrequisitos);
           const Requisito = await Promise.all(
             idrequisitos.map(async (ids) => {
               const Requisitos = await firstValueFrom(
                 this.client.send({ cmd: 'GetRequisito' }, ids.id_requisito),
               );
-              return { Requisito: Requisitos.documento };
+              return { Requisito: Requisitos.documento, id_requisito:Requisitos.id_requisito};
             }),
           );
           return Requisito;
         }),
       );
-
+      console.log(RequisitosNombre)
       const RequisitosCombinados = IdRequisitos.map((requisitos, index) => {
         const requisitosNombre = RequisitosNombre[index] || [];
         const combinados = requisitosNombre.map((req) => {
-          const estado =
-            requisitos.find((r) => r.id_requisito === req.id_requisito)
-              ?.estado || 0;
+          // Depuración para ver los datos actuales
+          console.log('Requisito actual:', req);
+          console.log('Requisitos disponibles:', requisitos);
+      
+          const match = requisitos.find((r) => r.id_requisito === req.id_requisito);
+          console.log('Match encontrado:', match);
+      
+          const estado = match?.estado || 0; // Usar nullish coalescing
           return { ...req, estado };
         });
         return combinados;
