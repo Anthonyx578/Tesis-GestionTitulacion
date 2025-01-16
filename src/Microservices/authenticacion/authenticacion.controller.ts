@@ -50,7 +50,7 @@ export class AuthenticacionController {
         });
         return response.send('Sesion iniciada con exito');
       }
-      if (login.RolName === 'estudiantes') {
+      if (login.RolName === 'estudiante') {
         console.log(login.RolName)
         const Estudiante:{id_usuario:number,id_estudiante:number,status:number} = await firstValueFrom(
           this.client.send({ cmd: 'GetEstudiantebyUser' }, login.id_usuario),
