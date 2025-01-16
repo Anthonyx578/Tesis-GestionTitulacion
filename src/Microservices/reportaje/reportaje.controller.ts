@@ -72,16 +72,11 @@ export class ReportajeController {
           return Requisito;
         }),
       );
-      console.log(RequisitosNombre)
       const RequisitosCombinados = IdRequisitos.map((requisitos, index) => {
         const requisitosNombre = RequisitosNombre[index] || [];
         const combinados = requisitosNombre.map((req) => {
-          // Depuración para ver los datos actuales
-          console.log('Requisito actual:', req);
-          console.log('Requisitos disponibles:', requisitos);
       
           const match = requisitos.find((r) => r.id_requisito === req.id_requisito);
-          console.log('Match encontrado:', match);
       
           const estado = match?.estado || 0; // Usar nullish coalescing
           return { ...req, estado };
