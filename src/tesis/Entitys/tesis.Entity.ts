@@ -13,6 +13,8 @@ export class tesis{
     @Column()
     documento:string
     @Column()
+    periodo:string
+    @Column()
     created_at:Date
     @Column()
     deleted_at:Date

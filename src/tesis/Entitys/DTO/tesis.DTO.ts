@@ -4,4 +4,5 @@ export class tesisDTO{
     titulo:string
     fecha:string
     documento:string
+    periodo:string
 }
