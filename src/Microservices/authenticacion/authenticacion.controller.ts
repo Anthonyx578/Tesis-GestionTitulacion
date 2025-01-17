@@ -89,6 +89,7 @@ export class AuthenticacionController {
     }
   }
 
+  @ApiTags('Auth')
   @Post('/logout')
   async logout(@Res() response: Response) {
     try {
