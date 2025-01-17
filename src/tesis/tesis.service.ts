@@ -5,9 +5,6 @@ import { ILike, Repository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { tesisDTO } from './Entitys/DTO/tesis.DTO';
-import { Response } from 'express';
-import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class TesisService {
@@ -46,6 +43,7 @@ export class TesisService {
           'fecha',
           'id_docente_tutor',
           'status',
+          'periodo'
         ],
         skip: (page - 1) * limit,
         take: limit,
@@ -80,6 +78,7 @@ export class TesisService {
           'documento',
           'fecha',
           'id_docente_tutor',
+          'periodo'
         ],
         skip: (page - 1) * limit,
         take: limit,
@@ -115,6 +114,7 @@ export class TesisService {
           'documento',
           'fecha',
           'id_docente_tutor',
+          'periodo'
         ],
         skip: (page - 1) * limit,
         take: limit,
@@ -141,6 +141,7 @@ export class TesisService {
           'documento',
           'fecha',
           'id_docente_tutor',
+          'periodo'
         ],
       });
     } catch (e) {
