@@ -47,7 +47,7 @@ export class AuthenticacionController {
           this.client.send({ cmd: 'Token' }, { payload, Rol: login.RolName }),
         );
         response.cookie('authuleamtk', Token, {
-          httpOnly: false,
+          httpOnly: true,
           secure: false,
           maxAge: 7 * 24 * 60 * 60 * 1000, // Configuración de duración de la cookie
         });
