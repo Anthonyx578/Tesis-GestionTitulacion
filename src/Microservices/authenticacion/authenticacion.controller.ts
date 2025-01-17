@@ -49,8 +49,10 @@ export class AuthenticacionController {
         response.cookie('authuleamtk', Token, {
           httpOnly: false,
           secure: false,
-          maxAge: 30 * 24 * 60 * 60 * 1000,
+          maxAge: 2 * 60 * 60 * 1000, // Configuración de duración de la cookie
         });
+        
+        
         return response.send('Sesion iniciada con exito');
       }
       if (login.RolName === 'estudiante') {
@@ -86,4 +88,33 @@ export class AuthenticacionController {
       return FailResponse(ExeptValidator(error));
     }
   }
+
+  @ApiTags('Auth')
+  @Post('/logout')
+  async logout(@Res() response: Response) {
+    try {
+      // Eliminar la cookie configurada en el login
+      response.clearCookie('authuleamtk', {
+        httpOnly: true, // Mantener consistente con la configuración original
+        secure: false,  // Asegúrate de que coincida con la configuración original
+        path: '/',      // Debe coincidir con el path usado al crear la cookie
+      });
+
+      // Devolver una respuesta exitosa
+      return response.status(200).send({
+        message: 'Sesión cerrada con éxito',
+      });
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      return response.status(500).send({
+        message: 'Error al cerrar sesión',
+        error: error.message,
+      });
+    }
+  }
+
+
 }
+
+
+
