@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { first, firstValueFrom, map } from 'rxjs';
 import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
-import { FailResponse } from 'src/Response/Responses';
+import { FailResponse, PaginatedSuccessResponse } from 'src/Response/Responses';
 import { tesisDTO } from '../DTO/tesis.DTO';
 import { RequisitoController } from '../requisito/requisito.controller';
 import { Usuario } from '../DTO/usuario.Entity';
@@ -109,12 +109,7 @@ export class ReportajeController {
     }
   }
 
-  @ApiTags('Reportaje')
-  @Get('TesisTutor')
-  async TesisTutor(@Query('id_tutor') Id_tutor: number) {
-    try {
-    } catch (error) {}
-  }
+
 
   @ApiTags('Reportaje')
   @Get('TesisPerido')
@@ -138,16 +133,17 @@ export class ReportajeController {
       const UsuariosName = await Promise.all(
         IDdocenteTutor.map(async (idDocenteTutor) => {
           const usuarios = await firstValueFrom(
-            this.client.send({ cmd: 'GetUsuarioNames' }, idDocenteTutor.IdUsuario),
+            this.client.send(
+              { cmd: 'GetUsuarioNames' },
+              idDocenteTutor.IdUsuario,
+            ),
           );
-          return {Nombres:`${usuarios.nombres} ${usuarios.apellidos}`}
+          return { Nombres: `${usuarios.nombres} ${usuarios.apellidos}` };
         }),
       );
-      const MapeoFinal = Tesis.map(
-      (tesis,index)=>{
-        return {...tesis,...UsuariosName[index]}
-      }
-      )
+      const MapeoFinal = Tesis.map((tesis, index) => {
+        return { ...tesis, ...UsuariosName[index] };
+      });
       return MapeoFinal;
     } catch (error) {
       return FailResponse(ExeptValidator(error));
@@ -159,5 +155,83 @@ export class ReportajeController {
       this.client.send({ cmd: 'GetAllTesisByPeriod' }, Periodo),
     );
     return Tesis;
+  }
+
+  @ApiTags('Reportaje')
+  @Get('UsuariosProfesores')
+  async GetAllProfesores() {
+    try {
+      const idRol = await firstValueFrom(
+        this.client.send({ cmd: 'GetByRol' }, 'profesor'),
+      );
+      const Profesores: { Data: Usuario[]; meta: {} } = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllUsuarioByRolReporte' }, { ...idRol }),
+      );
+
+
+      const { Data } = Profesores;
+      const ProfesorMapped = await Promise.all(
+        Data.map(async (profesores) => {
+          const Istutor: { id_docente_tutor; id_usuario; status: number } =
+            await firstValueFrom(
+              this.client.send(
+                { cmd: 'GetDocenteTutorByUser' },
+                profesores.id_usuario,
+              ),
+            );
+          const IsJurado: { id_jurado; id_usuario; status } =
+            await firstValueFrom(
+              this.client.send(
+                { cmd: 'GetJuradoByUser' },
+                profesores.id_usuario,
+              ),
+            );
+          var ProfesorTutorMP: {};
+          var ProfesorJuradoMp: {};
+          if (Istutor != null) {
+            if (Istutor.status == 0) {
+              ProfesorTutorMP = {
+                ...profesores,
+                id_docente_tutor: Istutor.id_docente_tutor,
+                statusTutor: Istutor.status,
+                isTutor: 0,
+              };
+            } else {
+              ProfesorTutorMP = {
+                ...profesores,
+                id_docente_tutor: Istutor.id_docente_tutor,
+                statusTutor: Istutor.status,
+                isTutor: 1,
+              };
+            }
+          }
+          if (ProfesorTutorMP) {
+            if (IsJurado != null) {
+              ProfesorJuradoMp = {
+                ...ProfesorTutorMP,
+                id_jurado: IsJurado.id_jurado,
+                statusJurado: IsJurado.status,
+              };
+              if (IsJurado.status == 0) {
+                ProfesorJuradoMp = { ...ProfesorJuradoMp, isJurado: 0 };
+              } else {
+                ProfesorJuradoMp = { ...ProfesorJuradoMp, isJurado: 1 };
+              }
+            }
+          }
+          if (ProfesorJuradoMp) {
+            console.log(ProfesorJuradoMp);
+            return ProfesorJuradoMp;
+          }
+        }),
+      );
+      //console.log(ProfesorMapped);
+      const Response = {
+        Data: ProfesorMapped,
+      };
+      return Response
+    } catch (e) {
+      return FailResponse(e.message);
+    }
   }
 }
