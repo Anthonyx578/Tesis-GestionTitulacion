@@ -49,7 +49,7 @@ export class AuthenticacionController {
         response.cookie('authuleamtk', Token, {
           httpOnly: false,
           secure: false,
-          maxAge: 2 * 60 * 60 * 1000, // Configuración de duración de la cookie
+          maxAge: 7 * 24 * 60 * 60 * 1000, // Configuración de duración de la cookie
         });
         
         
@@ -69,7 +69,7 @@ export class AuthenticacionController {
         response.cookie('authuleamtk', Token, {
           httpOnly: true,
           secure: false,
-          maxAge: 2 * 60 * 60 * 1000,
+          maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         return response.send('Sesion iniciada con exito');
       }
@@ -80,7 +80,7 @@ export class AuthenticacionController {
       response.cookie('authuleamtk', Token, {
         httpOnly: true,
         secure: false,
-        maxAge: 2 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
       return response.send('Sesion iniciada con exito');
     } catch (error) {
