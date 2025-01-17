@@ -9,4 +9,6 @@ export class tesisDTO{
     fecha:string
     @ApiProperty()
     documento:string
+    @ApiProperty()
+    periodo:string
 }
