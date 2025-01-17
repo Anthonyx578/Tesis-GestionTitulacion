@@ -61,6 +61,29 @@ export class TesisService {
     }
   }
 
+  async GetAllByPeriod(Periodo:string) {
+    try {
+      const Data = await this.repository.find({
+        where: { periodo:Periodo,status: 1 },
+        select: [
+          'id_tesis',
+          'titulo',
+          'documento',
+          'fecha',
+          'id_docente_tutor',
+          'status',
+          'periodo'
+        ],
+        order: {
+          id_tesis: 'DESC',
+        },
+      });
+      return Data
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
   async GetAllLike(Pagination: PaginationDto, Like: string) {
     try {
       const { page, limit } = Pagination;
