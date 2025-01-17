@@ -33,6 +33,7 @@ export class DocenteTutorController {
         return await this.Services.GetByUser(id);
     }
 
+
     @MessagePattern({cmd:'UpdateDocenteTutor'})
         async Update(data:{id:number,DocenteTutorData:docenteTutorUpdateDTO}){
         const {id,DocenteTutorData} = data;
