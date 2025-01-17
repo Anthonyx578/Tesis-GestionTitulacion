@@ -169,6 +169,34 @@ export class UsuarioService {
     }
   }
 
+  async GetAllByRolReportaje(
+    Rol: number,
+  ) {
+    try {
+
+      const data = await this.repository.find({
+        where:{id_rol:Rol},
+        select: [
+          'id_usuario',
+          'nombre_usuario',
+          'nombres',
+          'apellidos',
+          'telefono',
+          'correo',
+          'fecha_nacimiento',
+          'id_rol',
+          'id_carrera',
+          'status',
+        ],
+      });
+      const MappedData = await this.MappearDatos(data);
+      return {Data: MappedData}
+  
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
   async MappearDatos(data: usuario[]) {
     const MappedData = await Promise.all(
       data.map(async (data) => {

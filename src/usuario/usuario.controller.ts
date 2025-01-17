@@ -32,6 +32,12 @@ export class UsuarioController {
     return await this.Services.GetAllByRol(Pagination, id_rol,searchLike);
   }
 
+  @MessagePattern({ cmd: 'GetAllUsuarioByRolReporte' })
+  async GetAllByRolReporte(data:{id_rol:number}) {
+    const {id_rol} = data
+    return await this.Services.GetAllByRolReportaje(id_rol);
+  }
+
   @MessagePattern({ cmd: 'GetUsuario' })
   async Get(id: number) {
     return await this.Services.Get(id);
