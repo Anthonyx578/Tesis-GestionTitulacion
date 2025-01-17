@@ -56,11 +56,6 @@ export class TesisController {
   }
 
   @ApiTags('Tesis')
-  @ApiProperty({ description: 'Por hacer' })
-  @Get()
-  async GetAllByPeriod(@Query('Periodo') Periodo: string) {}
-
-  @ApiTags('Tesis')
   @Get()
   async GetAll(@Query() Pagination: PaginationDto) {
     try {
@@ -132,7 +127,7 @@ export class TesisController {
           return {
             ...Estudiante,
             estudiante: `${EstudianteData.nombres} ${EstudianteData.apellidos}`,
-            ...tesisNombre
+            tesisNombre
           };
         }),
       );
