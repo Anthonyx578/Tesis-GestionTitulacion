@@ -236,12 +236,15 @@ export class ReportajeController {
   @Get('SustentacionJurado')
   async GetAllJurado(@Query('idJurado') id_jurado: number) {
     try {
-      const { Data } = await firstValueFrom(
+      console.log("Entro al reportaje")
+      const Data = await firstValueFrom(
         this.client.send(
-          { cmd: 'GetAllJuradoSustentacionJurado' },
+          { cmd: 'GetAllJuradoSustentacionJuradoReporte' },
           { id_jurado },
         ),
       );
+      console.log("Sali con esto", Data)
+
       const Sustentaicones: any[] = await Promise.all(
         Data.map(async (Sustentaciones) => {
           const DataSustentaciones = await firstValueFrom(
@@ -265,7 +268,7 @@ export class ReportajeController {
 
       return SustentacionMapeada
     } catch (e) {
-      return FailResponse(ExeptValidator(e));
+      return FailResponse(e);
     }
   }
 
