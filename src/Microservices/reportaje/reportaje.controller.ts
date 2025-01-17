@@ -56,9 +56,12 @@ export class ReportajeController {
       const RequisitosCumplidos = await Promise.all(
         EstudiantesIDs.map(async (estudiantes) => {
           const RequisitosCumplidos = await firstValueFrom(
-            this.client.send({ cmd: 'ContarRequisito' }, estudiantes.id_estudiante),
+            this.client.send(
+              { cmd: 'ContarRequisito' },
+              estudiantes.id_estudiante,
+            ),
           );
-          return RequisitosCumplidos
+          return RequisitosCumplidos;
         }),
       );
       const RequisitosNombre = await Promise.all(
@@ -68,7 +71,10 @@ export class ReportajeController {
               const Requisitos = await firstValueFrom(
                 this.client.send({ cmd: 'GetRequisito' }, ids.id_requisito),
               );
-              return { Requisito: Requisitos.documento, id_requisito:Requisitos.id_requisito};
+              return {
+                Requisito: Requisitos.documento,
+                id_requisito: Requisitos.id_requisito,
+              };
             }),
           );
           return Requisito;
@@ -77,9 +83,10 @@ export class ReportajeController {
       const RequisitosCombinados = IdRequisitos.map((requisitos, index) => {
         const requisitosNombre = RequisitosNombre[index] || [];
         const combinados = requisitosNombre.map((req) => {
-      
-          const match = requisitos.find((r) => r.id_requisito === req.id_requisito);
-      
+          const match = requisitos.find(
+            (r) => r.id_requisito === req.id_requisito,
+          );
+
           const estado = match?.estado || 0; // Usar nullish coalescing
           return { ...req, estado };
         });
@@ -90,7 +97,7 @@ export class ReportajeController {
         return {
           Nombres: nombre.nombres,
           Carrera: nombre.Carrera,
-          RequistosCumplidos:RequisitosCumplidos[index],
+          RequistosCumplidos: RequisitosCumplidos[index],
           Requisitos: RequisitosCombinados[index],
         };
       });
@@ -101,35 +108,28 @@ export class ReportajeController {
     }
   }
 
-
-
   @ApiTags('Reportaje')
   @Get('TesisTutor')
-  async TesisTutor(@Query('id_tutor')Id_tutor:number) {
+  async TesisTutor(@Query('id_tutor') Id_tutor: number) {
     try {
-        
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
-
 
   @ApiTags('Reportaje')
   @Get('TesisPerido')
-  async TesisPeriodo(@Query('id_tutor')Periodo:number) {
+  async TesisPeriodo(@Query('id_tutor') Periodo: number) {
     try {
       const Tesis = this.GetTesisByPeriodo(Periodo);
-      return Tesis
-    } catch (error) {
-      
-    }
+      return Tesis;
+    } catch (error) {}
   }
 
 
-  async GetTesisByPeriodo(Periodo:number):Promise<tesisDTO[]>{
-    const Tesis =await firstValueFrom(
-      this.client.send({cmd:'GetAllTesisByPeriod'},Periodo)
-    )
-    return Tesis
+  
+  async GetTesisByPeriodo(Periodo: number): Promise<tesisDTO[]> {
+    const Tesis = await firstValueFrom(
+      this.client.send({ cmd: 'GetAllTesisByPeriod' }, Periodo),
+    );
+    return Tesis;
   }
 }

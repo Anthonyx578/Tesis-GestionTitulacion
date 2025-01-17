@@ -56,11 +56,9 @@ export class TesisController {
   }
 
   @ApiTags('Tesis')
-  @ApiProperty({description:'Por hacer'})
+  @ApiProperty({ description: 'Por hacer' })
   @Get()
-  async GetAllByPeriod(@Query('Periodo')Periodo:string){
-    
-  }
+  async GetAllByPeriod(@Query('Periodo') Periodo: string) {}
 
   @ApiTags('Tesis')
   @Get()
@@ -117,6 +115,15 @@ export class TesisController {
       if (!EstudiantesData || EstudiantesData.length === 0) {
         return [];
       }
+      const tesisNombre = await Promise.all(
+        EstudiantesData.map(async (estudiante) => {
+          const Tesis: tesisDTO = await firstValueFrom(
+            this.client.send({ cmd: 'GetTesis' }, estudiante.id_tesis),
+          );
+          return Tesis.titulo
+        }),
+      );
+
       const Estudiantes = await Promise.all(
         EstudiantesData.map(async (Estudiante) => {
           const EstudianteData = await firstValueFrom(
@@ -125,6 +132,7 @@ export class TesisController {
           return {
             ...Estudiante,
             estudiante: `${EstudianteData.nombres} ${EstudianteData.apellidos}`,
+            ...tesisNombre
           };
         }),
       );
@@ -142,17 +150,17 @@ export class TesisController {
     @Query() Paginado: PaginationDto,
   ) {
     try {
-      console.log(idDocenteTutor)
+      console.log(idDocenteTutor);
       const Tesis = await firstValueFrom(
         this.client.send(
           { cmd: 'GetAllTesisByDocenteId' },
           { idDocenteTutor, Paginado },
         ),
       );
-      console.log(Tesis)
+      console.log(Tesis);
       return Tesis;
     } catch (error) {
-      console.log(e)
+      console.log(e);
       return FailResponse(ExeptValidator(error));
     }
   }
