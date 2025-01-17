@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import { first, firstValueFrom, map } from 'rxjs';
 import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
-import { FailResponse, PaginatedSuccessResponse } from 'src/Response/Responses';
+import { FailResponse, PaginatedMappedResponse, PaginatedSuccessResponse } from 'src/Response/Responses';
 import { tesisDTO } from '../DTO/tesis.DTO';
 import { RequisitoController } from '../requisito/requisito.controller';
 import { Usuario } from '../DTO/usuario.Entity';
@@ -109,8 +109,6 @@ export class ReportajeController {
     }
   }
 
-
-
   @ApiTags('Reportaje')
   @Get('TesisPerido')
   async TesisPeriodo(@Query('Periodo') Periodo: string) {
@@ -167,7 +165,6 @@ export class ReportajeController {
       const Profesores: { Data: Usuario[]; meta: {} } = await firstValueFrom(
         this.client.send({ cmd: 'GetAllUsuarioByRolReporte' }, { ...idRol }),
       );
-
 
       const { Data } = Profesores;
       const ProfesorMapped = await Promise.all(
@@ -229,9 +226,70 @@ export class ReportajeController {
       const Response = {
         Data: ProfesorMapped,
       };
-      return Response
+      return Response;
     } catch (e) {
       return FailResponse(e.message);
     }
+  }
+
+  @ApiTags('Reportaje')
+  @Get('SustentacionJurado')
+  async GetAllJurado(@Query('idJurado') id_jurado: number) {
+    try {
+      const { Data } = await firstValueFrom(
+        this.client.send(
+          { cmd: 'GetAllJuradoSustentacionJurado' },
+          { id_jurado },
+        ),
+      );
+      const Sustentaicones: any[] = await Promise.all(
+        Data.map(async (Sustentaciones) => {
+          const DataSustentaciones = await firstValueFrom(
+            this.client.send(
+              { cmd: 'GetSustentacion' },
+              Sustentaciones.id_sustentacion,
+            ),
+          );
+          return DataSustentaciones;
+        }),
+      );
+      const carreras = await this.MappearCarrera(Sustentaicones);
+      const tesis = await this.MappearTesis(Sustentaicones);
+      const SustentacionMapeada = Sustentaicones.map((sustentacion, index) => {
+        return {
+          ...sustentacion,
+          carrera: carreras[index].nombre_carrera,
+          tesis: tesis[index].titulo,
+        };
+      });
+
+      return SustentacionMapeada
+    } catch (e) {
+      return FailResponse(ExeptValidator(e));
+    }
+  }
+
+  async MappearCarrera(Sustentaciones: any[]) {
+    const Carrera = await Promise.all(
+      Sustentaciones.map(async (sustentacion) => {
+        const carreras = await firstValueFrom(
+          this.client.send({ cmd: 'GetCarrera' }, sustentacion.id_carrera),
+        );
+        return carreras;
+      }),
+    );
+    return Carrera;
+  }
+
+  async MappearTesis(Sustentaciones: any[]) {
+    const Tesis = await Promise.all(
+      Sustentaciones.map(async (sustentacion) => {
+        const tesis = await firstValueFrom(
+          this.client.send({ cmd: 'GetTesis' }, sustentacion.id_tesis),
+        );
+        return tesis;
+      }),
+    );
+    return Tesis;
   }
 }
