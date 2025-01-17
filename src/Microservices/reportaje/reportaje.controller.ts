@@ -6,6 +6,7 @@ import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { FailResponse } from 'src/Response/Responses';
 import { tesisDTO } from '../DTO/tesis.DTO';
 import { RequisitoController } from '../requisito/requisito.controller';
+import { Usuario } from '../DTO/usuario.Entity';
 
 @Controller('reportaje')
 export class ReportajeController {
@@ -117,17 +118,44 @@ export class ReportajeController {
 
   @ApiTags('Reportaje')
   @Get('TesisPerido')
-  async TesisPeriodo(@Query('id_tutor') Periodo: number) {
+  async TesisPeriodo(@Query('Periodo') Periodo: string) {
     try {
-      const Tesis = this.GetTesisByPeriodo(Periodo);
-      return Tesis;
-    } catch (error) {}
+      const Tesis: tesisDTO[] = await this.GetTesisByPeriodo(Periodo);
+      console.log(Tesis);
+
+      const IDdocenteTutor = await Promise.all(
+        Tesis.map(async (tesis) => {
+          const docenteData = await firstValueFrom(
+            this.client.send(
+              { cmd: 'GetDocenteTutor' },
+              tesis.id_docente_tutor,
+            ),
+          );
+          console.log(docenteData);
+          return { IdUsuario: docenteData.id_usuario };
+        }),
+      );
+      const UsuariosName = await Promise.all(
+        IDdocenteTutor.map(async (idDocenteTutor) => {
+          const usuarios = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuarioNames' }, idDocenteTutor.IdUsuario),
+          );
+          return {Nombres:`${usuarios.nombres} ${usuarios.apellidos}`}
+        }),
+      );
+      const MapeoFinal = Tesis.map(
+      (tesis,index)=>{
+        return {...tesis,...UsuariosName[index]}
+      }
+      )
+      return MapeoFinal;
+    } catch (error) {
+      return FailResponse(ExeptValidator(error));
+    }
   }
 
-
-  
-  async GetTesisByPeriodo(Periodo: number): Promise<tesisDTO[]> {
-    const Tesis = await firstValueFrom(
+  async GetTesisByPeriodo(Periodo: string): Promise<tesisDTO[]> {
+    const Tesis: tesisDTO[] = await firstValueFrom(
       this.client.send({ cmd: 'GetAllTesisByPeriod' }, Periodo),
     );
     return Tesis;
