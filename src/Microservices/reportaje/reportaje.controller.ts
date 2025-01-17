@@ -4,6 +4,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { first, firstValueFrom, map } from 'rxjs';
 import { ExeptValidator } from 'src/ExceptionValidator/ExceptionValidator';
 import { FailResponse } from 'src/Response/Responses';
+import { tesisDTO } from '../DTO/tesis.DTO';
+import { RequisitoController } from '../requisito/requisito.controller';
 
 @Controller('reportaje')
 export class ReportajeController {
@@ -109,5 +111,25 @@ export class ReportajeController {
     } catch (error) {
       
     }
+  }
+
+
+  @ApiTags('Reportaje')
+  @Get('TesisPerido')
+  async TesisPeriodo(@Query('id_tutor')Periodo:number) {
+    try {
+      const Tesis = this.GetTesisByPeriodo(Periodo);
+      return Tesis
+    } catch (error) {
+      
+    }
+  }
+
+
+  async GetTesisByPeriodo(Periodo:number):Promise<tesisDTO[]>{
+    const Tesis =await firstValueFrom(
+      this.client.send({cmd:'GetAllTesisByPeriod'},Periodo)
+    )
+    return Tesis
   }
 }
