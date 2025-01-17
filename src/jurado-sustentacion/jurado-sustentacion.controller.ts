@@ -24,6 +24,12 @@ export class JuradoSustentacionController {
     return await this.Services.GetAllJurado(Pagination, id_jurado);
   }
 
+  @MessagePattern({ cmd: 'GetAllJuradoSustentacionJuradoReporte' })
+  async GetAllJUradoReporte(data: { id_jurado }) {
+    const {  id_jurado } = data;
+    return await this.Services.GetAllJuradoReporte(id_jurado);
+  }
+
   @MessagePattern({ cmd: 'GetJuradoSustentacion' })
   async Get(id: number) {
     return await this.Services.Get(id);

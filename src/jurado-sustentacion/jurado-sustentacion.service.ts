@@ -75,6 +75,19 @@ export class JuradoSustentacionService {
         }
       }
 
+      async GetAllJuradoReporte(id_jurado:number) {
+        try {
+          const Data = await this.repository.find({
+            where: { status: 1 ,id_jurado:id_jurado},
+            select: ['id','id_jurado','id_sustentacion'],
+          });
+    
+          return Data
+        } catch (e) {
+          throw new RpcException(e);
+        }
+      }
+
       async GetAllVerJUrados(idSustentacion: number) {
         try {
           console.log(idSustentacion)
