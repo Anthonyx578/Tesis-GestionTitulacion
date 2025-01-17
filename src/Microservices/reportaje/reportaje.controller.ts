@@ -236,7 +236,6 @@ export class ReportajeController {
   @Get('SustentacionJurado')
   async GetAllJurado(@Query('idJurado') id_jurado: number) {
     try {
-      console.log("Entro al reportaje")
       const Data = await firstValueFrom(
         this.client.send(
           { cmd: 'GetAllJuradoSustentacionJuradoReporte' },
