@@ -21,6 +21,7 @@ import {
   SuccessResponse,
 } from 'src/Response/Responses';
 import { juradoSustentacionDTO } from '../DTO/jurado-sustentacion.DTO';
+import { SustentacionComentarioDTO } from './Dto/ComentarioSustentacionDTO';
 
 @Controller('jurado-sustentacion')
 export class JuradoSustentacionController {
@@ -69,16 +70,77 @@ export class JuradoSustentacionController {
   }
 
   @ApiTags('Jurado Sustentacion')
-  @Get()
-  async GetAll(@Query() Pagination: PaginationDto) {
+  @Get('verjurados/buscar')
+  async GetAllVerJUrados(@Query('idSustentacion') id_sustentaicon: number) {
     try {
-      const Data = await firstValueFrom(
-        this.client.send({ cmd: 'GetAllJuradoSustentacion' }, Pagination),
+      console.log(id_sustentaicon);
+      const Jurados: any[] = await firstValueFrom(
+        this.client.send({ cmd: 'GetSustentacionVerJurados' }, id_sustentaicon),
       );
-      //console.log(CompleteData)
-      return PaginatedSuccessResponse(Data);
+      const IdUsuarios = await Promise.all(
+        Jurados.map(async (jurados) => {
+          const IdUsuarios = await firstValueFrom(
+            this.client.send({ cmd: 'GetJurado' }, jurados.id_jurado),
+          );
+          return IdUsuarios.id_usuario;
+        }),
+      );
+      const nombres = await Promise.all(
+        IdUsuarios.map(async (ids) => {
+          const Nombres = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuarioNames' }, ids),
+          );
+          return Nombres;
+        }),
+      );
+      console.log(Jurados);
+      console.log(IdUsuarios);
+      console.log(nombres);
+      const Response = await Jurados.map((jurados, index) => {
+        return { ...jurados, ...nombres[index] };
+      });
+      return SuccessResponse(Response);
     } catch (e) {
-      return FailResponse(ExeptValidator(e));
+      console.log(e);
+      return FailResponse(e);
+    }
+  }
+
+  @ApiTags('Jurado Sustentacion')
+  @Get('sustentacion/comentarios')
+  async GetSustentacionComentarios(
+    @Query('idSutentacion') idSustentacion: number,
+  ) {
+    try {
+      const SustentacionComentarios: SustentacionComentarioDTO[] =
+        await firstValueFrom(
+          this.client.send({ cmd: 'GetAllComentarios' }, idSustentacion),
+        );
+      const IdsUsuarios = await Promise.all(
+        SustentacionComentarios.map(async (comentarios) => {
+          const Jurados: { id_usuario: number; id_jurado: number } =
+            await firstValueFrom(
+              this.client.send({ cmd: 'GetJurado' }, comentarios.id_jurado),
+            );
+          return Jurados.id_usuario;
+        }),
+      );
+      const NombresJurados = await Promise.all(
+        IdsUsuarios.map(async (ids) => {
+          const Nombres:{id_carrera:number,nombres:string,apellidos:string} = await firstValueFrom(
+            this.client.send({ cmd: 'GetUsuarioNames' }, ids),
+          );
+          return {Nombres:`${Nombres.nombres} ${Nombres.apellidos}`}
+        }),
+      );
+      const Respuesta = SustentacionComentarios.map(
+        (comentarios,index)=>{
+          return {...comentarios,nombres:NombresJurados[index].Nombres}
+        }
+      )
+      return SuccessResponse(Respuesta);
+    } catch (error) {
+      return FailResponse(ExeptValidator(error));
     }
   }
 
@@ -102,37 +164,16 @@ export class JuradoSustentacionController {
   }
 
   @ApiTags('Jurado Sustentacion')
-  @Get('verjurados/buscar')
-  async GetAllVerJUrados(@Query('idSustentacion') id_sustentaicon: number) {
+  @Get()
+  async GetAll(@Query() Pagination: PaginationDto) {
     try {
-      console.log(id_sustentaicon);
-      const Jurados: any[] = await firstValueFrom(
-        this.client.send({ cmd: 'GetSustentacionVerJurados' }, id_sustentaicon),
+      const Data = await firstValueFrom(
+        this.client.send({ cmd: 'GetAllJuradoSustentacion' }, Pagination),
       );
-      const IdUsuarios = await Promise.all(
-        Jurados.map(async (jurados) => {
-          const IdUsuarios = await firstValueFrom(
-            this.client.send({ cmd: 'GetJurado' }, jurados.id_jurado),
-          );
-          return IdUsuarios.id_usuario;
-        }),
-      );
-      const nombres = await Promise.all(
-        IdUsuarios.map(async (ids)=>{
-          const Nombres = await firstValueFrom( this.client.send({cmd:'GetUsuarioNames'},ids))
-          return Nombres
-        })
-      )
-      console.log(Jurados);
-      console.log(IdUsuarios);
-      console.log(nombres);
-      const Response = await Jurados.map((jurados,index)=>{
-        return {...jurados,...nombres[index]}
-      })
-      return SuccessResponse(Response)
+      //console.log(CompleteData)
+      return PaginatedSuccessResponse(Data);
     } catch (e) {
-      console.log(e);
-      return FailResponse(e);
+      return FailResponse(ExeptValidator(e));
     }
   }
 

@@ -10,6 +10,8 @@ export class juradoSustentacionDTO{
     @ApiProperty()
     indicacion:string
     @ApiProperty()
+    fecha_indicacion:Date
+    @ApiProperty()
     documento_revisar:string
     @ApiProperty()
     documento_revisado:string
