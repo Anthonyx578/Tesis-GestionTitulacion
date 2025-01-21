@@ -36,7 +36,7 @@ export class JuradoSustentacionService {
     
           const Data = await this.repository.find({
             where: { status: 1 },
-            select: ['id','id_jurado','id_sustentacion','indicacion','presente','suplente','documento_revisar','documento_revisado','indicacion'],
+            select: ['id','id_jurado','id_sustentacion','indicacion','fecha_indicacion','presente','suplente','documento_revisar','documento_revisado','indicacion'],
             skip: (page - 1) * limit,
             take: limit,
           });
@@ -50,6 +50,14 @@ export class JuradoSustentacionService {
         }
       }
     
+      async GetAllComentarios(idSustentacion){
+        try {
+          const Comentarios = await this.repository.find({where:{id_sustentacion:idSustentacion,status:1},select:['id','id_jurado','indicacion','fecha_indicacion','status']})
+          return Comentarios
+        } catch (error) {
+          throw new RpcException(error)
+        }
+      }
       async GetAllJurado(Pagination: PaginationDto,id_jurado:number) {
         try {
           const { page, limit } = Pagination;
@@ -103,7 +111,7 @@ export class JuradoSustentacionService {
         try {
           return await this.repository.findOne({
             where: { id: id, status: 1 },
-            select: ['id','id_jurado','indicacion','presente','suplente','documento_revisar','documento_revisado','indicacion'],
+            select: ['id','id_jurado','indicacion','fecha_indicacion','presente','suplente','documento_revisar','documento_revisado','indicacion'],
           });
         } catch (e) {
           throw new RpcException(e);

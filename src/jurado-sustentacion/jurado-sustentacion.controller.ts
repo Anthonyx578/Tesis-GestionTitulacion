@@ -18,6 +18,10 @@ export class JuradoSustentacionController {
     return await this.Services.GetAll(Pagination);
   }
 
+  @MessagePattern({ cmd: 'GetAllComentarios' })
+  async GetAllComentarios(id_sustentacion:number) {
+    return await this.Services.GetAllComentarios(id_sustentacion)  
+  }
   @MessagePattern({ cmd: 'GetAllJuradoSustentacionJurado' })
   async GetAllJUrado(data: { Pagination: PaginationDto; id_jurado }) {
     const { Pagination, id_jurado } = data;
@@ -26,7 +30,7 @@ export class JuradoSustentacionController {
 
   @MessagePattern({ cmd: 'GetAllJuradoSustentacionJuradoReporte' })
   async GetAllJUradoReporte(data: { id_jurado }) {
-    const {  id_jurado } = data;
+    const { id_jurado } = data;
     return await this.Services.GetAllJuradoReporte(id_jurado);
   }
 
@@ -37,7 +41,7 @@ export class JuradoSustentacionController {
 
   @MessagePattern({ cmd: 'GetSustentacionVerJurados' })
   async GetallVerJurados(idSustentacion: number) {
-    console.log(idSustentacion)
+    console.log(idSustentacion);
     return await this.Services.GetAllVerJUrados(idSustentacion);
   }
 

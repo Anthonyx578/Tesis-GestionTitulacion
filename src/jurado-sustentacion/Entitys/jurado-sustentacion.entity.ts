@@ -13,6 +13,8 @@ export class juradoSustentacion{
     @Column()
     indicacion:string
     @Column()
+    fecha_indicacion:Date
+    @Column()
     documento_revisar:string
     @Column()
     documento_revisado:string
