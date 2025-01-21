@@ -6,11 +6,8 @@ import { PaginationDto } from 'src/pagination/PaginationDTO';
 import { ILike, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UsuarioUpdateDTO } from 'src/entitys/DTO/usuario.Update.DTO';
-import { rol } from 'src/entitys/rol.entity';
 import { RolService } from 'src/rol/rol.service';
 import { CarreraService } from 'src/carrera/carrera.service';
-import { findSourceMap } from 'module';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UsuarioService {
@@ -80,7 +77,6 @@ export class UsuarioService {
       const TotalData = await this.repository.count({
       });
       const TotalPages = Math.ceil(TotalData / limit);
-      console.log(Like)
       const data: usuario[] = await this.repository.find({
         where: [
           {nombre_usuario: ILike(`%${Like}%`)},
@@ -106,7 +102,6 @@ export class UsuarioService {
           id_usuario: 'DESC',
         },
       });
-      console.log(data);
       const MappedData = await this.MappearDatos(data);
       return {
         MappedData,
