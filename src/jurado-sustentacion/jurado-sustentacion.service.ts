@@ -52,7 +52,7 @@ export class JuradoSustentacionService {
     
       async GetAllComentarios(idSustentacion){
         try {
-          const Comentarios = await this.repository.find({where:{id_sustentacion:idSustentacion,status:1},select:['id','id_jurado','indicacion','fecha_indicacion','status']})
+          const Comentarios = await this.repository.find({where:{id_sustentacion:idSustentacion,status:1},select:['id','id_jurado','indicacion','fecha_indicacion','estado','status']})
           return Comentarios
         } catch (error) {
           throw new RpcException(error)
