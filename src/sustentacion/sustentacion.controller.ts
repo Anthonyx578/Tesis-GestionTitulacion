@@ -14,15 +14,22 @@ export class SustentacionController {
         return await this.Services.Create(sustentacion)
     }
 
-    @MessagePattern({cmd:'GetAllSustentacion'})
-        async GetAll(Pagination:PaginationDto){
-        return await this.Services.GetAll(Pagination);
+    @MessagePattern({cmd:'GetAllSustentacionByPeriodo'})
+    async GetAllByPeriodo(Periodo:string){
+        return await this.Services.GetAllByPeriod(Periodo)
     }
 
     @MessagePattern({cmd:'GetSustentacion'})
         async Get(id:number){
         return await this.Services.Get(id);
     }
+
+    @MessagePattern({cmd:'GetAllSustentacion'})
+        async GetAll(Pagination:PaginationDto){
+        return await this.Services.GetAll(Pagination);
+    }
+
+    
 
     @MessagePattern({cmd:'GetSustentacionTesis'})
         async GetSustentacion(id:number){
