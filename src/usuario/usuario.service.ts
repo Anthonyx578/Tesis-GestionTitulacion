@@ -242,6 +242,7 @@ export class UsuarioService {
       const Find = await this.repository.findOne({
         where: { id_usuario: id },
         select: [
+          'id_usuario',
           'nombres',
           'apellidos',
           'id_carrera'
