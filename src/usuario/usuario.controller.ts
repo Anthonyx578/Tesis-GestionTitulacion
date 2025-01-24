@@ -22,7 +22,6 @@ export class UsuarioController {
   @MessagePattern({ cmd: 'GetAllUsuarioLike' })
   async GetAllLike(Data:{Pagination: PaginationDto,Like:string}) {
     const {Pagination,Like} = Data
-    console.log(Like)
     return await this.Services.GetAllLike(Pagination,Like);
   }
 

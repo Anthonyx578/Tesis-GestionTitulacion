@@ -44,4 +44,7 @@ export class usuario {
 
     @Column({ type: 'int' })
     status: number;
+
+    @Column({ type: 'varchar' })
+    cedula:string
 }

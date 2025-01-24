@@ -37,7 +37,6 @@ export class UsuarioService {
       const { page, limit } = Pagination;
 
       const TotalData = await this.repository.count({
-        where: { status: 1 },
       });
       const TotalPages = Math.ceil(TotalData / limit);
       const data: usuario[] = await this.repository.find({
@@ -75,6 +74,12 @@ export class UsuarioService {
       Like = Like||'';
       const { page, limit } = Pagination;
       const TotalData = await this.repository.count({
+        where: [
+          {nombre_usuario: ILike(`%${Like}%`)},
+          {nombres: ILike(`%${Like}%`) },
+          {apellidos: ILike(`%${Like}%`) },
+          {correo: ILike(`%${Like}%`)},
+        ]
       });
       const TotalPages = Math.ceil(TotalData / limit);
       const data: usuario[] = await this.repository.find({
@@ -120,7 +125,12 @@ export class UsuarioService {
     try {
       const { page, limit } = Pagination;
       const TotalData = await this.repository.count({
-        where: { status: 1, id_rol: Rol },
+        where: [
+          {id_rol: Rol,nombre_usuario: ILike(`%${searchLike}%`)},
+          {id_rol: Rol,nombres: ILike(`%${searchLike}%`)},
+          {id_rol: Rol,apellidos: ILike(`%${searchLike}%`)},
+          {id_rol: Rol,correo: ILike(`%${searchLike}%`)}
+        ],
       });
       const TotalPages = Math.ceil(TotalData / limit);
 
@@ -177,6 +187,7 @@ export class UsuarioService {
           'nombres',
           'apellidos',
           'telefono',
+          'cedula',
           'correo',
           'fecha_nacimiento',
           'id_rol',
@@ -220,6 +231,7 @@ export class UsuarioService {
           'nombres',
           'apellidos',
           'telefono',
+          'cedula',
           'correo',
           'fecha_nacimiento',
           'id_rol',
@@ -245,7 +257,8 @@ export class UsuarioService {
           'id_usuario',
           'nombres',
           'apellidos',
-          'id_carrera'
+          'id_carrera',
+          'cedula',
         ],
       });
       if (!Find) {

@@ -30,4 +30,7 @@ export class UsuarioUpdateDTO {
 
     @IsOptional()
     id_carrera?: number;
+
+    @IsOptional()
+    cedula:string
 }
