@@ -101,7 +101,7 @@ export class JuradoSustentacionService {
           console.log(idSustentacion)
           return await this.repository.find({
             where: { id_sustentacion: idSustentacion, status:1 },
-            select: ['id','id_jurado'],
+            select: ['id','id_jurado','id_sustentacion'],
           });
         } catch (e) {
           throw new RpcException(e);
