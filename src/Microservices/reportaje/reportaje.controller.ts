@@ -363,6 +363,7 @@ export class ReportajeController {
         const nombres = JuradosName.find( nombre => nombre.id_usuario === juraditos.id_usuario)
         return {juradoNombres: `${nombres.apellidos} ${nombres.nombres}`}
       })
+
       delete sustentaciones.id_sustentacion;
       delete sustentaciones.id_carrera;
       delete sustentaciones.id_tesis;
@@ -374,6 +375,8 @@ export class ReportajeController {
       delete tesis.fecha;
       delete docenteTutor.id_docente_tutor;
       delete docenteNombre.id_carrera;
+
+      
       return {
         ...sustentaciones,
         ...tesis,
@@ -386,7 +389,6 @@ export class ReportajeController {
 
       };
     });
-
     return SustentacionesXTesis;
   }
 

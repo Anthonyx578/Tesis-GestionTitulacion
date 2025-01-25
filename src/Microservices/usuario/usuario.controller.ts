@@ -32,20 +32,20 @@ export class UsuarioController {
   @Post()
   async Create(@Body() Usuario: UsuarioUpdateDTO) {
     try {
-      if(Usuario.id_rol || Usuario.id_rol == 0 ){
+      if (Usuario.id_rol || Usuario.id_rol == 0) {
         const Exist = await firstValueFrom(
-          this.client.send({cmd:'GetRol'},Usuario.id_rol)
-        ) 
-        if(!Exist){
-          return BadRequestResponse('Rol no valido')
+          this.client.send({ cmd: 'GetRol' }, Usuario.id_rol),
+        );
+        if (!Exist) {
+          return BadRequestResponse('Rol no valido');
         }
       }
-      if(Usuario.id_carrera || Usuario.id_carrera == 0){
+      if (Usuario.id_carrera || Usuario.id_carrera == 0) {
         const Exist = await firstValueFrom(
-          this.client.send({cmd:'GetCarrera'},Usuario.id_carrera)
-        )
-        if(!Exist){
-          return BadRequestResponse('Carrera no valida')
+          this.client.send({ cmd: 'GetCarrera' }, Usuario.id_carrera),
+        );
+        if (!Exist) {
+          return BadRequestResponse('Carrera no valida');
         }
       }
       const Data = await firstValueFrom(
@@ -167,7 +167,6 @@ export class UsuarioController {
             }
           }
           if (ProfesorJuradoMp) {
-            console.log(ProfesorJuradoMp);
             return ProfesorJuradoMp;
           }
         }),
@@ -199,21 +198,20 @@ export class UsuarioController {
   @Put(':id')
   async Update(@Param('id') id: number, @Body() UsuarioData: UsuarioUpdateDTO) {
     try {
-
-      if(UsuarioData.id_rol || UsuarioData.id_rol == 0 ){
+      if (UsuarioData.id_rol || UsuarioData.id_rol == 0) {
         const Exist = await firstValueFrom(
-          this.client.send({cmd:'GetRol'},UsuarioData.id_rol)
-        ) 
-        if(!Exist){
-          return BadRequestResponse('Rol no valido')
+          this.client.send({ cmd: 'GetRol' }, UsuarioData.id_rol),
+        );
+        if (!Exist) {
+          return BadRequestResponse('Rol no valido');
         }
       }
-      if(UsuarioData.id_carrera || UsuarioData.id_carrera == 0){
+      if (UsuarioData.id_carrera || UsuarioData.id_carrera == 0) {
         const Exist = await firstValueFrom(
-          this.client.send({cmd:'GetCarrera'},UsuarioData.id_carrera)
-        )
-        if(!Exist){
-          return BadRequestResponse('Carrera no valida')
+          this.client.send({ cmd: 'GetCarrera' }, UsuarioData.id_carrera),
+        );
+        if (!Exist) {
+          return BadRequestResponse('Carrera no valida');
         }
       }
       const data = await firstValueFrom(
