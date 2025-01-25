@@ -42,4 +42,8 @@ export class Usuario{
     @ApiProperty()
     @IsNumber()
     id_carrera:number
+
+    @ApiProperty()
+    @IsString()
+    cedula:string
 }

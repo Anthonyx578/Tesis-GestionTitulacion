@@ -37,4 +37,8 @@ export class UsuarioUpdateDTO{
     @ApiProperty()
     @IsNumber()
     id_carrera:number
+
+    @ApiProperty()
+    @IsString()
+    cedula:string
 }
