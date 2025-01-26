@@ -62,52 +62,64 @@ export class TesisController {
       const Tesis: ResponseAPIDTO = await firstValueFrom(
         this.client.send({ cmd: 'GetAllTesis' }, Pagination),
       );
-
+  
       const { Data, meta } = Tesis;
-
+  
       const Docente = await Promise.all(
         Data.map(async (Tesis) => {
+          if (Tesis.id_docente_tutor === 0) {
+            return null; // Docente tutor no asignado
+          }
+  
           const Docente = await firstValueFrom(
             this.client.send(
               { cmd: 'GetDocenteTutor' },
               Tesis.id_docente_tutor,
             ),
           );
-
+  
           if (!Docente) {
             console.warn(
               `Docente deshabilitado encontrado: ${Tesis.id_docente_tutor}`,
             );
             return null;
           }
-
+  
           return Docente.id_usuario;
         }),
       );
-
-      const ValidDocentes = Docente.filter((docente) => docente !== null);
-
+  
+      // Incluye `null` en `ValidDocentes` si el id_docente_tutor es 0 o el docente está deshabilitado
       const UsuariosName = await Promise.all(
-        ValidDocentes.map(async (docente) => {
+        Docente.map(async (docente) => {
+          if (docente === null) {
+            return null; // Si no hay docente, retorna null
+          }
           const DocenteData = await firstValueFrom(
             this.client.send({ cmd: 'GetUsuarioNames' }, docente),
           );
           return DocenteData;
         }),
       );
-
-      const MappedData = Data.filter((_, index) => Docente[index] !== null).map(
-        (Tesis, index) => {
+  
+      // Mapea los datos incluyendo los casos donde el docente es null
+      const MappedData = Data.map((Tesis, index) => {
+        if (Docente[index] === null) {
           return {
             ...Tesis,
-            docente_tutor:
-              `${UsuariosName[index].nombres}` +
-              ' ' +
-              `${UsuariosName[index].apellidos}`,
+            docente_tutor: null, // Si no hay docente, se asigna null
           };
-        },
-      );
-
+        }
+  
+        return {
+          ...Tesis,
+          docente_tutor:
+            `${UsuariosName[index].nombres}` +
+            ' ' +
+            `${UsuariosName[index].apellidos}`,
+        };
+      });
+  
       const Response = { Data: MappedData, meta };
       return PaginatedSuccessResponse(Response);
     } catch (e) {
@@ -228,20 +240,32 @@ export class TesisController {
       const data: tesisDTO = await firstValueFrom(
         this.client.send({ cmd: 'GetTesis' }, id),
       );
-
-      const DocenteTutor: docenteTutorGet = await firstValueFrom(
-        this.client.send({ cmd: 'GetDocenteTutor' }, data.id_docente_tutor),
-      );
-
-      const UsuarioName: { nombres: string; apellidos: string } =
-        await firstValueFrom(
-          this.client.send({ cmd: 'GetUsuarioNames' }, DocenteTutor.id_usuario),
+  
+      let docente_tutor = null;
+  
+      if (data.id_docente_tutor !== 0) {
+        const DocenteTutor: docenteTutorGet = await firstValueFrom(
+          this.client.send({ cmd: 'GetDocenteTutor' }, data.id_docente_tutor),
         );
-
+  
+        if (DocenteTutor) {
+          const UsuarioName: { nombres: string; apellidos: string } =
+            await firstValueFrom(
+              this.client.send(
+                { cmd: 'GetUsuarioNames' },
+                DocenteTutor.id_usuario,
+              ),
+            );
+  
+          docente_tutor = `${UsuarioName.nombres} ${UsuarioName.apellidos}`;
+        }
+      }
+  
       const Response = {
         ...data,
-        docente_tutor: `${UsuarioName.nombres} ${UsuarioName.apellidos}`,
+        docente_tutor: docente_tutor || "No asignado",
       };
+  
       return SuccessResponse(Response);
     } catch (e) {
       return FailResponse(e);
