@@ -181,7 +181,7 @@ export class UsuarioService {
     try {
 
       const data = await this.repository.find({
-        where:{id_rol:Rol},
+        where:{id_rol:Rol,status:1},
         select: [
           'id_usuario',
           'nombre_usuario',
