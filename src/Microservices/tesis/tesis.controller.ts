@@ -62,7 +62,9 @@ export class TesisController {
       const Tesis: ResponseAPIDTO = await firstValueFrom(
         this.client.send({ cmd: 'GetAllTesis' }, Pagination),
       );
+
       const { Data, meta } = Tesis;
+
       const Docente = await Promise.all(
         Data.map(async (Tesis) => {
           const Docente = await firstValueFrom(
@@ -71,27 +73,41 @@ export class TesisController {
               Tesis.id_docente_tutor,
             ),
           );
+
+          if (!Docente) {
+            console.warn(
+              `Docente deshabilitado encontrado: ${Tesis.id_docente_tutor}`,
+            );
+            return null;
+          }
+
           return Docente.id_usuario;
         }),
       );
+
+      const ValidDocentes = Docente.filter((docente) => docente !== null);
+
       const UsuariosName = await Promise.all(
-        Docente.map(async (docentes) => {
+        ValidDocentes.map(async (docente) => {
           const DocenteData = await firstValueFrom(
-            this.client.send({ cmd: 'GetUsuarioNames' }, docentes),
+            this.client.send({ cmd: 'GetUsuarioNames' }, docente),
           );
           return DocenteData;
         }),
       );
 
-      const MappedData = Data.map((Tesis, index) => {
-        return {
-          ...Tesis,
-          docente_tutor:
-            `${UsuariosName[index].nombres}` +
-            ' ' +
-            `${UsuariosName[index].apellidos}`,
-        };
-      });
+      const MappedData = Data.filter((_, index) => Docente[index] !== null).map(
+        (Tesis, index) => {
+          return {
+            ...Tesis,
+            docente_tutor:
+              `${UsuariosName[index].nombres}` +
+              ' ' +
+              `${UsuariosName[index].apellidos}`,
+          };
+        },
+      );
+
       const Response = { Data: MappedData, meta };
       return PaginatedSuccessResponse(Response);
     } catch (e) {
@@ -115,7 +131,7 @@ export class TesisController {
           const Tesis: tesisDTO = await firstValueFrom(
             this.client.send({ cmd: 'GetTesis' }, estudiante.id_tesis),
           );
-          return Tesis.titulo
+          return Tesis.titulo;
         }),
       );
 
@@ -127,7 +143,7 @@ export class TesisController {
           return {
             ...Estudiante,
             estudiante: `${EstudianteData.nombres} ${EstudianteData.apellidos}`,
-            tesisNombre
+            tesisNombre,
           };
         }),
       );
