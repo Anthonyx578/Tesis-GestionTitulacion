@@ -33,22 +33,33 @@ export class EstudianteService {
     }
   }
 
-
-async GetAllIDs(){
-  try {
-    const EstudiantesID:any[] = await this.repository.find({where:{status:1},select:['id_estudiante','id_usuario']}) 
-    return EstudiantesID
-  } catch (error) {
-    throw new RpcException(error)
+  async GetAllIDs() {
+    try {
+      const EstudiantesID: any[] = await this.repository.find({
+        where: { status: 1 },
+        select: ['id_estudiante', 'id_usuario'],
+      });
+      return EstudiantesID;
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
-}
-
 
   async GetAll(Pagination: PaginationDto, Like) {
     try {
       const { page, limit } = Pagination;
       const TotalData = await this.repository.count({
-        where: { status: 1 },
+        where: [
+          { sexo: ILike(`%${Like}%`) },
+          { genero: ILike(`%${Like}%`) },
+          { estado_civil: ILike(`%${Like}%`) },
+          { pais: ILike(`%${Like}%`) },
+          { provincia: ILike(`%${Like}%`) },
+          { ciudad: ILike(`%${Like}%`) },
+          { parroquia: ILike(`%${Like}%`) },
+          { direccion: ILike(`%${Like}%`) },
+          { tipo_colegio: ILike(`%${Like}%`) },
+        ],
       });
       const TotalPages = Math.ceil(TotalData / limit);
       Like = Like || '';
@@ -78,6 +89,7 @@ async GetAllIDs(){
           'direccion',
           'numero_hijos',
           'tipo_colegio',
+          'status',
         ],
         skip: (page - 1) * limit,
         take: limit,
@@ -85,8 +97,14 @@ async GetAllIDs(){
           id_estudiante: 'DESC',
         },
       });
+      const MappedData = Data.map((item) => ({
+        ...item,
+        statusEstudiante: item.status,
+        status: undefined,
+      }));
+
       return {
-        Data,
+        Data: MappedData,
         meta: { TotalPages: TotalPages, CurrentPage: page, DataCount: limit },
       };
     } catch (e) {
@@ -97,12 +115,9 @@ async GetAllIDs(){
   async GetAllNames() {
     try {
       const Data = await this.repository.find({
-        select: [
-          'id_usuario',
-          'id_estudiante'
-        ],
-        where:{
-          id_tesis: IsNull()
+        select: ['id_usuario', 'id_estudiante'],
+        where: {
+          id_tesis: IsNull(),
         },
         order: {
           id_estudiante: 'DESC',
@@ -114,21 +129,16 @@ async GetAllIDs(){
     }
   }
 
-
-  async GetAllEstudiantesTesis(id:number) {
+  async GetAllEstudiantesTesis(id: number) {
     try {
       const Data = await this.repository.find({
-        where: {id_tesis:id,status:1},
-        select: [
-          'id_usuario',
-          'id_estudiante',
-          'id_tesis',
-        ],
+        where: { id_tesis: id, status: 1 },
+        select: ['id_usuario', 'id_estudiante', 'id_tesis'],
         order: {
           id_estudiante: 'DESC',
         },
       });
-      return Data
+      return Data;
     } catch (e) {
       throw new RpcException(e);
     }
