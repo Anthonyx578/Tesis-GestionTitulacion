@@ -167,7 +167,7 @@ export class ReportajeController {
     );
     return Tesis;
   }
-
+/*
   @ApiTags('Reportaje')
   @Get('UsuariosProfesores')
   async GetAllProfesores() {
@@ -185,7 +185,7 @@ export class ReportajeController {
           const Istutor: { id_docente_tutor; id_usuario; status: number } =
             await firstValueFrom(
               this.client.send(
-                { cmd: 'GetDocenteTutorByUser' },
+                { cmd: 'GetDocenteTutorByUserRep' },
                 profesores.id_usuario,
               ),
             );
@@ -244,6 +244,70 @@ export class ReportajeController {
       return FailResponse(e.message);
     }
   }
+*/
+
+@ApiTags('Reportaje')
+@Get('UsuariosProfesores')
+async GetAllProfesores() {
+  try {
+    // Obtener los IDs de los usuarios con rol de profesor
+    const idRol = await firstValueFrom(
+      this.client.send({ cmd: 'GetByRol' }, 'profesor'),
+    );
+
+    // Obtener todos los usuarios activos con el rol de profesor
+    const ProfesoresResponse: { Data: Usuario[]; meta: {} } = await firstValueFrom(
+      this.client.send({ cmd: 'GetAllUsuarioByRolReporte' }, { ...idRol }),
+    );
+
+    const { Data: Profesores } = ProfesoresResponse;
+
+    // Obtener información adicional (Tutor y Jurado) de todos los profesores
+    const ProfesoresData = await Promise.all(
+      Profesores.map(async (profesor) => {
+        const Istutor = await firstValueFrom(
+          this.client.send(
+            { cmd: 'GetDocenteTutorByUserRep' },
+            profesor.id_usuario,
+          ),
+        );
+
+        const IsJurado = await firstValueFrom(
+          this.client.send(
+            { cmd: 'GetJuradoByUser' },
+            profesor.id_usuario,
+          ),
+        );
+
+        // Construir el objeto del profesor con los datos adicionales
+        const ProfesorData: any = {
+          ...profesor,
+          isTutor: Istutor ? 1 : 0,
+          id_docente_tutor: Istutor?.id_docente_tutor || null,
+          statusTutor: Istutor?.status || null,
+          isJurado: IsJurado ? 1 : 0,
+          id_jurado: IsJurado?.id_jurado || null,
+          statusJurado: IsJurado?.status || null,
+        };
+
+        return ProfesorData;
+      }),
+    );
+
+    // Filtrar los profesores para incluir solo los activos
+    const ProfesorMapped = ProfesoresData.filter((profesor) => {
+      // Excluir profesores que no son activos ni como tutor ni como jurado
+      return profesor.isTutor || profesor.isJurado;
+    });
+
+    return {
+      Data: ProfesorMapped,
+    };
+  } catch (e) {
+    return FailResponse(e.message);
+  }
+}
+
 
   @ApiTags('Reportaje')
   @Get('SustentacionJurado')
