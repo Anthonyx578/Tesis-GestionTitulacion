@@ -33,6 +33,11 @@ export class JuradoController {
         return await this.Services.GetByUser(id);
     }
 
+    @MessagePattern({cmd:'GetJuradoByUserRep'})
+        async GetByUserRep(id:number){
+        return await this.Services.GetByUserRep(id);
+    }
+
     @MessagePattern({cmd:'UpdateJurado'})
         async Update(data:{id:number,JuradoData:juradoUpdateDTO}){
         const {id,JuradoData} = data;

@@ -89,6 +89,17 @@ export class DocenteTutorService {
     }
   }
 
+  async GetByUserRep(id: number) {
+    try {
+      return await this.repository.findOne({
+        where: { id_usuario: id, status:1 },
+        select: ['id_usuario', 'id_docente_tutor', 'status'],
+      });
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
   async update(id: number, ChangeData: docenteTutorUpdateDTO) {
     try {
       const ExistData = await this.repository.findOne({

@@ -32,7 +32,11 @@ export class DocenteTutorController {
         async GetByUser(id:number){
         return await this.Services.GetByUser(id);
     }
-
+    
+    @MessagePattern({cmd:'GetDocenteTutorByUserRep'})
+        async GetByUserRep(id:number){
+        return await this.Services.GetByUserRep(id);
+    }
 
     @MessagePattern({cmd:'UpdateDocenteTutor'})
         async Update(data:{id:number,DocenteTutorData:docenteTutorUpdateDTO}){

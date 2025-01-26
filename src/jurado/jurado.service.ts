@@ -90,6 +90,17 @@ export class JuradoService {
     }
   }
 
+  async GetByUserRep(id: number) {
+    try {
+      return await this.repository.findOne({
+        where: { id_usuario: id,status:1},
+        select: ['id_usuario','id_jurado','status'],
+      });
+    } catch (e) {
+      throw new RpcException(e);
+    }
+  }
+
   async update(id: number, ChangeData: juradoUpdateDTO) {
     try {
       const ExistData = await this.repository.findOne({
