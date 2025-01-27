@@ -448,7 +448,6 @@ async GetAllProfesores() {
       delete sustentaciones.id_sustentacion;
       delete sustentaciones.id_carrera;
       delete sustentaciones.id_tesis;
-      delete carrera.id_carrera;
       delete tesis.periodo;
       delete tesis.id_tesis;
       delete tesis.documento;
