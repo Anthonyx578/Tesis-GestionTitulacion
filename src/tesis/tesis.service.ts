@@ -35,7 +35,7 @@ export class TesisService {
       const TotalPages = Math.ceil(TotalData / limit);
 
       const Data = await this.repository.find({
-        where: { status: 1 },
+        where: {},
         select: [
           'id_tesis',
           'titulo',
