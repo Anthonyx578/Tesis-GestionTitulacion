@@ -123,26 +123,41 @@ export class ReportajeController {
   }
 
   @ApiTags('Reportaje')
-  @Get('TesisPerido')
+  @Get('TesisPeriodo')
   async TesisPeriodo(@Query('Periodo') Periodo: string) {
     try {
       const Tesis: tesisRepDTO[] = await this.GetTesisByPeriodo(Periodo);
       console.log(Tesis);
-
+  
       const IDdocenteTutor = await Promise.all(
         Tesis.map(async (tesis) => {
+          if (!tesis.id_docente_tutor || tesis.id_docente_tutor === 0) {
+            // Si no hay docente tutor, retorna un objeto vacío
+            return { IdUsuario: null };
+          }
           const docenteData = await firstValueFrom(
             this.client.send(
               { cmd: 'GetDocenteTutor' },
               tesis.id_docente_tutor,
             ),
           );
+  
+          if (!docenteData) {
+            console.warn(`Docente no encontrado: ${tesis.id_docente_tutor}`);
+            return { IdUsuario: null };
+          }
+  
           console.log(docenteData);
           return { IdUsuario: docenteData.id_usuario };
         }),
       );
+  
       const UsuariosName = await Promise.all(
         IDdocenteTutor.map(async (idDocenteTutor) => {
+          if (!idDocenteTutor.IdUsuario) {
+            // Si no hay usuario, retorna un nombre por defecto
+            return { Nombres: 'No asignado' };
+          }
           const usuarios = await firstValueFrom(
             this.client.send(
               { cmd: 'GetUsuarioNames' },
@@ -152,15 +167,17 @@ export class ReportajeController {
           return { Nombres: `${usuarios.nombres} ${usuarios.apellidos}` };
         }),
       );
+  
       const MapeoFinal = Tesis.map((tesis, index) => {
-        return { ...tesis, ...UsuariosName[index] };
+        return { ...tesis, docente_tutor: UsuariosName[index].Nombres };
       });
+  
       return MapeoFinal;
     } catch (error) {
       return FailResponse(ExeptValidator(error));
     }
   }
-
+  
   async GetTesisByPeriodo(Periodo: string): Promise<tesisRepDTO[]> {
     const Tesis: tesisRepDTO[] = await firstValueFrom(
       this.client.send({ cmd: 'GetAllTesisByPeriod' }, Periodo),
