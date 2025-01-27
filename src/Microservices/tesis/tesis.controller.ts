@@ -67,8 +67,8 @@ export class TesisController {
   
       const Docente = await Promise.all(
         Data.map(async (Tesis) => {
-          if (Tesis.id_docente_tutor === 0) {
-            return null; // Docente tutor no asignado
+          if (Tesis.id_docente_tutor === 0 || Tesis.id_docente_tutor === null) {
+            return null; // Docente tutor no asignado o valor null
           }
   
           const Docente = await firstValueFrom(
@@ -89,7 +89,6 @@ export class TesisController {
         }),
       );
   
-      // Incluye `null` en `ValidDocentes` si el id_docente_tutor es 0 o el docente está deshabilitado
       const UsuariosName = await Promise.all(
         Docente.map(async (docente) => {
           if (docente === null) {
@@ -102,7 +101,6 @@ export class TesisController {
         }),
       );
   
-      // Mapea los datos incluyendo los casos donde el docente es null
       const MappedData = Data.map((Tesis, index) => {
         if (Docente[index] === null) {
           return {
@@ -127,7 +125,6 @@ export class TesisController {
       return FailResponse(ExeptValidator(e));
     }
   }
-
   @ApiTags('Tesis')
   @Get('Estudiantes')
   async GetAllEstudiantes(@Query('idTesis') idTesis: number) {
@@ -243,7 +240,8 @@ export class TesisController {
   
       let docente_tutor = null;
   
-      if (data.id_docente_tutor !== 0) {
+      // Validación para id_docente_tutor igual a null o 0
+      if (data.id_docente_tutor !== 0 && data.id_docente_tutor !== null) {
         const DocenteTutor: docenteTutorGet = await firstValueFrom(
           this.client.send({ cmd: 'GetDocenteTutor' }, data.id_docente_tutor),
         );
