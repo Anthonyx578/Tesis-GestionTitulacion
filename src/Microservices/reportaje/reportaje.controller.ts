@@ -415,7 +415,7 @@ async GetAllProfesores() {
         (docentes) => docentes.id_usuario === docenteTutor.id_usuario,
       );
       const carrera = Carrera.find(
-        (carrera) => carrera.id_carrera === sustentaciones.id_carrera,
+        (carrera) => carrera?.id_carrera === sustentaciones.id_carrera,
       );
       const estudiantes = Estudiantes.filter(
         (estudiantes) => estudiantes.id_tesis === sustentaciones.id_tesis,
@@ -443,6 +443,8 @@ async GetAllProfesores() {
         return {juradoNombres: `${nombres.apellidos} ${nombres.nombres}`}
       })
 
+      const nombreCarrera = carrera?.nombre_carrera || 'Carrera no disponible';
+
       delete sustentaciones.id_sustentacion;
       delete sustentaciones.id_carrera;
       delete sustentaciones.id_tesis;
@@ -460,7 +462,7 @@ async GetAllProfesores() {
         ...sustentaciones,
         ...tesis,
         docenteTutorNombres: `${docenteNombre.nombres} ${docenteNombre.apellidos}`,
-        carrera: carrera.nombre_carrera,
+        carrera: nombreCarrera,
         estudiante1: estudiantesNames[0] || null,
         estudiante2: estudiantesNames[1] || null,
         jurado1: juradosNombres[0] || null,
@@ -512,7 +514,7 @@ async GetAllProfesores() {
         const Carrera = await firstValueFrom(
           this.client.send({ cmd: 'GetCarrera' }, sustentaciones.id_carrera),
         );
-        return Carrera;
+        return Carrera || null;
       }),
     );
   }
