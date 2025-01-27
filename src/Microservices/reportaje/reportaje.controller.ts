@@ -49,7 +49,7 @@ export class ReportajeController {
             this.client.send({ cmd: 'GetCarrera' }, nombres.id_carrera),
           );
           return {
-            nombres: `${nombres.apellidos} ${nombres.apellidos}`,
+            nombres: `${nombres.apellidos} ${nombres.nombres}`,
             Carrera: Carrera.nombre_carrera,
           };
         }),
@@ -127,7 +127,7 @@ export class ReportajeController {
   async TesisPeriodo(@Query('Periodo') Periodo: string) {
     try {
       const Tesis: tesisRepDTO[] = await this.GetTesisByPeriodo(Periodo);
-      console.log(Tesis);
+    
   
       const IDdocenteTutor = await Promise.all(
         Tesis.map(async (tesis) => {
@@ -146,8 +146,6 @@ export class ReportajeController {
             console.warn(`Docente no encontrado: ${tesis.id_docente_tutor}`);
             return { IdUsuario: null };
           }
-  
-          console.log(docenteData);
           return { IdUsuario: docenteData.id_usuario };
         }),
       );

@@ -121,7 +121,6 @@ export class TesisController {
       const Response = { Data: MappedData, meta };
       return PaginatedSuccessResponse(Response);
     } catch (e) {
-      console.log(e);
       return FailResponse(ExeptValidator(e));
     }
   }
@@ -209,7 +208,6 @@ export class TesisController {
 
       return SuccessResponse(Response);
     } catch (e) {
-      console.log(e);
       return FailResponse(ExeptValidator(e));
     }
   }
