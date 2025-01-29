@@ -99,6 +99,7 @@ export class UsuarioService {
           'fecha_nacimiento',
           'id_rol',
           'id_carrera',
+          'cedula',
           'status',
         ],
         skip: (page - 1) * limit,
