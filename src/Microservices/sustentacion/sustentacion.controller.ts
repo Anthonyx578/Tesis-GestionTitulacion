@@ -36,7 +36,6 @@ export class SustentacionController {
   @Post()
   async Create(@Body() sustentacion: sustentacionDTO) {
     try {
-      //Validamos su existencia
       if (sustentacion.id_carrera || sustentacion.id_carrera == 0) {
         const ExistCarrera = await firstValueFrom(
           this.client.send({ cmd: 'GetCarrera' }, sustentacion.id_carrera),

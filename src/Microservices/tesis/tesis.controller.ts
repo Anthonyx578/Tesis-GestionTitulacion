@@ -185,32 +185,40 @@ export class TesisController {
   }
 
   @ApiTags('Tesis')
-  @Get('DocenteTutor')
-  async GetAllDocenteTutor(@Query('idTesis') idTesis: number) {
-    try {
-      const TesisData: Record<string, any> = await firstValueFrom(
-        this.client.send({ cmd: 'GetTesis' }, idTesis),
-      );
-      const DocenteData = await firstValueFrom(
-        this.client.send(
-          { cmd: 'GetDocenteTutor' },
-          TesisData.id_docente_tutor,
-        ),
-      );
-      const DocenteTutorName = await firstValueFrom(
-        this.client.send({ cmd: 'GetUsuarioNames' }, DocenteData.id_usuario),
-      );
-      const Response = {
-        ...TesisData,
-        docenteTutor:
-          `${DocenteTutorName.nombres}` + ' ' + `${DocenteTutorName.apellidos}`,
-      };
+@Get('DocenteTutor')
+async GetAllDocenteTutor(@Query('idTesis') idTesis: number) {
+  try {
+    const TesisData: Record<string, any> = await firstValueFrom(
+      this.client.send({ cmd: 'GetTesis' }, idTesis),
+    );
 
-      return SuccessResponse(Response);
-    } catch (e) {
-      return FailResponse(ExeptValidator(e));
+    // Verificar si id_docente_tutor es 0 o null
+    if (!TesisData.id_docente_tutor) {
+      return SuccessResponse({
+        ...TesisData,
+        docenteTutor: 'No tiene docente tutor asignado',
+      });
     }
+
+    const DocenteData = await firstValueFrom(
+      this.client.send({ cmd: 'GetDocenteTutor' }, TesisData.id_docente_tutor),
+    );
+
+    const DocenteTutorName = await firstValueFrom(
+      this.client.send({ cmd: 'GetUsuarioNames' }, DocenteData.id_usuario),
+    );
+
+    const Response = {
+      ...TesisData,
+      docenteTutor: `${DocenteTutorName.nombres} ${DocenteTutorName.apellidos}`,
+    };
+
+    return SuccessResponse(Response);
+  } catch (e) {
+    console.log(e);
+    return FailResponse(ExeptValidator(e));
   }
+}
 
   @ApiTags('Tesis')
   @Get('Like')
