@@ -36,7 +36,7 @@ export class JuradoSustentacionService {
     
           const Data = await this.repository.find({
             where: { status: 1 },
-            select: ['id','id_jurado','id_sustentacion','indicacion','fecha_indicacion','presente','suplente','documento_revisar','documento_revisado','indicacion'],
+            select: ['id','id_jurado','id_sustentacion','estado','indicacion','fecha_indicacion','presente','suplente','documento_revisar','documento_revisado','indicacion'],
             skip: (page - 1) * limit,
             take: limit,
           });
@@ -119,6 +119,7 @@ export class JuradoSustentacionService {
       }
       async update(id: number, ChangeData: juradoSustentacionDTO) {
         try {
+          console.log(ChangeData)
           const ExistData = await this.repository.findOne({
             where: { id: id, status: 1 },
           });

@@ -41,7 +41,6 @@ export class JuradoSustentacionController {
 
   @MessagePattern({ cmd: 'GetSustentacionVerJurados' })
   async GetallVerJurados(idSustentacion: number) {
-    console.log(idSustentacion);
     return await this.Services.GetAllVerJUrados(idSustentacion);
   }
 
