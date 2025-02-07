@@ -209,7 +209,7 @@ export class JuradoSustentacionController {
       }
       const data = await firstValueFrom(
         this.client.send(
-          { cmd: 'UpdateEstudiante' },
+          { cmd: 'UpdateJuradoSustentacion' },
           { id, JuradoSustentacion },
         ),
       );
